@@ -1,0 +1,2 @@
+export const CHANGE_COMPONENT = 'CHANGE_COMPONENT';
+export const SHOW_CHILD = 'SHOW_CHILD';

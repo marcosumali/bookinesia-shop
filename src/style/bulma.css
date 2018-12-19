@@ -2665,10 +2665,11 @@ a.box:active {
     width: 960px;
   }
   .container.is-fluid {
-    margin-left: 64px;
-    margin-right: 64px;
+    margin-left: 12px;
+    margin-right: 12px;
     max-width: none;
     width: auto;
+    margin-top: 12px;
   }
 }
 
