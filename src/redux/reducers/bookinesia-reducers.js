@@ -1,4 +1,6 @@
-import { CHANGE_COMPONENT, SHOW_CHILD } from '../../constant/action-types';
+import {
+  CHANGE_COMPONENT, SHOW_CHILD, CHANGE_CHILD
+} from '../../constant/action-types';
 
 const initialState = {
   stateStatus: [
@@ -18,7 +20,7 @@ const initialState = {
       child: [
         {
           name: 'Barbers',
-          status: false
+          status: true
         },
         {
           name: 'Services',
@@ -37,7 +39,7 @@ const initialState = {
       child: [
         {
           name: 'Transaction',
-          status: false
+          status: true
         },
         {
           name: 'Customer',
@@ -61,6 +63,11 @@ const Bookinesia = (state = {...initialState}, action) => {
         ...state,
         stateStatus: action.payload
       };
+    case CHANGE_CHILD:
+      return {
+        ...state,
+        stateStatus: action.payload
+      }
     default:
       return state;
   }

@@ -6,7 +6,9 @@ import * as actions from '../../redux/actions/bookinesia-actions';
 
 class MainPage extends Component {
   render() {
-    const { stateStatus, children, changeComponent, showChild } = this.props;
+    const {
+      stateStatus, children, changeComponent, showChild, changeChild
+    } = this.props;
     return (
       <section>
         <nav className="navbar is-fixed-top" role="navigation" aria-label="main navigation">
@@ -27,7 +29,7 @@ class MainPage extends Component {
                 <ul className="menu-list">
                   {
                     stateStatus.map((stt, idx) => (
-                      <li onClick={!stt.child ? () => changeComponent(stt.name) : undefined } key={idx}>
+                      <li onClick={!stt.child ? () => changeComponent(stt.name, stateStatus) : () => showChild(stt.name, stateStatus) } key={idx}>
                         <a className={`${stt.status ? 'is-active' : ''}`}>
                           <div className={`white-color ${stt.child ? 'space-between' : ''}`}>
                             {
@@ -45,9 +47,9 @@ class MainPage extends Component {
                             stt.child && stt.childStatus && (
                               <ul>
                                 {
-                                  stt.child.map((chl, idx) => (
-                                    <li>
-                                      <a href="" key={idx}>
+                                  stt.child.map((chl, index) => (
+                                    <li key={index} onClick={() => changeChild(chl.name, stt.name, stateStatus)}>
+                                      <a>
                                         <div>
                                           {
                                             chl.name

@@ -8,7 +8,6 @@ import './style/custom.css';
 
 class App extends Component {
   renderComponent = (currentState) => {
-    console.log('masuk render component');
     switch(currentState) {
       case 'Welcome': return <Welcome />
       case 'Calendar': return <Calendar />
