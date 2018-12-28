@@ -57,6 +57,7 @@ export const changeChild = (data, parentData, raw) => {
       }
       newStatus.push(status);
     });
+    changeComponent(parentData, raw);
     dispatch(changeChildAct(newStatus));
   }
 }

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { Welcome, Manage, Calendar, Report } from './components/index';
+import { Welcome, Manage, Calendar, Reports } from './components/index';
 import MainPage from './pages/main-page/main-page';
 import './style/bulma.css';
 import './style/custom.css';
@@ -12,7 +12,7 @@ class App extends Component {
       case 'Welcome': return <Welcome />
       case 'Calendar': return <Calendar />
       case 'Manage': return <Manage />
-      case 'Reports': return <Report />
+      case 'Reports': return <Reports />
       default: break;
     }
   }

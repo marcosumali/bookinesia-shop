@@ -1,11 +1,11 @@
 import Welcome from './main-page/welcome';
 import Calendar from './calendar/calendar';
 import Manage from './manage/manage';
-import Report from './report/report';
+import Reports from './report/reports';
 
 export {
   Welcome,
   Calendar,
   Manage,
-  Report
+  Reports
 }
