@@ -1,5 +1,5 @@
 import {
-  CHANGE_COMPONENT, SHOW_CHILD, CHANGE_CHILD
+  CHANGE_COMPONENT, SHOW_CHILD, CHANGE_CHILD, CHANGE_LOGIN_STATUS
 } from '../../constant/action-types';
 
 const initialState = {
@@ -48,7 +48,8 @@ const initialState = {
       ],
       childStatus: false
     }
-  ]
+  ],
+  isLogin: false
 }
 
 const Bookinesia = (state = {...initialState}, action) => {
@@ -67,6 +68,11 @@ const Bookinesia = (state = {...initialState}, action) => {
       return {
         ...state,
         stateStatus: action.payload
+      }
+    case CHANGE_LOGIN_STATUS:
+      return {
+        ...state,
+        isLogin: action.payload
       }
     default:
       return state;

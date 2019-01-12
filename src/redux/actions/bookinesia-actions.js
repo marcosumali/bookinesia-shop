@@ -1,5 +1,5 @@
 import {
-  CHANGE_COMPONENT, SHOW_CHILD, CHANGE_CHILD
+  CHANGE_COMPONENT, SHOW_CHILD, CHANGE_CHILD, CHANGE_LOGIN_STATUS
 } from '../../constant/action-types';
 
 export const changeComponent = (data, raw) => {
@@ -62,6 +62,12 @@ export const changeChild = (data, parentData, raw) => {
   }
 }
 
+export const changeLoginStatus = (data) => {
+  return dispatch => {
+    dispatch(changeLoginStatusAct(data));
+  }
+}
+
 const changeComponentAct = (data) => ({
   type: CHANGE_COMPONENT,
   payload: data
@@ -74,5 +80,10 @@ const showChildAct = (data) => ({
 
 const changeChildAct = (data) => ({
   type: CHANGE_CHILD,
+  payload: data
+})
+
+const changeLoginStatusAct = (data) => ({
+  type: CHANGE_LOGIN_STATUS,
   payload: data
 })
