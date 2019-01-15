@@ -1,27 +1,71 @@
+import { saveDashboardMenuStatus, getLatestDashboardMenuStatus } from '../../helpers/dashboard';
+
 // ---------------------------------------------- DASHBOARD ACTION ----------------------------------------------
-// Dispatch function to set display to show to users
-export const dispatchToSetDisplayToShow = (text, manageStatus, reportsStatus) => {
+// To get DMS cookies and dispatch to store
+export const getDMSCookies = (cookies) => {
   return (dispatch, getState, { getFirebase, getFirestore }) => {
-    dispatch(dispatchToSetMenuToShow(text))
-    dispatch(setSubMenuDisplayToShow(''))
+    let DMS = getLatestDashboardMenuStatus(cookies)
+    let { displayToShow, manageShowStatus, reportsShowStatus, menuToShow, subMenuToShow } = DMS
+    
+    dispatch(setDisplayToShow(displayToShow))
+    dispatch(setManageToShow(manageShowStatus))
+    dispatch(setReportsToShow(reportsShowStatus))
+    dispatch(setMenuToShow(menuToShow))
+    dispatch(setSubMenuToShow(subMenuToShow))
+  }
+}
+
+// Dispatch function to set display to show to users
+export const dispatchToSetDisplayToShow = (props) => {
+  return (dispatch, getState, { getFirebase, getFirestore }) => {
+    let text = props.text
+    let cookies = props.cookies
+
+    let manageShowStatus = props.manageShowStatus
+    let reportsShowStatus = props.reportsShowStatus
+    let displayToShow = props.displayToShow
+    let menuToShow = props.menuToShow
+    let subMenuToShow = props.subMenuToShow
+
+    menuToShow = text
+    dispatch(dispatchToSetMenuToShow(menuToShow))
+    subMenuToShow = ''
+    dispatch(setSubMenuToShow(subMenuToShow))
 
     if (text === 'Manage') {
-      if (manageStatus === true) {
-        dispatch(setManageToShow(false))
+      if (manageShowStatus === true) {
+        manageShowStatus = false
+        dispatch(setManageToShow(manageShowStatus))
       } else {
-        dispatch(setManageToShow(true))
+        manageShowStatus = true
+        dispatch(setManageToShow(manageShowStatus))
       }
     } else if (text === 'Reports') {
-      if (reportsStatus === true) {
-        dispatch(setReportsToShow(false))
+      if (reportsShowStatus === true) {
+        reportsShowStatus = false
+        dispatch(setReportsToShow(reportsShowStatus))
       } else {
-        dispatch(setReportsToShow(true))
+        reportsShowStatus = true
+        dispatch(setReportsToShow(reportsShowStatus))
       }
     } else if (text === 'Welcome') {
-      dispatch(setDisplayToShow(text))
+      displayToShow = text
+      dispatch(setDisplayToShow(displayToShow))
     } else if (text === 'Calendar') {
-      dispatch(setDisplayToShow(text))
+      displayToShow = text
+      dispatch(setDisplayToShow(displayToShow))
     }
+
+    let dashboardMenuStatus = {
+      displayToShow,
+      manageShowStatus,
+      reportsShowStatus,
+      subMenuToShow,
+      menuToShow,
+    }
+    // console.log('====', dashboardMenuStatus)
+
+    saveDashboardMenuStatus(cookies, dashboardMenuStatus)
   }
 }
 
@@ -47,20 +91,44 @@ const setReportsToShow = (data) => {
 }
 
 // Dispatch function to set sub menu to be highlighted on dashboard
-export const dispatchToSetSubMenuToShow = (text) => {
+export const dispatchToSetSubMenuToShow = (props) => {
   return (dispatch, getState, { getFirebase, getFirestore }) => {
-    dispatch(setSubMenuDisplayToShow(text))
-    dispatch(setDisplayToShow(text))
+    let text = props.text
+    let cookies = props.cookies
+
+    let manageShowStatus = props.manageShowStatus
+    let reportsShowStatus = props.reportsShowStatus
+    let displayToShow = props.displayToShow
+    let menuToShow = props.menuToShow
+    let subMenuToShow = props.subMenuToShow
+    
+    subMenuToShow = text
+    dispatch(setSubMenuToShow(subMenuToShow))
+    displayToShow = text
+    dispatch(setDisplayToShow(displayToShow))
     
     if (text === 'Barbers' || text === 'Services' || text === 'Users') {
-      dispatch(setMenuDisplayToShow('Manage'))
+      menuToShow = 'Manage'
+      dispatch(setMenuToShow(menuToShow))
     } else if (text === 'Transactions') {
-      dispatch(setMenuDisplayToShow('Reports'))
+      menuToShow = 'Reports'
+      dispatch(setMenuToShow(menuToShow))
     }
+
+    let dashboardMenuStatus = {
+      displayToShow,
+      manageShowStatus,
+      reportsShowStatus,
+      subMenuToShow,
+      menuToShow,
+    }
+    // console.log('===x', dashboardMenuStatus)
+
+    saveDashboardMenuStatus(cookies, dashboardMenuStatus)
   }
 }
 
-const setSubMenuDisplayToShow = (data) => {
+const setSubMenuToShow = (data) => {
   return {
     type: 'SET_SUB_MENU',
     payload: data
@@ -68,13 +136,13 @@ const setSubMenuDisplayToShow = (data) => {
 }
 
 // Dispatch function to set menu to be highlighted on dashboard 
-export const dispatchToSetMenuToShow = (text) => {
+const dispatchToSetMenuToShow = (text) => {
   return (dispatch, getState, { getFirebase, getFirestore }) => {
-    dispatch(setMenuDisplayToShow(text))
+    dispatch(setMenuToShow(text))
   }
 }
 
-const setMenuDisplayToShow = (data) => {
+const setMenuToShow = (data) => {
   return {
     type: 'SET_MENU',
     payload: data

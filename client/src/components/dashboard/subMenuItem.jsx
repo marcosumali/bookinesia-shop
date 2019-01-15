@@ -14,14 +14,14 @@ class subMenuItem extends Component {
           this.props.subMenuToShow === this.props.text ?
           <div 
             className="Active Sub-menu-box Container-nowrap-center-cross"
-            onClick={ () => this.props.dispatchToSetSubMenuToShow(this.props.text) }
+            onClick={ () => this.props.dispatchToSetSubMenuToShow(this.props) }
           >
             <div className="Sub-menu-text animated slideInDown">{ this.props.text }</div>
           </div>
           :
           <div 
             className="Sub-menu-box Container-nowrap-center-cross"
-            onClick={ () => this.props.dispatchToSetSubMenuToShow(this.props.text) }
+            onClick={ () => this.props.dispatchToSetSubMenuToShow(this.props) }
           >
             <div className="Sub-menu-text animated slideInDown">{ this.props.text }</div>
           </div>
@@ -34,7 +34,11 @@ class subMenuItem extends Component {
 const mapStateToProps = state => {
   return {
     displayToShow: state.nav.displayToShow,
+    manageShowStatus: state.nav.manageShowStatus,
+    reportsShowStatus: state.nav.reportsShowStatus,
     subMenuToShow: state.nav.subMenuToShow,
+    menuToShow: state.nav.menuToShow,
+    cookies: state.user.cookies
   }
 }
 

@@ -86,6 +86,7 @@ const mapStateToProps = state => {
     reportsShowStatus: state.nav.reportsShowStatus,
     subMenuToShow: state.nav.subMenuToShow,
     menuToShow: state.nav.menuToShow,
+    cookies: state.user.cookies
   }
 }
 

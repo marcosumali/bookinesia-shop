@@ -16,7 +16,7 @@ class menuItem extends Component {
     return (
       <div
         className="Menu-item-box Container-nowrap-center-cross" 
-        onClick={ () => {this.props.dispatchToSetDisplayToShow(this.props.text, this.props.manageShowStatus, this.props.reportsShowStatus)}}
+        onClick={ () => {this.props.dispatchToSetDisplayToShow(this.props)}}
       >
         <div className="Container-nowrap-center Margin-l-5 Margin-r-5">
           {
@@ -56,6 +56,9 @@ const mapStateToProps = state => {
     displayToShow: state.nav.displayToShow,
     manageShowStatus: state.nav.manageShowStatus,
     reportsShowStatus: state.nav.reportsShowStatus,
+    subMenuToShow: state.nav.subMenuToShow,
+    menuToShow: state.nav.menuToShow,
+    cookies: state.user.cookies
   }
 }
 

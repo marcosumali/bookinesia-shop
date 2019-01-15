@@ -1,13 +1,25 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 import '../../assets/css/general.css';
 import './dashboardPage.css';
 import DashboardHeader from '../../components/dashboard/dashboardHeader';
 import DashboardMenu from '../../components/dashboard/dashboardMenu';
 import DashboardDisplay from '../../components/dashboard/dashboardDisplay';
+import { setCookies } from '../../store/firestore/management/management.actions';
+import { getDMSCookies } from '../../store/dashboard/dashboard.actions';
 
-export default class dashboardPage extends Component {
+
+class dashboardPage extends Component {
+  componentWillMount() {
+    let cookiesFunction = this.props.cookies
+    this.props.setCookies(cookiesFunction)
+    this.props.getDMSCookies(cookiesFunction)
+  }
+
   render() {
+    console.log('dashboardPage', this.props)
     return (
       <div className="">
         <div className="Dashboard-header-box">
@@ -25,3 +37,18 @@ export default class dashboardPage extends Component {
     )
   }
 }
+
+const mapStateToProps = state => {
+  return {
+  }
+}
+
+const mapDispatchToProps = dispatch => bindActionCreators({
+  setCookies,
+  getDMSCookies
+}, dispatch)
+
+
+export default connect(mapStateToProps, mapDispatchToProps) (dashboardPage);
+
+
