@@ -1,0 +1,118 @@
+/* ---------- Margin & Padding Component ---------- */
+.No-padding {
+  padding: 0px !important;
+}
+
+.No-margin {
+  margin: 0px !important;
+}
+
+.Margin-t-40 {
+  margin-top: 2.5em !important;
+}
+
+.Margin-l-10 {
+  margin-left: 0.625em !important;
+}
+
+.Margin-l-5 {
+  margin-left: 0.3125em !important;
+}
+
+.Margin-r-5 {
+  margin-right: 0.3125em !important;
+}
+
+.Margin-l-r-10 {
+  margin-left: 0.625em !important;
+  margin-right: 0.625em !important;
+}
+
+.Width-10 {
+  width: 10vw;
+}
+
+.Width-90 {
+  width: 90vw;
+}
+
+.Width-100cent {
+  width: 100%;
+}
+
+.Height-100cent {
+  height: 100%;
+}
+
+/* ---------- Text Component ---------- */
+.Text-center {
+  text-align: center;
+}
+
+.Text-capitalize {
+  text-transform: capitalize;
+}
+
+/* ---------- Container Component ---------- */
+.Container-wrap {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.Container-nowrap {
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.Container-one-line {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+
+.Container-wrap-center {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.Container-nowrap-center {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.Container-nowrap-spacebetween {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.Container-nowrap-center-cross {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+
+.Container-nowrap-center-axis {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+}
+
+.Container-nowrap-start {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: flex-start
+}
+
+.Container-nowrap-end {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: flex-end;
+}

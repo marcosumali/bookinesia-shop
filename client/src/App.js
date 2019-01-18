@@ -1,43 +1,34 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import { Route, Switch } from 'react-router-dom';
+import { withCookies } from 'react-cookie';
 
-import { Welcome, Manage, Calendar, Reports } from './components/index';
-import MainPage from './pages/main-page/main-page';
-import './style/bulma.css';
-import './style/custom.css';
+import HomePage from './pages/home/homePage';
+import DashboardPage from './pages/dashboard/dashboardPage';
+import NotFoundPage from './pages/error/notFound';
+import LoginPage from './pages/auth/loginPage';
 
 class App extends Component {
-  renderComponent = (currentState) => {
-    switch(currentState) {
-      case 'Welcome': return <Welcome />
-      case 'Calendar': return <Calendar />
-      case 'Manage': return <Manage />
-      case 'Reports': return <Reports />
-      default: break;
-    }
-  }
-
   render() {
-    const { stateStatus } = this.props;
-    const currentState = stateStatus.filter(stt => {
-      if (stt.status) {
-        return stt.name
-      }
-    });
     return (
-      <MainPage>
-        <div>
-          {
-            this.renderComponent(currentState[0].name)
-          }
-        </div>
-      </MainPage>
+      <div className="App">
+        <Switch>
+          <Route
+            exact path="/" 
+            render={ (props) => (<HomePage {...props} cookies={this.props.cookies}/>) } 
+          />
+          <Route
+            exact path="/dashboard" 
+            render={ (props) => (<DashboardPage {...props} cookies={this.props.cookies}/>) } 
+          />
+          <Route
+            exact path="/login" 
+            render={ (props) => (<LoginPage {...props} cookies={this.props.cookies}/>) } 
+          />
+          <Route path="*" component={ NotFoundPage } />
+        </Switch>
+      </div>
     );
   }
-};
+}
 
-const mapStateToProps = state => ({
-  stateStatus: state.stateStatus
-});
-
-export default connect(mapStateToProps, null)(App);
+export default withCookies(App);

@@ -1,0 +1,118 @@
+.Calendar-header-box {
+  width: 100%;
+  height: 8vh;
+  padding: 0.5em;
+}
+
+.Calendar-body-box {
+  width: 100%;
+  height: 84.5vh;
+  overflow: auto;
+  /* border: 1px solid black; */
+}
+/* Height was set as combination with calender header box height and dashboardPage height  */
+
+.Calendar-header-text {
+  font-family: Montserrat;
+  font-size: 1.2em;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.22;
+  letter-spacing: normal;
+  color: #5499c3;
+}
+
+.Calendar-header-date {
+  font-family: Montserrat;
+  font-size: 1.1em;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.2;
+  letter-spacing: normal;
+  color: #5499c3;
+}
+
+.Show-today-box {
+  border: 1px solid #5499c3;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.Show-today-text {
+  font-family: Montserrat;
+  font-size: 0.8em;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.2;
+  letter-spacing: normal;
+  color: #5499c3;
+}
+
+.Number-box {
+  width: 8vh;
+  border: 1px solid #EAEAEA;
+  font-family: Montserrat;
+  font-size: 1.25em;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.2;
+  letter-spacing: normal;
+  color: #666666;
+}
+
+.Content-box {
+  width: 15.7vw;
+  border-top: 1px solid #EAEAEA;
+  border-right: 1px solid #EAEAEA;
+  border-bottom: 1px solid #EAEAEA;
+  padding: 5px;
+}
+
+.Staff-text{
+  text-align: center;
+  font-family: Montserrat;
+  font-size: 1.1em;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.22;
+  letter-spacing: normal;
+  color: #5499c3;
+}
+
+.Customer-text {
+  width: 100%;
+  font-family: Montserrat;
+  font-size: 0.8em;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.2;
+  letter-spacing: normal;
+  color: #5499c3;
+  margin-bottom: 2px;
+}
+
+.Customer-phone {
+  width: 100%;
+  font-family: Montserrat;
+  font-size: 0.8em;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.2;
+  letter-spacing: normal;
+  color: #666666;
+}
+
+td, th {
+  padding: 0px;
+}
+
+tr {
+  height: 8vh;
+}
