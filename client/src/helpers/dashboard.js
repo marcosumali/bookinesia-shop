@@ -12,8 +12,11 @@ let expirationDate = new Date(expirationYear, todayMonth, todayDate)
 
 function getLatestDashboardMenuStatus (cookies) {
   let DMS = cookies.get('DMS')
-  let decodedDMS = jwt.verify(DMS, PRIVATEKEY)
-  return decodedDMS
+
+  if (DMS) {
+    let decodedDMS = jwt.verify(DMS, PRIVATEKEY)
+    return decodedDMS
+  }
 }
 
 function saveDashboardMenuStatus (cookies, dashboardMenuStatus) {

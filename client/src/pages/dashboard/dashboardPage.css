@@ -15,10 +15,10 @@
 }
 
 .Dashboard-menu-box {
-  height: 100%;
+  /* height: 100%; */
   width: 15vw;
   background-color: #5499c3;
-  border-right: 1px solid #EAEAEA;
+  /* border-right: 1px solid #EAEAEA; */
 }
 
 .Dashboard-display-box {

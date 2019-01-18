@@ -5,13 +5,16 @@ import { saveDashboardMenuStatus, getLatestDashboardMenuStatus } from '../../hel
 export const getDMSCookies = (cookies) => {
   return (dispatch, getState, { getFirebase, getFirestore }) => {
     let DMS = getLatestDashboardMenuStatus(cookies)
-    let { displayToShow, manageShowStatus, reportsShowStatus, menuToShow, subMenuToShow } = DMS
-    
-    dispatch(setDisplayToShow(displayToShow))
-    dispatch(setManageToShow(manageShowStatus))
-    dispatch(setReportsToShow(reportsShowStatus))
-    dispatch(setMenuToShow(menuToShow))
-    dispatch(setSubMenuToShow(subMenuToShow))
+
+    if (DMS) {
+      let { displayToShow, manageShowStatus, reportsShowStatus, menuToShow, subMenuToShow } = DMS
+      
+      dispatch(setDisplayToShow(displayToShow))
+      dispatch(setManageToShow(manageShowStatus))
+      dispatch(setReportsToShow(reportsShowStatus))
+      dispatch(setMenuToShow(menuToShow))
+      dispatch(setSubMenuToShow(subMenuToShow))
+    }
   }
 }
 

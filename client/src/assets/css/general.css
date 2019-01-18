@@ -44,7 +44,32 @@
   height: 100%;
 }
 
+/* ---------- Text Component ---------- */
+.Text-center {
+  text-align: center;
+}
+
+.Text-capitalize {
+  text-transform: capitalize;
+}
+
 /* ---------- Container Component ---------- */
+.Container-wrap {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.Container-nowrap {
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.Container-one-line {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+
 .Container-wrap-center {
   display: flex;
   flex-wrap: wrap;
@@ -56,6 +81,13 @@
   display: flex;
   flex-wrap: nowrap;
   justify-content: center;
+  align-items: center;
+}
+
+.Container-nowrap-spacebetween {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
   align-items: center;
 }
 

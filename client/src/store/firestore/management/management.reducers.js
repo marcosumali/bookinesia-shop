@@ -2,7 +2,7 @@ let initialState = {
   cookies: '',
 }
 
-const authDataList = (state = { ...initialState }, action) => {
+const managementDataList = (state = { ...initialState }, action) => {
   switch (action.type) {
     case 'SET_COOKIES_FUNCTION':
       return ({
@@ -14,4 +14,4 @@ const authDataList = (state = { ...initialState }, action) => {
   }
 }
 
-export default authDataList;
+export default managementDataList;

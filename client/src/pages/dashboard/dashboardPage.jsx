@@ -19,7 +19,7 @@ class dashboardPage extends Component {
   }
 
   render() {
-    console.log('dashboardPage', this.props)
+    // console.log('dashboardPage', this.props)
     return (
       <div className="">
         <div className="Dashboard-header-box">
