@@ -1,4 +1,5 @@
 import { saveDashboardMenuStatus, getLatestDashboardMenuStatus } from '../../helpers/dashboard';
+import { setBarberDisableStatusInput } from '../firestore/staff/staff.actions';
 
 // ---------------------------------------------- DASHBOARD ACTION ----------------------------------------------
 // To get DMS cookies and dispatch to store
@@ -149,5 +150,81 @@ const setMenuToShow = (data) => {
   return {
     type: 'SET_MENU',
     payload: data
+  }
+}
+
+
+// ---------------------------------------------- INPUT ACTION ----------------------------------------------
+
+// To Handle Input Changes During Filtering
+export const handleFilterInputChanges = (e) => {
+  return (dispatch, getState, { getFirebase, getFirestore }) => {
+    let target = e.target
+    let inputId = target.id
+    let value = target.value
+
+    if (inputId === 'name') {
+      dispatch(setFilterInput(value))
+    }
+  }
+}
+
+const setFilterInput = (data) => {
+  return {
+    type: 'SET_FILTER_INPUT',
+    payload: data
+  }
+}
+
+// To handle active tab on materialize css
+export const handleActiveTab = (tabIndex) => {
+  return (dispatch, getState, { getFirebase, getFirestore }) => {
+    let index = Number(tabIndex) % 10
+    let activeTab = ''
+    if (index === 0) {
+      activeTab = 'Details'
+    } else if (index === 1) {
+      activeTab = 'Services'
+    } else if (index === 2) {
+      activeTab = 'Working Hours'
+    }
+    dispatch(setActiveTab(activeTab))
+  }
+}
+
+export const setActiveTab = (data) => {
+  return {
+    type: 'SET_ACTIVE_TAB',
+    payload: data
+  }
+}
+
+// To handle each single checkbox
+export const handleSingleCheckbox = (e) => {
+  return (dispatch, getState, { getFirebase, getFirestore }) => {
+    let target = e.target
+    let id = target.id            // represent id of input
+    let type = target.type        // type of input e.g. radio or checkbox
+    let status = target.checked   // true or false
+
+    if (id === 'barberStatus' && type === 'checkbox') {
+      if (status) {
+        status = false
+      } else {
+        status = true
+      }
+      dispatch(setBarberDisableStatusInput(status))
+    }
+  }
+}
+
+// To handle each single checkbox checked status
+export const handleCheckedStatus = (status) => {
+  return (dispatch, getState, { getFirebase, getFirestore }) => {
+    let checkedStatus = false
+    if (status === false) {
+      checkedStatus = true
+    }
+    return checkedStatus  
   }
 }

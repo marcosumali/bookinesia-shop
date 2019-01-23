@@ -5,33 +5,39 @@ import { bindActionCreators } from 'redux';
 import '../../assets/css/general.css';
 import Welcome from '../display/welcome';
 import Calendar from '../display/calendar/calendar';
-import ManageServiceProviders from '../display/manageServiceProviders';
+import Manage from '../display/manage/manage';
 import ManageServices from '../display/manageServices';
 import ManageUsers from '../display/manageUsers';
 import ReportsTransaction from '../display/reportsTransaction';
 import Loading from '../display/loading/loading';
-import { getStaffs } from '../../store/firestore/staff/staff.actions';
+import { getStaffsAndOtherData, getAllStaffs } from '../../store/firestore/staff/staff.actions';
+import { getServices } from '../../store/firestore/service/service.actions';
+import { getStaffServices } from '../../store/firestore/staffService/staffService.actions';
 
 class dashboardDisplay extends Component {
   componentWillMount() {
-    this.props.getStaffs('dummyshop-bekasi')
+    this.props.getStaffsAndOtherData('dummyshop-bekasi')
+    this.props.getAllStaffs('dummyshop-bekasi')
+    this.props.getServices('dummyshop-bekasi')
+    this.props.getStaffServices('dummyshop-bekasi')
   }
   
-  componentDidUpdate() {
-    console.log('didupdate')
-    this.props.getStaffs('dummyshop-bekasi')
-  }
-
   render() {
     // console.log('dashboardDisplay', this.props)
     return (
       <div className="Height-100cent">
         {/* DISPLAY */}
         {
-          this.props.barbersLoading || this.props.dashboardsLoading || !this.props.selectedDate ?
+          this.props.barbersLoading || 
+          this.props.transactionsLoading || 
+          this.props.dashboardsLoading || 
+          !this.props.selectedDate ||
+          this.props.allBarbersLoading ||
+          this.props.servicesLoading ||
+          this.props.staffServicesLoading ?
           <Loading />
           :
-          <div>
+          <div className="row No-margin Height-100cent">
             {
               this.props.displayToShow === 'Welcome' ?
               <Welcome />
@@ -40,7 +46,7 @@ class dashboardDisplay extends Component {
               <Calendar />
               :
               this.props.displayToShow === 'Barbers' ?
-              <ManageServiceProviders />
+              <Manage />
               :
               this.props.displayToShow === 'Services' ?
               <ManageServices />
@@ -65,13 +71,20 @@ const mapStateToProps = state => {
     displayToShow: state.nav.displayToShow,
     subMenuToShow: state.nav.subMenuToShow,
     barbersLoading: state.staff.barbersLoading,
+    allBarbersLoading: state.staff.allBarbersLoading,
+    transactionsLoading: state.transaction.transactionsLoading,
     dashboardsLoading: state.transaction.dashboardsLoading,
+    servicesLoading: state.service.servicesLoading,
+    staffServicesLoading: state.staffService.staffServicesLoading,
     selectedDate: state.appointment.selectedDate,
   }
 }
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  getStaffs
+  getStaffsAndOtherData,
+  getAllStaffs,
+  getServices,
+  getStaffServices
 }, dispatch)
 
 

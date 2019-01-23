@@ -8,6 +8,8 @@ import branchReducer from './firestore/branch/branch.reducers';
 import shopReducer from './firestore/shop/shop.reducers';
 import staffReducer from './firestore/staff/staff.reducers';
 import transactionReducer from './firestore/transaction/transaction.reducers';
+import serviceReducer from './firestore/service/service.reducers';
+import staffServiceReducer from './firestore/staffService/staffService.reducers';
 
 const allReducers = combineReducers({
   nav: dashboardReducer,
@@ -17,7 +19,9 @@ const allReducers = combineReducers({
   branch: branchReducer,
   shop: shopReducer,
   staff: staffReducer,
-  transaction: transactionReducer
+  transaction: transactionReducer,
+  service: serviceReducer,
+  staffService: staffServiceReducer,
 });
 
 export default allReducers

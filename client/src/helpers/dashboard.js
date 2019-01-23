@@ -10,7 +10,7 @@ let todayMonth = todayFullDate.getMonth() + 1
 let expirationYear = Number(todayYear) + 10
 let expirationDate = new Date(expirationYear, todayMonth, todayDate)
 
-function getLatestDashboardMenuStatus (cookies) {
+function getLatestDashboardMenuStatus(cookies) {
   let DMS = cookies.get('DMS')
 
   if (DMS) {
@@ -19,7 +19,7 @@ function getLatestDashboardMenuStatus (cookies) {
   }
 }
 
-function saveDashboardMenuStatus (cookies, dashboardMenuStatus) {
+function saveDashboardMenuStatus(cookies, dashboardMenuStatus) {
   let DMS = jwt.sign(dashboardMenuStatus, PRIVATEKEY)
   cookies.set('DMS', DMS, { path: '/', secure: false, expires: expirationDate })
 }

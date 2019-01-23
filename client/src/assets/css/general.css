@@ -1,4 +1,8 @@
 /* ---------- Margin & Padding Component ---------- */
+.Disabled {
+  opacity: 0.25;
+}
+
 .No-padding {
   padding: 0px !important;
 }
@@ -19,6 +23,10 @@
   margin-left: 0.3125em !important;
 }
 
+.Margin-l-10 {
+  margin-left: 0.625em !important;
+}
+
 .Margin-r-5 {
   margin-right: 0.3125em !important;
 }
@@ -26,6 +34,18 @@
 .Margin-l-r-10 {
   margin-left: 0.625em !important;
   margin-right: 0.625em !important;
+}
+
+.Margin-b-5 {
+  margin-bottom: 0.3125em !important;
+}
+
+.Margin-b-10 {
+  margin-bottom: 0.625em !important;
+}
+
+.Margin-b-16 {
+  margin-bottom: 1em !important;
 }
 
 .Width-10 {
@@ -49,8 +69,20 @@
   text-align: center;
 }
 
+.Text-right {
+  text-align: right;
+}
+
 .Text-capitalize {
   text-transform: capitalize;
+}
+
+.Text-uppercase {
+  text-transform: uppercase !important;
+}
+
+.Text-lowercase {
+  text-transform: lowercase !important;
 }
 
 /* ---------- Container Component ---------- */
@@ -75,6 +107,12 @@
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
+}
+
+.Container-wrap-center-axis {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .Container-nowrap-center {
@@ -115,4 +153,18 @@
   flex-wrap: nowrap;
   align-items: center;
   justify-content: flex-end;
+}
+
+.Container-nowrap-center-end {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.Container-nowrap-center-start {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: flex-start;
 }
