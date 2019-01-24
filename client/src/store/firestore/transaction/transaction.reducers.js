@@ -15,6 +15,12 @@ const transactionDataList = (state = { ...initialState }, action) => {
         dashboards: action.payload,
         dashboardsLoading: false,
       })
+    case 'SET_TRANSACTIONS_SUCCESS':
+      return ({
+        ...state,
+        transactions: action.payload,
+        transactionsLoading: false,
+      })
     case 'SET_TRANSACTIONS_FAILED':
       return ({
         ...state,

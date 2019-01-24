@@ -5,6 +5,7 @@ import { bindActionCreators } from 'redux';
 import './calendar.css';
 import CalendarHeader from './calendarHeader';
 import AddBoxSvg from '../../svg/addBoxSvg';
+import ModalInfo from '../../modal/calendar/modalInfo';
 
 class calendar extends Component {
   render() {
@@ -55,10 +56,7 @@ class calendar extends Component {
                                             <div className="Customer-phone"></div>
                                           </div>
                                           :
-                                          <div className="Container-wrap-center-cross">
-                                            <div className="Customer-text Text-capitalize">{ transaction.name }</div>
-                                            <div className="Customer-phone">{ transaction.phone }</div>
-                                          </div>
+                                          <ModalInfo transaction={ transaction } />
                                         }
                                       </td>
                                     )
@@ -88,6 +86,7 @@ const mapStateToProps = state => {
     barbers: state.staff.barbers,
     dashboards: state.transaction.dashboards,
     selectedDate: state.appointment.selectedDate,
+    transactions: state.transaction.transactions,
   }
 }
 

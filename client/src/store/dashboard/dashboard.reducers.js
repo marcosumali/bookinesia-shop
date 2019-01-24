@@ -4,6 +4,8 @@ let initialState = {
   reportsShowStatus: false,
   menuToShow: '',
   subMenuToShow: '',
+  filterInput: '',
+  activeTab: '',
 }
 
 const dashbordDataList = (state = { ...initialState }, action) => {
@@ -32,6 +34,16 @@ const dashbordDataList = (state = { ...initialState }, action) => {
       return ({
         ...state,
         subMenuToShow: action.payload,
+      })
+    case 'SET_FILTER_INPUT':
+      return ({
+        ...state,
+        filterInput: action.payload,
+      })
+    case 'SET_ACTIVE_TAB':
+      return ({
+        ...state,
+        activeTab: action.payload,
       })
     default:
       return state;
