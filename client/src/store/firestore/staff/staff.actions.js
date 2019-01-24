@@ -1,7 +1,9 @@
 import { getAppointmentsDate } from '../appointment/appointment.actions';
 import { setActiveTab } from '../../dashboard/dashboard.actions';
-import { setSelectedStaffServices } from '../../firestore/staffService/staffService.actions';
+import { setSelectedStaffServices, setHasEditStatus } from '../../firestore/staffService/staffService.actions';
 import swal from 'sweetalert';
+
+export const emptyError = 'This section must be filled.'
 
 // Get barbers data based on provided branchId with disableStatus is false
 export const getStaffsAndOtherData = (branchId) => {
@@ -91,6 +93,7 @@ export const setSelectedBarber = (barber, staffServices) => {
     dispatch(setBarberInfo(barber))
     dispatch(setActiveTab('Details'))
     dispatch(setSelectedStaffServices(barber, staffServices))
+    dispatch(setHasEditStatus(false))
   }
 }
 
@@ -130,6 +133,13 @@ const setBarberNameInput = (data) => {
   }
 }
 
+const setBarberNameInputError = (data) => {
+  return {
+    type: 'SET_BARBER_NAME_INPUT_ERROR',
+    payload: data
+  }
+}
+
 export const setBarberDisableStatusInput = (data) => {
   return {
     type: 'SET_BARBER_DISABLE_STATUS_INPUT',
@@ -142,32 +152,45 @@ export const updateBarberData = (data) => {
   return (dispatch, getState, { getFirebase, getFirestore }) => {
     let firestore = getFirestore()
     let { id, name, disableStatus, selectedBarber } = data
+    let lowercasedName = name.toLowerCase()
     
     let staffRef = firestore.collection('staff').doc(id)
 
-    swal({
-      title: 'Are you sure?',
-      text: "Barber's information will be updated including their availibility status in the shop's website.",
-      icon: 'warning',
-      buttons: ['Cancel', 'OK']
-    })
-    .then(result => {
-      if (result) {
-        staffRef.update({
-          name,
-          disableStatus
-        })
-        .then(() => {
-          selectedBarber.name = name
-          selectedBarber.disableStatus = disableStatus
-          dispatch(selectedBarberAction(selectedBarber))
-          swal("Information Updated", "", "success")
-        })
-        .catch(err => {
-          console.log('ERROR: update staff data', err)
-        })
-      }
-    })
+    // Input Validation: Error
+    if (name.length <= 0) {
+      dispatch(setBarberNameInputError(emptyError))
+    }
+
+    // Input Validation: OK
+    if (name.length > 0) {
+      dispatch(setBarberNameInputError(false))
+    }
+
+    if (name.length > 0) {
+      swal({
+        title: 'Are you sure?',
+        text: "Barber's detail information will be updated including their availibility status in the shop's website.",
+        icon: 'warning',
+        buttons: ['Cancel', 'OK']
+      })
+      .then(result => {
+        if (result) {
+          staffRef.update({
+            name: lowercasedName,
+            disableStatus
+          })
+          .then(() => {
+            selectedBarber.name = lowercasedName
+            selectedBarber.disableStatus = disableStatus
+            dispatch(selectedBarberAction(selectedBarber))
+            swal("Information Updated", "", "success")
+          })
+          .catch(err => {
+            console.log('ERROR: update staff data', err)
+          })
+        }
+      })
+    }
   }
 }
 

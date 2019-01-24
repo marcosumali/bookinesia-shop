@@ -3,7 +3,9 @@ let initialState = {
   staffServicesExists: true,
   staffServicesLoading: true,
   selectedStaffServices: [],
-  selectedStaffServicesInput: [],
+  selectedServicesInput: [],
+  hasEditStatus: false,
+  staffServiceInputError: false,
 }
 
 const staffServiceDataList = (state = { ...initialState }, action) => {
@@ -24,10 +26,20 @@ const staffServiceDataList = (state = { ...initialState }, action) => {
         ...state,
         selectedStaffServices: action.payload,
       })
-    case 'SET_SELECTED_STAFF_SERVICES_INPUT':
+    case 'SET_SELECTED_SERVICES_INPUT':
       return ({
         ...state,
-        selectedStaffServicesInput: action.payload,
+        selectedServicesInput: action.payload,
+      })
+    case 'SET_HAS_EDIT_STATUS':
+      return ({
+        ...state,
+        hasEditStatus: action.payload,
+      })
+    case 'SET_STAFF_SERVICE_INPUT_ERROR':
+      return ({
+        ...state,
+        staffServiceInputError: action.payload,
       })
     default:
       return state;

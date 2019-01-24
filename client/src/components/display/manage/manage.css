@@ -5,7 +5,8 @@
 }
 
 .Manage-content-box {
-  padding: 0.3125em !important;
+  padding: 0.625em !important;
+  padding-left: 0px !important;
   background-color: #FAFAFA;
   /* border: 1px solid blue; */
 }
@@ -14,6 +15,8 @@
   background-color: #ffffff;
   border-radius: 5px;
   border: 1px solid #EAEAEA;
+  max-height: 100%;
+  overflow-y: scroll;
 }
 
 .Manage-headers {
@@ -121,4 +124,5 @@
   letter-spacing: normal;
   color: #5499c3;
   text-transform: capitalize;
+  padding-top: 0.2vh;
 }

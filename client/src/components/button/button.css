@@ -10,6 +10,17 @@
   margin-left: 2vw;
 }
 
+.Btn-disabled {
+  padding: 3px;
+  color: #9F9F9F;
+  border-radius: 6px;
+  background-color: #DFDFDF;
+  min-width: 4em;
+  text-align: center;
+  font-size: 0.9em;
+  margin-left: 2vw;
+}
+
 .Btn-blue {
   padding: 3px;
   color: #5499c3;

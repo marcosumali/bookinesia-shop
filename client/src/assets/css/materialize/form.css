@@ -151,3 +151,8 @@ input[type="radio"].with-gap:checked+label:after {
   font-size: 0.6rem;
   color: #666666;
 }
+
+.Input-info-error {
+  font-size: 0.75em;
+  color: #d00; 
+}

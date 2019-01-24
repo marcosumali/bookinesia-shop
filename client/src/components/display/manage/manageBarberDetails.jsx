@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { handleSingleCheckbox, handleCheckedStatus } from '../../../store/dashboard/dashboard.actions';
-import { setBarberInfo, handleChangesManageBarbers, updateBarberData } from '../../../store/firestore/staff/staff.actions';
+import { handleSingleCheckbox, handleCheckedStatus, handleCancelation } from '../../../store/dashboard/dashboard.actions';
+import { handleChangesManageBarbers, updateBarberData } from '../../../store/firestore/staff/staff.actions';
 import TextInput from '../../form/inputText';
 import SwitchInput from '../../form/inputSwitch';
 import Button from '../../button/button';
+import DisabledButton from '../../button/buttonDisabled';
 
 class manageBarberDetails extends Component {
   render() {
@@ -18,9 +19,10 @@ class manageBarberDetails extends Component {
       handleSingleCheckbox, 
       barberDisableStatus, 
       handleCheckedStatus,
-      setBarberInfo,
-      updateBarberData
+      updateBarberData,
+      handleCancelation
     } = this.props
+    // console.log('manageBarberDetails', this.props)
     return (
       <div className="col m12 Container-wrap-center-cross Margin-b-10">
         <div className="col m10 offset-m1 Container-nowrap-center-cross Margin-b-16">
@@ -54,18 +56,34 @@ class manageBarberDetails extends Component {
           </div>
         </div>
         <div className="col m12 No-margin No-padding Container-nowrap-end Margin-b-10">
-          <Button 
-            text="Cancel"
-            type="Btn-blue"
-            clickFunction={ setBarberInfo }
-            data={ selectedBarber }
-          />
-          <Button 
-            text="Save"
-            type="Btn-white-blue"
-            clickFunction={ updateBarberData }
-            data={{ id: selectedBarber.id, name: barberName, disableStatus: barberDisableStatus, selectedBarber }}
-          />
+          {
+            selectedBarber.name !== barberName || selectedBarber.disableStatus !== barberDisableStatus ?
+            <Button 
+              text="Cancel"
+              type="Btn-blue"
+              clickFunction={ handleCancelation }
+              data={{ functionToBeExecuted: 'setBarberInfo', section: 'details', requiredData: selectedBarber }}
+            />
+            :
+            <DisabledButton 
+              text="Cancel"
+              type="Btn-disabled"
+            />
+          }
+          {
+            selectedBarber.name !== barberName || selectedBarber.disableStatus !== barberDisableStatus ?
+            <Button 
+              text="Save"
+              type="Btn-white-blue"
+              clickFunction={ updateBarberData }
+              data={{ id: selectedBarber.id, name: barberName, disableStatus: barberDisableStatus, selectedBarber }}
+            />
+            :
+            <DisabledButton 
+              text="Save"
+              type="Btn-disabled"
+            />
+          }
         </div>
       </div>
     )
@@ -84,11 +102,11 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  setBarberInfo,
   handleChangesManageBarbers,
   handleSingleCheckbox,
   handleCheckedStatus,
-  updateBarberData
+  updateBarberData,
+  handleCancelation
 }, dispatch)
 
 

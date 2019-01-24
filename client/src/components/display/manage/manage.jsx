@@ -12,6 +12,7 @@ import ManageContentStart from './manageContentStart';
 import { handleActiveTab } from '../../../store/dashboard/dashboard.actions';
 import ManageBarberDetails from './manageBarberDetails';
 import ManageBarberServices from './manageBarberServices';
+import ManageBarberWorkingHours from './manageBarberHours';
 
 class serviceProviders extends Component {
   componentDidUpdate() {
@@ -64,8 +65,8 @@ class serviceProviders extends Component {
                     this.props.activeTab === 'Services' ?
                     <ManageBarberServices />
                     :
-                    this.props.activeTab === 'Working Hours' || this.props.activeTab.length === 0 ?
-                    <div>Working Hours</div>
+                    this.props.activeTab === 'Working Hours' ?
+                    <ManageBarberWorkingHours />
                     :
                     <div></div>
                   }

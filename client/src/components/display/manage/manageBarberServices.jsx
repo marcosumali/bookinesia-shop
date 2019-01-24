@@ -2,75 +2,78 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { setSelectedStaffServicesInput } from '../../../store/firestore/staffService/staffService.actions';
+import { setSelectedServicesInput, updateStaffServicesData } from '../../../store/firestore/staffService/staffService.actions';
+import { handleMultipleCheckboxStatus, handleMultipleCheckbox, handleCancelation } from '../../../store/dashboard/dashboard.actions';
+import CheckboxInput from '../../form/inputCheckbox';
+import Button from '../../button/button';
+import DisabledButton from '../../button/buttonDisabled';
 
 class manageBarberServices extends Component {
-  handleSecondaryServices = (e) => {
-    let target = e.target
-    let id = target.id            // id represent key of product in firestore
-    let type = target.type        // type of input e.g. radio or checkbox
-    let status = target.checked   // true or false
-    console.log('===', id, type, status)
-    
-    let { selectedStaffServicesInput } = this.props
-    console.log('===', selectedStaffServicesInput)
-    let checkedIndex = selectedStaffServicesInput.findIndex(staffService => staffService.serviceId === id);
-    console.log('===', checkedIndex)
-
-    if (type === 'checkbox' && status) {
-      if (checkedIndex <= -1) {
-        selectedStaffServicesInput.push(id)
-      } 
-      console.log('===add', selectedStaffServicesInput)
-    } else if (type === 'checkbox' && status === false) {
-      if (checkedIndex >= 0) {
-        selectedStaffServicesInput.splice(checkedIndex, 1)
-        console.log('===deduct', selectedStaffServicesInput)
-      }
-    }
-
-    console.log('===result', selectedStaffServicesInput)
-    this.props.setSelectedStaffServicesInput(selectedStaffServicesInput)     
-  }
-
-  handleCheckbox = (service) => {
-    let status = false
-    let breakStatus = false
-    this.props.selectedStaffServicesInput && this.props.selectedStaffServicesInput.map(selectedStaffService => {
-      if (service.id === selectedStaffService.serviceId && breakStatus === false) {
-        status = true
-        breakStatus = true
-      }
-      return ''
-    })
-    return status
-  }
-
   render() {
     console.log('manageBarberServices', this.props)
-    let { services } = this.props
+    let { 
+      services, 
+      handleMultipleCheckboxStatus, 
+      handleMultipleCheckbox, 
+      selectedServicesInput, 
+      selectedStaffServices, 
+      handleCancelation, 
+      hasEditStatus, 
+      staffServiceInputError,
+      updateStaffServicesData,
+    } = this.props
+
     return (
       <div className="col m12 Container-wrap-center-cross Margin-b-10">
-        <form className="col m12 No-margin No-padding Container-wrap-center-cross">
+        <form className="col m12 No-margin No-padding Container-wrap-center-cross Margin-b-10">
           {
             services && services.map((service, index) => {
               return (
                 <div className="col m12 No-margin No-padding Manage-barber-service-box" key={ 'service' + index }>
-                  <input 
-                    className="checkbox-blue filled-in" 
-                    name="group1" 
-                    type="checkbox" 
-                    id={ service.id }
-                    value={ service.id }
-                    onChange={ this.handleSecondaryServices }
-                    checked={ this.handleCheckbox(service) }
+                  <CheckboxInput 
+                    inputData={ service }
+                    handleChangesFunction={ handleMultipleCheckbox }
+                    handleCheckedFunction={ handleMultipleCheckboxStatus }
+                    multipleData={ selectedServicesInput }
                   />
-                  <label className="Manage-barber-service-text" htmlFor={ service.id }>{ service.name }</label>
                 </div>
               )
             })
           }
         </form>
+        <div className="col m12 No-margin No-padding Container-nowrap-center Margin-b-10">
+          <div className="Input-info-error">{ staffServiceInputError }</div>
+        </div>
+        <div className="col m12 No-margin No-padding Container-nowrap-end Margin-b-10">
+          {
+            hasEditStatus ?
+            <Button 
+              text="Cancel"
+              type="Btn-blue"
+              clickFunction={ handleCancelation }
+              data={{ functionToBeExecuted: 'setSelectedServicesInput', section: 'services', requiredData: { uniqueStatus: true, staffServices: selectedStaffServices }}}
+            />
+            :
+            <DisabledButton 
+              text="Cancel"
+              type="Btn-disabled"
+            />
+          }
+          {
+            hasEditStatus ?
+            <Button 
+              text="Save"
+              type="Btn-white-blue"
+              clickFunction={ updateStaffServicesData }
+              data={{ staffServices: selectedStaffServices, servicesInput: selectedServicesInput }}
+            />
+            :
+            <DisabledButton 
+              text="Save"
+              type="Btn-disabled"
+            />
+          }
+        </div>
       </div>
     )
   }
@@ -82,12 +85,18 @@ const mapStateToProps = state => {
     services: state.service.services,
     selectedBarber: state.staff.selectedBarber,
     selectedStaffServices: state.staffService.selectedStaffServices,
-    selectedStaffServicesInput: state.staffService.selectedStaffServicesInput,
+    selectedServicesInput: state.staffService.selectedServicesInput,
+    hasEditStatus: state.staffService.hasEditStatus,
+    staffServiceInputError: state.staffService.staffServiceInputError,
   }
 }
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  setSelectedStaffServicesInput
+  setSelectedServicesInput,
+  handleMultipleCheckboxStatus,
+  handleMultipleCheckbox,
+  handleCancelation,
+  updateStaffServicesData
 }, dispatch)
 
 

@@ -1,5 +1,8 @@
+import swal from 'sweetalert';
+
 import { saveDashboardMenuStatus, getLatestDashboardMenuStatus } from '../../helpers/dashboard';
-import { setBarberDisableStatusInput } from '../firestore/staff/staff.actions';
+import { setBarberDisableStatusInput, setBarberInfo } from '../firestore/staff/staff.actions';
+import { setSelectedServicesInput, setHasEditStatus } from '../firestore/staffService/staffService.actions';
 
 // ---------------------------------------------- DASHBOARD ACTION ----------------------------------------------
 // To get DMS cookies and dispatch to store
@@ -218,6 +221,30 @@ export const handleSingleCheckbox = (e) => {
   }
 }
 
+// To handle each multiple checkbox
+export const handleMultipleCheckbox = (e, selectedServicesInput) => {
+  return (dispatch, getState, { getFirebase, getFirestore }) => {
+    let target = e.target
+    let id = target.id            // id represent key of product in firestore
+    let type = target.type        // type of input e.g. radio or checkbox
+    let status = target.checked   // true or false
+    
+    let checkedIndex = selectedServicesInput.findIndex(staffService => staffService === id);
+
+    if (type === 'checkbox' && status) {
+      if (checkedIndex <= -1) {
+        selectedServicesInput.push(id)
+      } 
+    } else if (type === 'checkbox' && status === false) {
+      if (checkedIndex >= 0) {
+        selectedServicesInput.splice(checkedIndex, 1)
+      }
+    }
+    dispatch(setHasEditStatus(true))
+    dispatch(setSelectedServicesInput({ uniqueStatus: false, staffServices: selectedServicesInput }))
+  }
+}
+
 // To handle each single checkbox checked status
 export const handleCheckedStatus = (status) => {
   return (dispatch, getState, { getFirebase, getFirestore }) => {
@@ -226,5 +253,44 @@ export const handleCheckedStatus = (status) => {
       checkedStatus = true
     }
     return checkedStatus  
+  }
+}
+
+// To handle multiple checkbox checked status
+export const handleMultipleCheckboxStatus = (service, selectedServicesInput) => {
+  return (dispatch, getState, { getFirebase, getFirestore }) => {
+    let status = false
+    let breakStatus = false
+    selectedServicesInput && selectedServicesInput.map(selectedStaffService => {
+      if (service.id === selectedStaffService && breakStatus === false) {
+        status = true
+        breakStatus = true
+      }
+      return ''
+    })
+    return status  
+  }
+}
+
+// To handle cancelation through modal action
+export const handleCancelation = (data) => {
+  return (dispatch, getState, { getFirebase, getFirestore }) => {
+    let { functionToBeExecuted, requiredData, section } = data
+    swal({
+      title: 'Are you sure?',
+      text: `Barber's ${section} information will be restored to previous settings.`,
+      icon: 'warning',
+      buttons: ['Cancel', 'OK']
+    })
+    .then(result => {
+      if (result) {
+        if (functionToBeExecuted === 'setSelectedServicesInput') {
+          dispatch(setHasEditStatus(false))
+          dispatch(setSelectedServicesInput(requiredData))
+        } else if (functionToBeExecuted === 'setBarberInfo') {
+          dispatch(setBarberInfo(requiredData))
+        }
+      }
+    })  
   }
 }

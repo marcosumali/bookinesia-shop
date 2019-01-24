@@ -45,6 +45,11 @@ const staffDataList = (state = { ...initialState }, action) => {
         ...state,
         barberName: action.payload,
       })
+    case 'SET_BARBER_NAME_INPUT_ERROR':
+      return ({
+        ...state,
+        barberNameError: action.payload,
+      })
     case 'SET_BARBER_DISABLE_STATUS_INPUT':
       return ({
         ...state,
