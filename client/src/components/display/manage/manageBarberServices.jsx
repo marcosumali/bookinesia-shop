@@ -10,7 +10,7 @@ import DisabledButton from '../../button/buttonDisabled';
 
 class manageBarberServices extends Component {
   render() {
-    console.log('manageBarberServices', this.props)
+    // console.log('manageBarberServices', this.props)
     let { 
       services, 
       handleMultipleCheckboxStatus, 

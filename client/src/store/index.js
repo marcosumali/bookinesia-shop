@@ -10,6 +10,7 @@ import staffReducer from './firestore/staff/staff.reducers';
 import transactionReducer from './firestore/transaction/transaction.reducers';
 import serviceReducer from './firestore/service/service.reducers';
 import staffServiceReducer from './firestore/staffService/staffService.reducers';
+import staffScheduleReducer from './firestore/staffSchedule/staffSchedule.reducers.js';
 
 const allReducers = combineReducers({
   nav: dashboardReducer,
@@ -22,6 +23,7 @@ const allReducers = combineReducers({
   transaction: transactionReducer,
   service: serviceReducer,
   staffService: staffServiceReducer,
+  staffSchedule: staffScheduleReducer,
 });
 
 export default allReducers

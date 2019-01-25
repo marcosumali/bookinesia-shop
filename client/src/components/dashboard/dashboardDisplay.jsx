@@ -13,6 +13,7 @@ import Loading from '../display/loading/loading';
 import { getStaffsAndOtherData, getAllStaffs } from '../../store/firestore/staff/staff.actions';
 import { getServices } from '../../store/firestore/service/service.actions';
 import { getStaffServices } from '../../store/firestore/staffService/staffService.actions';
+import { getStaffSchedules } from '../../store/firestore/staffSchedule/staffSchedule.actions';
 
 class dashboardDisplay extends Component {
   componentWillMount() {
@@ -20,6 +21,7 @@ class dashboardDisplay extends Component {
     this.props.getAllStaffs('dummyshop-bekasi')
     this.props.getServices('dummyshop-bekasi')
     this.props.getStaffServices('dummyshop-bekasi')
+    this.props.getStaffSchedules('dummyshop-bekasi')
   }
   
   render() {
@@ -34,7 +36,8 @@ class dashboardDisplay extends Component {
           !this.props.selectedDate ||
           this.props.allBarbersLoading ||
           this.props.servicesLoading ||
-          this.props.staffServicesLoading ?
+          this.props.staffServicesLoading ||
+          this.props.staffSchedulesLoading ?
           <Loading />
           :
           <div className="row No-margin Height-100cent">
@@ -76,6 +79,7 @@ const mapStateToProps = state => {
     dashboardsLoading: state.transaction.dashboardsLoading,
     servicesLoading: state.service.servicesLoading,
     staffServicesLoading: state.staffService.staffServicesLoading,
+    staffSchedulesLoading: state.staffSchedule.staffSchedulesLoading,
     selectedDate: state.appointment.selectedDate,
   }
 }
@@ -84,7 +88,8 @@ const mapDispatchToProps = dispatch => bindActionCreators({
   getStaffsAndOtherData,
   getAllStaffs,
   getServices,
-  getStaffServices
+  getStaffServices,
+  getStaffSchedules
 }, dispatch)
 
 

@@ -2,13 +2,18 @@ import React, { Component } from 'react';
 
 export default class inputSwitch extends Component {
   render() {
-    let { inputId, inputLabel, inputValue, handleChangesFunction, handleCheckFunction, checkedStatus } = this.props
+    let { inputId, inputLabel, inputValue, handleChangesFunction, handleCheckFunction, checkedStatus, showLabel } = this.props
     return (
       <div>
         <label htmlFor={ inputId } className="Form-text-active active">{ inputLabel }</label>
         <div className="switch">
           <label>
-            Off
+            {
+              showLabel ?
+              "Off"
+              :
+              ""
+            }
             <input 
               id={ inputId } 
               type="checkbox"
@@ -17,7 +22,12 @@ export default class inputSwitch extends Component {
               checked={ handleCheckFunction(checkedStatus) } 
             />
             <span className="lever"></span>
-            On
+            {
+              showLabel ?
+              "On"
+              :
+              ""
+            }
           </label>
         </div>       
       </div>

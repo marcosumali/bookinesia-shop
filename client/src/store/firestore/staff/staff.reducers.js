@@ -9,6 +9,8 @@ let initialState = {
   barberName: '',
   barberNameError: false,
   barberDisableStatus: false,
+  fileSizeError: false,
+  hasEditStatusFile: false,
 }
 
 const staffDataList = (state = { ...initialState }, action) => {
@@ -54,6 +56,16 @@ const staffDataList = (state = { ...initialState }, action) => {
       return ({
         ...state,
         barberDisableStatus: action.payload,
+      })
+    case 'SET_FILE_SIZE_ERROR':
+      return ({
+        ...state,
+        fileSizeError: action.payload,
+      })
+    case 'SET_HAS_EDIT_STATUS_FILE':
+      return ({
+        ...state,
+        hasEditStatusFile: action.payload,
       })
     default:
       return state;
