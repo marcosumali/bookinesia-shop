@@ -1,9 +1,11 @@
 import { getAppointmentsDate } from '../appointment/appointment.actions';
 import { setActiveTab } from '../../dashboard/dashboard.actions';
 import { setSelectedStaffServices, setHasEditStatus } from '../../firestore/staffService/staffService.actions';
+import { setSelectedStaffSchedules, setHasEditStatusStaffSchedule } from '../../firestore/staffSchedule/staffSchedule.actions';
 import swal from 'sweetalert';
 
 export const emptyError = 'This section must be filled.'
+export const maxFileSizeError = 'Maximum file size is 1 MB.'
 
 // Get barbers data based on provided branchId with disableStatus is false
 export const getStaffsAndOtherData = (branchId) => {
@@ -87,13 +89,16 @@ const setAllBarbersFailed = (status) => {
 }
 
 // To set selected barbers to display it on content section
-export const setSelectedBarber = (barber, staffServices) => {
+export const setSelectedBarberAndOtherData = (barber, staffServices, staffSchedules) => {
   return (dispatch, getState, { getFirebase, getFirestore }) => {
     dispatch(selectedBarberAction(barber))
     dispatch(setBarberInfo(barber))
     dispatch(setActiveTab('Details'))
     dispatch(setSelectedStaffServices(barber, staffServices))
+    dispatch(setHasEditStatusFile(false))
     dispatch(setHasEditStatus(false))
+    dispatch(setHasEditStatusStaffSchedule(false))
+    dispatch(setSelectedStaffSchedules(barber, staffSchedules))
   }
 }
 
@@ -151,8 +156,9 @@ export const setBarberDisableStatusInput = (data) => {
 export const updateBarberData = (data) => {
   return (dispatch, getState, { getFirebase, getFirestore }) => {
     let firestore = getFirestore()
-    let { id, name, disableStatus, selectedBarber } = data
+    let { id, name, disableStatus, selectedBarber, file } = data
     let lowercasedName = name.toLowerCase()
+    console.log(file.size, '===continued')
     
     let staffRef = firestore.collection('staff').doc(id)
 
@@ -161,12 +167,20 @@ export const updateBarberData = (data) => {
       dispatch(setBarberNameInputError(emptyError))
     }
 
+    if (file.size > 1000000) {
+      dispatch(setFileSizeInputError(maxFileSizeError))
+    }
+
     // Input Validation: OK
     if (name.length > 0) {
       dispatch(setBarberNameInputError(false))
     }
 
-    if (name.length > 0) {
+    if (file.size <= 1000000) {
+      dispatch(setFileSizeInputError(false))
+    }
+
+    if (name.length > 0 && file.size <= 1000000) {
       swal({
         title: 'Are you sure?',
         text: "Barber's detail information will be updated including their availibility status in the shop's website.",
@@ -180,9 +194,13 @@ export const updateBarberData = (data) => {
             disableStatus
           })
           .then(() => {
-            selectedBarber.name = lowercasedName
-            selectedBarber.disableStatus = disableStatus
-            dispatch(selectedBarberAction(selectedBarber))
+            let revisedSelectedBarber = {
+              ...selectedBarber,
+              name: lowercasedName,
+              disableStatus,
+            }
+            dispatch(setHasEditStatusFile(false))
+            dispatch(selectedBarberAction(revisedSelectedBarber))
             swal("Information Updated", "", "success")
           })
           .catch(err => {
@@ -193,6 +211,35 @@ export const updateBarberData = (data) => {
     }
   }
 }
+
+const setFileSizeInputError = (data) => {
+  return {
+    type: 'SET_FILE_SIZE_ERROR',
+    payload: data
+  }
+}
+
+// To set has click input file button status
+export const setHasEditStatusFile = (clickStatus) => {
+  return (dispatch, getState, { getFirebase, getFirestore }) => {
+    let status = ''
+
+    if (clickStatus) {
+      status = true
+    } else {
+      status = false
+    }
+    dispatch(setHasEditStatusFileAction(status))
+  }
+}
+
+const setHasEditStatusFileAction = (data) => {
+  return {
+    type: 'SET_HAS_EDIT_STATUS_FILE',
+    payload: data
+  }
+}
+
 
 
 

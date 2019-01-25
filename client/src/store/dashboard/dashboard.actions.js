@@ -1,8 +1,9 @@
 import swal from 'sweetalert';
 
 import { saveDashboardMenuStatus, getLatestDashboardMenuStatus } from '../../helpers/dashboard';
-import { setBarberDisableStatusInput, setBarberInfo } from '../firestore/staff/staff.actions';
+import { setBarberDisableStatusInput, setBarberInfo, setHasEditStatusFile } from '../firestore/staff/staff.actions';
 import { setSelectedServicesInput, setHasEditStatus } from '../firestore/staffService/staffService.actions';
+import { setSelectedStaffSchedulesInput, setHasEditStatusStaffSchedule } from '../firestore/staffSchedule/staffSchedule.actions';
 
 // ---------------------------------------------- DASHBOARD ACTION ----------------------------------------------
 // To get DMS cookies and dispatch to store
@@ -288,9 +289,105 @@ export const handleCancelation = (data) => {
           dispatch(setHasEditStatus(false))
           dispatch(setSelectedServicesInput(requiredData))
         } else if (functionToBeExecuted === 'setBarberInfo') {
+          dispatch(setHasEditStatusFile(false))
           dispatch(setBarberInfo(requiredData))
+        } else if (functionToBeExecuted === 'setSelectedStaffSchedulesInput') {
+          dispatch(setHasEditStatusStaffSchedule(false))
+          dispatch(setSelectedStaffSchedulesInput(requiredData))
         }
       }
     })  
   }
 }
+
+// To handle multiple switches
+export const handleMultipleSwitches = (purpose, e, data) => {
+  return (dispatch, getState, { getFirebase, getFirestore }) => {
+    let target = e.target
+    let id = target.id            // represent id of input
+    let type = target.type        // type of input e.g. radio or checkbox
+    let status = target.checked   // true or false
+
+    if (purpose === 'manageBarberHours' && type === 'checkbox') {
+      // Here data represent selected staff services
+      let checkedIndex = data.findIndex(staffService => staffService.id === id)
+      let selectedData = data[checkedIndex]
+      let revisedStatus = ''
+      if (status) {
+        revisedStatus = false
+      } else {
+        revisedStatus = true
+      }
+      let revisedData = {
+        ...selectedData,
+        disableStatus: revisedStatus
+      }
+      data.splice(checkedIndex, 1, revisedData)
+      dispatch(setHasEditStatusStaffSchedule(true))
+      dispatch(setSelectedStaffSchedulesInput(data))
+    }
+  }
+}
+
+// To handle multiple select option
+export const handleMultipleSelectOption = (e, value, purpose, time, data) => {
+  return (dispatch, getState, { getFirebase, getFirestore }) => {
+    let target = e.target
+    let id = target.id            // represent id of input
+    let type = target.type        // type of input e.g. radio or checkbox
+
+    if (purpose === 'manageBarberHours' && type === 'select-one') {
+      // Here data represent selected staff services
+      let checkedIndex = data.findIndex(staffService => staffService.id === id)
+      let selectedData = data[checkedIndex]
+
+      if (time === 'startHours') {
+        let revisedData = {
+          ...selectedData,
+          startHours: value
+        }
+        data.splice(checkedIndex, 1, revisedData)
+      } else if (time === 'startMinutes') {
+        let revisedData = {
+          ...selectedData,
+          startMinutes: value
+        }
+        data.splice(checkedIndex, 1, revisedData)
+      } else if (time === 'endHours') {
+        let revisedData = {
+          ...selectedData,
+          endHours: value
+        }
+        data.splice(checkedIndex, 1, revisedData)
+      } else if (time === 'endMinutes') {
+        let revisedData = {
+          ...selectedData,
+          endMinutes: value
+        }
+        data.splice(checkedIndex, 1, revisedData)
+      }
+      dispatch(setHasEditStatusStaffSchedule(true))
+      dispatch(setSelectedStaffSchedulesInput(data))
+    }
+  }
+}
+
+// To handle single file input to redux
+export const handleSingleFileInput = (e) => {
+  return (dispatch, getState, { getFirebase, getFirestore }) => {
+    let target = e.target
+    let file = target.files[0]
+
+    dispatch(setHasEditStatusFile(true))
+    dispatch(setSingleFileInput(file))
+  }
+}
+
+export const setSingleFileInput = (data) => {
+  return {
+    type: 'SET_SINGLE_FILE_INPUT',
+    payload: data
+  }
+}
+
+

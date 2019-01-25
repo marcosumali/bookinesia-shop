@@ -1,6 +1,6 @@
 import swal from 'sweetalert';
 
-let emptyInputError = 'Barber has to provide atleast one service.'
+let emptyInputError = 'Barber has to provide atleast one active service.'
 
 // ---------------------------------------------- STAFF SERVICE ACTION ----------------------------------------------
 // Get staff services data based on provided branchId
@@ -192,15 +192,30 @@ export const updateStaffServicesData = (data) => {
       })
       .then(result => {
         if (result) {
+          // Process to update the data to selected staff services to be dispatch on next action
+          staffServicesToBeUpdated && staffServicesToBeUpdated.map((staffServiceToBeUpdated) => {
+            let checkedIndex = staffServices.findIndex(staffService => staffService.id === staffServiceToBeUpdated.id)
+            let revisedStaffServices = {
+              ...staffServices[checkedIndex],
+              disableStatus: staffServiceToBeUpdated.disableStatus
+            }
+            staffServices.splice(checkedIndex, 1, revisedStaffServices)
+            return ''
+          })
 
-          staffServicesToBeUpdated && staffServicesToBeUpdated.map(staffServiceToBeUpdated => {
+          // Process to update the data to firestore and redux
+          staffServicesToBeUpdated && staffServicesToBeUpdated.map((staffServiceToBeUpdated, index) => {
             let staffServiceRef = firestore.collection('staffService').doc(staffServiceToBeUpdated.id)
 
             staffServiceRef.update({
               disableStatus: staffServiceToBeUpdated.disableStatus
             })
             .then(() => {
-              swal("Information Updated", "", "success")
+              if (index === 0) {
+                dispatch(setHasEditStatus(false))
+                dispatch(setSelectedStaffServicesAction(staffServices))
+                swal("Information Updated", "", "success")
+              }
             })
             .catch(err => {
               console.log('ERROR: update staff service data', err)

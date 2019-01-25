@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import { handleFilterInputChanges } from '../../../store/dashboard/dashboard.actions';
-import { setSelectedBarber } from '../../../store/firestore/staff/staff.actions';
+import { setSelectedBarberAndOtherData } from '../../../store/firestore/staff/staff.actions';
 import AddBoxSvg from '../../svg/addBoxSvg';
 
 class manageMenu extends Component {
@@ -26,7 +26,7 @@ class manageMenu extends Component {
   render() {
     let headerText = ''
     let data = []
-    let { displayToShow, barbers, setSelectedBarber, staffServices } = this.props
+    let { displayToShow, barbers, setSelectedBarberAndOtherData, staffServices, staffSchedules } = this.props
     if (displayToShow === 'Barbers') {
       headerText = 'Barbers'
       data = barbers
@@ -57,7 +57,7 @@ class manageMenu extends Component {
                   singleData.disableStatus ?
                   <div 
                     className="col m12 No-margin No-padding Manage-box Container-nowrap-center-cross animated fadeIn faster"
-                    onClick={ () => setSelectedBarber(singleData, staffServices) }
+                    onClick={ () => setSelectedBarberAndOtherData(singleData, staffServices, staffSchedules) }
                   >
                     <div className="col m2 l1 No-margin No-padding Container-nowrap-center Barber-image-box">
                       <img className="Barber-image Disabled" src={ singleData.picture } alt={ "image" + index }/>
@@ -69,7 +69,7 @@ class manageMenu extends Component {
                   :
                   <div 
                     className="col m12 No-margin No-padding Manage-box Container-nowrap-center-cross animated fadeIn faster"
-                    onClick={ () => setSelectedBarber(singleData, staffServices) }
+                    onClick={ () => setSelectedBarberAndOtherData(singleData, staffServices, staffSchedules) }
                   >
                     <div className="col m2 l1 No-margin No-padding Container-nowrap-center Barber-image-box">
                       <img className="Barber-image" src={ singleData.picture } alt={ "image" + index }/>
@@ -97,12 +97,13 @@ const mapStateToProps = state => {
     barbers: state.staff.allBarbers,
     filterInput: state.nav.filterInput,
     staffServices: state.staffService.staffServices,
+    staffSchedules: state.staffSchedule.staffSchedules,
   }
 }
 
 const mapDispatchToProps = dispatch => bindActionCreators({
   handleFilterInputChanges,
-  setSelectedBarber
+  setSelectedBarberAndOtherData
 }, dispatch)
 
 

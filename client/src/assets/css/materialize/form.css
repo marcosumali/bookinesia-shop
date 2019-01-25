@@ -9,7 +9,7 @@ input[type=number]  {
 }
 /* label color */
 .input-field {
-  margin-top: 0.5rem;
+  margin-top: 0.25rem;
 }
 .input-field label {
   color: #666666;
@@ -130,6 +130,64 @@ input[type="radio"].with-gap:checked+label:after {
 .switch label input[type=checkbox]:checked+.lever {
   background-color: lightblue;
 }
+
+/* Modifying Input Switch Checkbox Materialize CSS */
+.select-wrapper input.select-dropdown {
+  margin: 0;
+  font-family: Montserrat;
+  font-size: 1em;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.2;
+  letter-spacing: normal;
+  color: #5499c3;
+} /* To edit the input style */
+.select-wrapper span.caret {
+  color: #666666;
+} /* To edit caret symbol/icon */
+.dropdown-content {
+  min-width: 20px;
+  border-radius: 2.5px;
+} /* To edit the ul section of select input */
+.dropdown-content li {
+  min-height: 0px;
+} /* To edit the li section of select input */
+.dropdown-content li>a, .dropdown-content li>span {
+  padding: 5px;
+  font-family: Montserrat;
+  font-size: 0.75em;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.2;
+  letter-spacing: normal;
+  color: #5499c3;
+  text-align: center;
+} /* To edit the span section of li inside select input */
+
+/* Modifying Input File Materialize CSS */
+.file-field .btn, .file-field .btn-large {
+  height: inherit;
+  line-height: inherit;
+}
+.btn, .btn-large, .btn-flat {
+  height: inherit;
+  line-height: inherit;
+  padding: 0 5px;
+  background-color: #5499c3;
+  text-transform: capitalize;
+}
+.btn:hover, .btn-large:hover {
+  background-color: #5499c3;
+}
+#image-text {
+  margin: 0px;
+}
+.Image-text-error {
+  margin-left: 3.1rem;
+}
+
 
 /* General Form CSS */
 .Form-text {
