@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Modal } from 'react-materialize';
 
+import '../modal.css';
 import './modalInfo.css';
 import { formatMoney, getTotalTransaction } from '../../../helpers/currency';
 import CloseSvg from '../../../components/svg/closeSvg';

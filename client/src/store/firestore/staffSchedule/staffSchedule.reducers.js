@@ -6,6 +6,7 @@ let initialState = {
   selectedStaffSchedulesInput: [],
   hasEditStatus: false,
   staffScheduleInputError: false,
+  loadingStatus: false,
 }
 
 const staffScheduleDataList = (state = { ...initialState }, action) => {
@@ -40,6 +41,11 @@ const staffScheduleDataList = (state = { ...initialState }, action) => {
       return ({
         ...state,
         staffScheduleInputError: action.payload,
+      })
+    case 'SET_STAFF_SCHEDULE_LOADING_STATUS':
+      return ({
+        ...state,
+        loadingStatus: action.payload,
       })
     default:
       return state;

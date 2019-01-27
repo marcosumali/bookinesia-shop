@@ -4,7 +4,8 @@ import { bindActionCreators } from 'redux';
 
 import { handleFilterInputChanges } from '../../../store/dashboard/dashboard.actions';
 import { setSelectedBarberAndOtherData } from '../../../store/firestore/staff/staff.actions';
-import AddBoxSvg from '../../svg/addBoxSvg';
+import AddBarberModal from '../../modal/manage/barber/modalAddBarber';
+import AccountCircleSvg from '../../svg/accountCircleSvg';
 
 class manageMenu extends Component {
   filterFunction() {
@@ -45,7 +46,7 @@ class manageMenu extends Component {
             </div>
           </form>
           <div className="col m2 l1 No-margin No-padding Container-nowrap-end">
-            <AddBoxSvg width="80%" height="80%" color="#f68606" />
+            <AddBarberModal />
           </div>
         </div>
         <div className="col m12 No-margin No-padding">
@@ -60,7 +61,12 @@ class manageMenu extends Component {
                     onClick={ () => setSelectedBarberAndOtherData(singleData, staffServices, staffSchedules) }
                   >
                     <div className="col m2 l1 No-margin No-padding Container-nowrap-center Barber-image-box">
-                      <img className="Barber-image Disabled" src={ singleData.picture } alt={ "image" + index }/>
+                      {
+                        singleData.picture.length <= 0 ?
+                        <AccountCircleSvg className="Disabled" width="100%" height="100%" color="#666666" />
+                        :
+                        <img className="Barber-image Disabled" src={ singleData.picture } alt={ "image" + index }/>
+                      }
                     </div>
                     <div className="col m10 l11 No-margin No-padding Container-nowrap-center-cross">
                       <div className="Manage-text Disabled">{ singleData.name }</div>
@@ -72,7 +78,12 @@ class manageMenu extends Component {
                     onClick={ () => setSelectedBarberAndOtherData(singleData, staffServices, staffSchedules) }
                   >
                     <div className="col m2 l1 No-margin No-padding Container-nowrap-center Barber-image-box">
-                      <img className="Barber-image" src={ singleData.picture } alt={ "image" + index }/>
+                      {
+                        singleData.picture.length <= 0 ?
+                        <AccountCircleSvg className="" width="100%" height="100%" color="#666666" />
+                        :
+                        <img className="Barber-image" src={ singleData.picture } alt={ "image" + index }/>
+                      }
                     </div>
                     <div className="col m10 l11 No-margin No-padding Container-nowrap-center-cross">
                       <div className="Manage-text">{ singleData.name }</div>

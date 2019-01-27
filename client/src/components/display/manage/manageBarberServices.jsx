@@ -7,6 +7,7 @@ import { handleMultipleCheckboxStatus, handleMultipleCheckbox, handleCancelation
 import CheckboxInput from '../../form/inputCheckbox';
 import Button from '../../button/button';
 import DisabledButton from '../../button/buttonDisabled';
+import LoadingButton from '../../button/buttonLoading';
 
 class manageBarberServices extends Component {
   render() {
@@ -21,6 +22,7 @@ class manageBarberServices extends Component {
       hasEditStatus, 
       staffServiceInputError,
       updateStaffServicesData,
+      loadingStatus,
     } = this.props
 
     return (
@@ -46,7 +48,7 @@ class manageBarberServices extends Component {
         </div>
         <div className="col m12 No-margin No-padding Container-nowrap-end Margin-b-10">
           {
-            hasEditStatus ?
+            hasEditStatus && loadingStatus === false ?
             <Button 
               text="Cancel"
               type="Btn-blue"
@@ -60,12 +62,17 @@ class manageBarberServices extends Component {
             />
           }
           {
-            hasEditStatus ?
+            hasEditStatus && loadingStatus === false ?
             <Button 
               text="Save"
               type="Btn-white-blue"
               clickFunction={ updateStaffServicesData }
               data={{ staffServices: selectedStaffServices, servicesInput: selectedServicesInput }}
+            />
+            :
+            loadingStatus ?
+            <LoadingButton 
+              type="Btn-white-blue Container-nowrap-center"
             />
             :
             <DisabledButton 
@@ -88,6 +95,7 @@ const mapStateToProps = state => {
     selectedServicesInput: state.staffService.selectedServicesInput,
     hasEditStatus: state.staffService.hasEditStatus,
     staffServiceInputError: state.staffService.staffServiceInputError,
+    loadingStatus: state.staffService.loadingStatus
   }
 }
 

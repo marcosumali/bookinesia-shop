@@ -11,6 +11,9 @@ let initialState = {
   barberDisableStatus: false,
   fileSizeError: false,
   hasEditStatusFile: false,
+  addBarberName: '',
+  addBarberNameError:  false,
+  loadingStatus: false,
 }
 
 const staffDataList = (state = { ...initialState }, action) => {
@@ -66,6 +69,21 @@ const staffDataList = (state = { ...initialState }, action) => {
       return ({
         ...state,
         hasEditStatusFile: action.payload,
+      })
+    case 'SET_ADD_BARBER_NAME_INPUT':
+      return ({
+        ...state,
+        addBarberName: action.payload,
+      })
+    case 'SET_ADD_BARBER_NAME_INPUT_ERROR':
+      return ({
+        ...state,
+        addBarberNameError: action.payload,
+      })
+    case 'SET_STAFF_DETAILS_LOADING_STATUS':
+      return ({
+        ...state,
+        loadingStatus: action.payload,
       })
     default:
       return state;

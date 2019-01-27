@@ -9,10 +9,18 @@ export default class inputFile extends Component {
         <div className="file-field input-field">
           <div className="btn">
             <span>File</span>
-            <input type="file" id={ inputId } onChange={ (e) => handleChangesFunction(e) }/>
+            <input 
+              type="file" 
+              id={ inputId } 
+              onChange={ (e) => handleChangesFunction(e) }
+            />
           </div>
           <div className="file-path-wrapper">
-            <input id="image-text" className="file-path validate" type="text" />
+            <input 
+              id="image-text" 
+              className="file-path validate" 
+              type="text" 
+            />
           </div>
         </div>
         {
