@@ -1,9 +1,9 @@
 import swal from 'sweetalert';
 
 import { saveDashboardMenuStatus, getLatestDashboardMenuStatus } from '../../helpers/dashboard';
-import { setBarberDisableStatusInput, setBarberInfo, setHasEditStatusFile } from '../firestore/staff/staff.actions';
-import { setSelectedServicesInput, setHasEditStatus } from '../firestore/staffService/staffService.actions';
-import { setSelectedStaffSchedulesInput, setHasEditStatusStaffSchedule } from '../firestore/staffSchedule/staffSchedule.actions';
+import { setBarberDisableStatusInput, setBarberInfo, setHasEditStatusFile, setBarberNameInputError } from '../firestore/staff/staff.actions';
+import { setSelectedServicesInput, setHasEditStatus, setStaffServiceInputError } from '../firestore/staffService/staffService.actions';
+import { setSelectedStaffSchedulesInput, setHasEditStatusStaffSchedule, setStaffScheduleInputError } from '../firestore/staffSchedule/staffSchedule.actions';
 
 // ---------------------------------------------- DASHBOARD ACTION ----------------------------------------------
 // To get DMS cookies and dispatch to store
@@ -288,12 +288,17 @@ export const handleCancelation = (data) => {
         if (functionToBeExecuted === 'setSelectedServicesInput') {
           dispatch(setHasEditStatus(false))
           dispatch(setSelectedServicesInput(requiredData))
+          dispatch(setStaffServiceInputError(false))
+
         } else if (functionToBeExecuted === 'setBarberInfo') {
           dispatch(setHasEditStatusFile(false))
           dispatch(setBarberInfo(requiredData))
+          dispatch(setBarberNameInputError(false))
+
         } else if (functionToBeExecuted === 'setSelectedStaffSchedulesInput') {
           dispatch(setHasEditStatusStaffSchedule(false))
           dispatch(setSelectedStaffSchedulesInput(requiredData))
+          dispatch(setStaffScheduleInputError(false))
         }
       }
     })  
@@ -313,18 +318,31 @@ export const handleMultipleSwitches = (purpose, e, data) => {
       let checkedIndex = data.findIndex(staffService => staffService.id === id)
       let selectedData = data[checkedIndex]
       let revisedStatus = ''
+
       if (status) {
         revisedStatus = false
       } else {
         revisedStatus = true
       }
+
       let revisedData = {
         ...selectedData,
         disableStatus: revisedStatus
       }
-      data.splice(checkedIndex, 1, revisedData)
+
+      let result = []
+      data && data.map((singleData, index) => {
+        if (index === checkedIndex) {
+          result.push(revisedData)
+        } else (
+          result.push(singleData)
+        )
+        return ''
+      })
+
+      // data.splice(checkedIndex, 1, revisedData)
       dispatch(setHasEditStatusStaffSchedule(true))
-      dispatch(setSelectedStaffSchedulesInput(data))
+      dispatch(setSelectedStaffSchedulesInput(result))
     }
   }
 }

@@ -190,8 +190,10 @@ export const updateStaffServicesData = (data) => {
         icon: 'warning',
         buttons: ['Cancel', 'OK']
       })
-      .then(result => {
+      .then(result => {        
         if (result) {
+          dispatch(setStaffServiceLoadingStatus(true))
+
           // Process to update the data to selected staff services to be dispatch on next action
           staffServicesToBeUpdated && staffServicesToBeUpdated.map((staffServiceToBeUpdated) => {
             let checkedIndex = staffServices.findIndex(staffService => staffService.id === staffServiceToBeUpdated.id)
@@ -203,19 +205,16 @@ export const updateStaffServicesData = (data) => {
             return ''
           })
 
+          let score = 0
           // Process to update the data to firestore and redux
           staffServicesToBeUpdated && staffServicesToBeUpdated.map((staffServiceToBeUpdated, index) => {
             let staffServiceRef = firestore.collection('staffService').doc(staffServiceToBeUpdated.id)
-
+            score = score + 1
+              
             staffServiceRef.update({
               disableStatus: staffServiceToBeUpdated.disableStatus
             })
             .then(() => {
-              if (index === 0) {
-                dispatch(setHasEditStatus(false))
-                dispatch(setSelectedStaffServicesAction(staffServices))
-                swal("Information Updated", "", "success")
-              }
             })
             .catch(err => {
               console.log('ERROR: update staff service data', err)
@@ -223,15 +222,62 @@ export const updateStaffServicesData = (data) => {
 
             return ''
           })
+
+          if (score >= staffServicesToBeUpdated.length) {
+            dispatch(setHasEditStatus(false))
+            dispatch(setSelectedStaffServicesAction(staffServices))
+            dispatch(setStaffServiceLoadingStatus(false))
+            swal("Information Updated", "", "success")
+          }
+
         }
       })
     }
   }
 }
 
-const setStaffServiceInputError = (data) => {
+export const setStaffServiceInputError = (data) => {
   return {
     type: 'SET_STAFF_SERVICE_INPUT_ERROR',
     payload: data
+  }
+}
+
+export const setStaffServiceLoadingStatus = (data) => {
+  return {
+    type: 'SET_STAFF_SERVICE_LOADING_STATUS',
+    payload: data
+  }
+}
+
+// To create new staff service data for new staff
+export const addNewStaffServicesData = (staffId, branchId, services) => {
+  return (dispatch, getState, { getFirebase, getFirestore }) => {
+    let firestore = getFirestore()
+    let disableStatus = true
+
+    services && services.map((service, index) => {
+      let newStaffService = {
+        branchId,
+        disableStatus,
+        staffId,
+        serviceId: service.id
+      }
+
+      let uid = `${staffId}-${index}`
+      let staffServiceRef = firestore.collection('staffService').doc(uid)
+
+      staffServiceRef
+      .set(newStaffService)
+      .then(() => {
+      })
+      .catch(err => {
+        console.log('ERROR: add new staff service', err)
+      })
+  
+      return ''
+    })
+    
+    return true
   }
 }

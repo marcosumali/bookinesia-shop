@@ -6,6 +6,7 @@ import SwitchInput from '../../form/inputSwitch';
 import SelectInput from '../../form/inputSelect';
 import Button from '../../button/button';
 import DisabledButton from '../../button/buttonDisabled';
+import LoadingButton from '../../button/buttonLoading';
 import { 
   handleCheckedStatus, 
   handleMultipleSwitches, 
@@ -27,7 +28,8 @@ class manageBarberHours extends Component {
       hasEditStatus,
       handleCancelation,
       staffScheduleInputError,
-      updateStaffSchedulesData
+      updateStaffSchedulesData,
+      loadingStatus,
     } = this.props
     // console.log('manageBarberHours', this.props)
     return (
@@ -120,7 +122,7 @@ class manageBarberHours extends Component {
         </div>
         <div className="col m12 No-margin No-padding Container-nowrap-end Margin-b-10">
           {
-            hasEditStatus ?
+            hasEditStatus && loadingStatus === false ?
             <Button 
               text="Cancel"
               type="Btn-blue"
@@ -134,12 +136,17 @@ class manageBarberHours extends Component {
             />
           }
           {
-            hasEditStatus ?
+            hasEditStatus && loadingStatus === false ?
             <Button 
               text="Save"
               type="Btn-white-blue"
               clickFunction={ updateStaffSchedulesData }
               data={{ staffSchedules: selectedStaffSchedules, staffSchedulesInput:  selectedStaffSchedulesInput}}
+            />
+            :
+            loadingStatus ?
+            <LoadingButton 
+              type="Btn-white-blue Container-nowrap-center"
             />
             :
             <DisabledButton 
@@ -161,7 +168,8 @@ const mapStateToProps = state => {
     selectedStaffSchedules: state.staffSchedule.selectedStaffSchedules,
     selectedStaffSchedulesInput: state.staffSchedule.selectedStaffSchedulesInput,
     hasEditStatus: state.staffSchedule.hasEditStatus,
-    staffScheduleInputError: state.staffSchedule.staffScheduleInputError
+    staffScheduleInputError: state.staffSchedule.staffScheduleInputError,
+    loadingStatus: state.staffSchedule.loadingStatus
   }
 }
 

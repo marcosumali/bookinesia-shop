@@ -6,6 +6,7 @@ let initialState = {
   selectedServicesInput: [],
   hasEditStatus: false,
   staffServiceInputError: false,
+  loadingStatus: false,
 }
 
 const staffServiceDataList = (state = { ...initialState }, action) => {
@@ -40,6 +41,11 @@ const staffServiceDataList = (state = { ...initialState }, action) => {
       return ({
         ...state,
         staffServiceInputError: action.payload,
+      })
+    case 'SET_STAFF_SERVICE_LOADING_STATUS':
+      return ({
+        ...state,
+        loadingStatus: action.payload,
       })
     default:
       return state;

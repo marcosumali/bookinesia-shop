@@ -1,11 +1,12 @@
 import { getAppointmentsDate } from '../appointment/appointment.actions';
 import { setActiveTab } from '../../dashboard/dashboard.actions';
-import { setSelectedStaffServices, setHasEditStatus } from '../../firestore/staffService/staffService.actions';
-import { setSelectedStaffSchedules, setHasEditStatusStaffSchedule } from '../../firestore/staffSchedule/staffSchedule.actions';
+import { setSelectedStaffServices, setHasEditStatus, addNewStaffServicesData } from '../../firestore/staffService/staffService.actions';
+import { setSelectedStaffSchedules, setHasEditStatusStaffSchedule, addNewStaffSchedulesData } from '../../firestore/staffSchedule/staffSchedule.actions';
 import swal from 'sweetalert';
 
 export const emptyError = 'This section must be filled.'
 export const maxFileSizeError = 'Maximum file size is 1 MB.'
+export const maxStaffError = 'Maximum number of barbers is 5 person per branch. Contact our care center for futher queries.'
 
 // Get barbers data based on provided branchId with disableStatus is false
 export const getStaffsAndOtherData = (branchId) => {
@@ -138,7 +139,7 @@ const setBarberNameInput = (data) => {
   }
 }
 
-const setBarberNameInputError = (data) => {
+export const setBarberNameInputError = (data) => {
   return {
     type: 'SET_BARBER_NAME_INPUT_ERROR',
     payload: data
@@ -152,22 +153,19 @@ export const setBarberDisableStatusInput = (data) => {
   }
 }
 
-// To update barber data to firestore
-export const updateBarberData = (data) => {
+// Vaildate data before update to firestore or cloud storage
+export const updateBarberDataValidation = (data) => {
   return (dispatch, getState, { getFirebase, getFirestore }) => {
-    let firestore = getFirestore()
-    let { id, name, disableStatus, selectedBarber, file } = data
+    let { selectedBarber, name, disableStatus, file, branchId } = data
     let lowercasedName = name.toLowerCase()
-    console.log(file.size, '===continued')
-    
-    let staffRef = firestore.collection('staff').doc(id)
+    let maxFileZie = 1 * 1024 * 1024 
 
     // Input Validation: Error
     if (name.length <= 0) {
       dispatch(setBarberNameInputError(emptyError))
     }
 
-    if (file.size > 1000000) {
+    if (file.size > maxFileZie) {
       dispatch(setFileSizeInputError(maxFileSizeError))
     }
 
@@ -176,11 +174,11 @@ export const updateBarberData = (data) => {
       dispatch(setBarberNameInputError(false))
     }
 
-    if (file.size <= 1000000) {
+    if (file.size <= maxFileZie) {
       dispatch(setFileSizeInputError(false))
     }
 
-    if (name.length > 0 && file.size <= 1000000) {
+    if (name.length > 0) {
       swal({
         title: 'Are you sure?',
         text: "Barber's detail information will be updated including their availibility status in the shop's website.",
@@ -189,28 +187,116 @@ export const updateBarberData = (data) => {
       })
       .then(result => {
         if (result) {
-          staffRef.update({
-            name: lowercasedName,
-            disableStatus
-          })
-          .then(() => {
-            let revisedSelectedBarber = {
-              ...selectedBarber,
-              name: lowercasedName,
-              disableStatus,
+          dispatch(setStaffLoadingStatus(true))
+          dispatch(setHasEditStatusFile(false))
+          if (Object.keys(file).length === 0 && file.constructor === Object) {
+            dispatch(updateBarberData(null, selectedBarber, lowercasedName, disableStatus, null))            
+          } else {
+            if (file.size <= maxFileZie) {
+              dispatch(updateBarberFileAndData(file, selectedBarber, lowercasedName, disableStatus, branchId))
             }
-            dispatch(setHasEditStatusFile(false))
-            dispatch(selectedBarberAction(revisedSelectedBarber))
-            swal("Information Updated", "", "success")
-          })
-          .catch(err => {
-            console.log('ERROR: update staff data', err)
-          })
+          }
         }
       })
     }
   }
 }
+
+export const setStaffLoadingStatus = (data) => {
+  return {
+    type: 'SET_STAFF_DETAILS_LOADING_STATUS',
+    payload: data
+  }
+}
+
+// To update barber data to firestore
+export const updateBarberData = (file, selectedBarber, lowercasedName, disableStatus, downloadURL) => {
+  return (dispatch, getState, { getFirebase, getFirestore }) => {
+    let firestore = getFirestore()
+    let staffRef = firestore.collection('staff').doc(selectedBarber.id)
+
+    let dataToBeUpdated = {}
+
+    if(file) {
+      dataToBeUpdated['name'] = lowercasedName
+      dataToBeUpdated['disableStatus'] = disableStatus
+      dataToBeUpdated['picture'] = downloadURL
+      dataToBeUpdated['storageFileName'] = file.name
+    } else {
+      dataToBeUpdated['name'] = lowercasedName
+      dataToBeUpdated['disableStatus'] = disableStatus
+    }
+
+    staffRef.update(dataToBeUpdated)
+    .then(() => {
+      let revisedSelectedBarber = {}
+      if (file) {        
+        revisedSelectedBarber = {
+          ...selectedBarber,
+          name: lowercasedName,
+          disableStatus,
+          picture: downloadURL,
+          storageFileName: file.name
+        }
+      } else {
+        revisedSelectedBarber = {
+          ...selectedBarber,
+          name: lowercasedName,
+          disableStatus,
+        }
+      }
+      dispatch(setStaffLoadingStatus(false))
+      dispatch(selectedBarberAction(revisedSelectedBarber))
+      swal("Information Updated", "", "success")
+    })
+    .catch(err => {
+      console.log('ERROR: update staff data', err)
+    })
+  }
+}
+
+// To update barber file to cloud storage
+export const updateBarberFileAndData = (file, selectedBarber, lowercasedName, disableStatus, branchId) => {
+  return (dispatch, getState, { getFirebase, getFirestore }) => {
+    let firebase =  getFirebase()
+    let staffId = selectedBarber.id
+    let storageStaffImageRefToUpdate = firebase.storage().ref(`staff/${branchId}/${staffId}/${file.name}`)
+
+    if (selectedBarber.picture.length <= 0) {
+      storageStaffImageRefToUpdate
+      .put(file)
+      .then(function(snapshot) {
+        snapshot.ref.getDownloadURL().then(function(downloadURL) {
+          dispatch(updateBarberData(file, selectedBarber, lowercasedName, disableStatus, downloadURL))
+        })
+      })
+      .catch(err => {
+        console.log('ERROR: update new barber file data', err)
+      })      
+
+    } else {
+      let storageStaffImageRefToDelete = firebase.storage().ref(`staff/${branchId}/${staffId}/${selectedBarber.storageFileName}`)
+  
+      storageStaffImageRefToDelete
+      .delete()
+      .then(function() {
+        storageStaffImageRefToUpdate
+        .put(file)
+        .then(function(snapshot) {
+          snapshot.ref.getDownloadURL().then(function(downloadURL) {
+            dispatch(updateBarberData(file, selectedBarber, lowercasedName, disableStatus, downloadURL))
+          })
+        })
+        .catch(err => {
+          console.log('ERROR: update barber file data', err)
+        })
+      }).catch(function(err) {
+        console.log('ERROR: delete file picture', err)
+      })
+    }
+  }
+}
+
 
 const setFileSizeInputError = (data) => {
   return {
@@ -241,5 +327,101 @@ const setHasEditStatusFileAction = (data) => {
 }
 
 
+// To handle changes in input from add new barber
+export const handleChangesAddBarber = (e) => {
+  return (dispatch, getState, { getFirebase, getFirestore }) => {
+    let target = e.target
+    let inputId = target.id
+    let value = target.value
 
+    if (inputId === 'name') {
+      dispatch(setAddBarberNameInput(value))
+    }
+  }
+}
+
+const setAddBarberNameInput = (data) => {
+  return {
+    type: 'SET_ADD_BARBER_NAME_INPUT',
+    payload: data
+  }
+}
+
+export const setAddBarberNameInputError = (data) => {
+  return {
+    type: 'SET_ADD_BARBER_NAME_INPUT_ERROR',
+    payload: data
+  }
+}
+
+
+// To validate and update staff data to firestore including staff schedule and staff services
+export const addNewStaffAndOtherData = (data) => {
+  return (dispatch, getState, { getFirebase, getFirestore }) => {
+    let { barbers, newBarberName, branchId, services } = data
+    let lowercasedName = newBarberName.toLowerCase()
+    
+    // Input Validation: Error
+    if (newBarberName.length <= 0 && barbers.length < 5) {
+      dispatch(setAddBarberNameInputError(emptyError))
+    }
+    
+    if (newBarberName.length > 0 && barbers.length >= 5) {
+      dispatch(setAddBarberNameInputError(maxStaffError))
+    }
+
+    if (newBarberName.length <= 0 && barbers.length >= 5) {
+      dispatch(setAddBarberNameInputError(`${emptyError} ${maxStaffError}`))
+    }
+    
+    // Input Validation: OK
+    if (newBarberName.length > 0 && barbers.length < 5) {
+      dispatch(setAddBarberNameInputError(false))
+    }
+    
+    if (newBarberName.length > 0 && barbers.length < 5) {
+      dispatch(setStaffLoadingStatus(true))
+
+      let newBarber = {
+        branchId,
+        description: '',
+        disableStatus: true,
+        job: 'barber',
+        name: lowercasedName,
+        picture: '',
+        storageFileName: '',
+      }
+
+      let firestore = getFirestore()
+      let uid = `${branchId}-${barbers.length}`
+      let staffRef = firestore.collection('staff').doc(uid)
+
+      staffRef
+      .set(newBarber)
+      .then(async () => {
+        // create staff schedule and staff service
+        let staffScheduleDispatchStatus = await dispatch(addNewStaffSchedulesData(uid, branchId))
+        let staffServiceDispatchStatus = await dispatch(addNewStaffServicesData(uid, branchId, services))
+        // success condition
+        if (staffScheduleDispatchStatus && staffServiceDispatchStatus) {
+          dispatch(setStaffLoadingStatus(false))
+          swal("New Barber Added", "", "success")
+          dispatch(setAddBarberNameInput(""))
+        }
+      })
+      .catch(err => {
+        console.log('ERROR: add new staff', err)
+      })
+    }
+  }
+}
+
+
+// To clear add new barber input and input error when click modal close
+export const clearAddBarberData = () => {
+  return (dispatch, getState, { getFirebase, getFirestore }) => {
+    dispatch(setAddBarberNameInputError(false))
+    dispatch(setAddBarberNameInput(""))
+  } 
+}
 

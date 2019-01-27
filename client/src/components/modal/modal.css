@@ -1,0 +1,93 @@
+/* MODAL CSS */
+.modal .modal-content {
+  padding: 0px;
+}
+
+h4 {
+  background-color: #5499c3;
+  font-family: Montserrat;
+  font-size: 1.25em;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.2;
+  letter-spacing: normal;
+  color: #ffffff;
+  padding: 10px;
+  margin-bottom: 0px;
+}
+
+.modal-footer {
+  display: none;
+  height: 0px !important;
+}
+
+.Modal-body-box {
+  padding: 10px !important;
+  border-bottom: 1px solid #EAEAEA !important;
+}
+
+.Transaction-box {
+  margin-top: 3px !important;
+  margin-bottom: 3px !important;
+}
+
+.Text-blue {
+  font-family: Montserrat;
+  font-size: 0.9em;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.2;
+  letter-spacing: normal;
+  text-transform: capitalize;
+  color: #5499c3;
+}
+
+.Text-blue-bold {
+  font-family: Montserrat;
+  font-size: 0.9em;
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.2;
+  letter-spacing: normal;
+  text-transform: capitalize;
+  color: #5499c3;
+}
+
+.Text-grey {
+  font-family: Montserrat;
+  font-size: 0.9em;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.2;
+  letter-spacing: normal;
+  text-transform: capitalize;
+  color: #666666;
+}
+
+.Text-grey-bold {
+  font-family: Montserrat;
+  font-size: 0.9em;
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.2;
+  letter-spacing: normal;
+  text-transform: capitalize;
+  color: #666666;
+}
+
+.Modal-info-text {
+  font-family: Montserrat;
+  font-size: 0.85em;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.2;
+  letter-spacing: normal;
+  text-align: justify;
+  color: #f68606;
+}

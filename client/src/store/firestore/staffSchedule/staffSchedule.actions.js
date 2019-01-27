@@ -159,8 +159,12 @@ export const updateStaffSchedulesData = (data) => {
       })
       .then(result => {
         if (result) {
+          dispatch(setStaffScheduleLoadingStatus(true))
+
+          let score = 0
           scheduleTosBeUpdated && scheduleTosBeUpdated.map((scheduleInput, index) => {
             let staffScheduleRef = firestore.collection('staffSchedule').doc(scheduleInput.id)
+            score = score + 1
             
             staffScheduleRef.update({
               disableStatus: scheduleInput.disableStatus,
@@ -170,27 +174,76 @@ export const updateStaffSchedulesData = (data) => {
               endMinutes: scheduleInput.endMinutes,
             })
             .then(() => {
-              // Use index since we can't async await update process
-              if (index === 0) {
-                dispatch(setHasEditStatusStaffSchedule(false))
-                dispatch(setSelectedStaffSchedulesAction(staffSchedulesInput))
-                swal("Information Updated", "", "success")
-              }
             })
             .catch(err => {
               console.log('ERROR: update staff schedules', err)
             })
             return ''
           })
+
+          if (score >= scheduleTosBeUpdated.length) {
+            dispatch(setHasEditStatusStaffSchedule(false))
+            dispatch(setSelectedStaffSchedulesAction(staffSchedulesInput))
+            dispatch(setStaffScheduleLoadingStatus(false))
+            swal("Information Updated", "", "success")
+          }
         }
       })
     }
   }
 }
 
-const setStaffScheduleInputError = (data) => {
+export const setStaffScheduleInputError = (data) => {
   return {
     type: 'SET_STAFF_SCHEDULE_INPUT_ERROR',
     payload: data
+  }
+}
+
+export const setStaffScheduleLoadingStatus = (data) => {
+  return {
+    type: 'SET_STAFF_SCHEDULE_LOADING_STATUS',
+    payload: data
+  }
+}
+
+// To create new staff schedule data for new staff
+export const addNewStaffSchedulesData = (staffId, branchId) => {
+  return (dispatch, getState, { getFirebase, getFirestore }) => {
+    let firestore = getFirestore()
+    let days = [ 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday' ]
+    let startHours = '10'
+    let startMinutes = '00'
+    let endHours = '22'
+    let endMinutes = '00'
+    let disableStatus = true
+
+    days.map((day, index) => {
+      let newStaffSchedule = {
+        branchId,
+        day,
+        disableStatus,
+        startHours,
+        startMinutes,
+        endHours,
+        endMinutes,
+        staffId,
+      }
+
+      let uid = `${staffId}-${index}`
+      let staffScheduleRef = firestore.collection('staffSchedule').doc(uid)
+
+      staffScheduleRef
+      .set(newStaffSchedule)
+      .then(() => {
+      })
+      .catch(err => {
+        console.log('ERROR: add new staff schedule', err)
+      })
+  
+      return ''
+    })
+
+    return true
   }
 }

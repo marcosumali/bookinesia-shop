@@ -3,18 +3,16 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import { handleSingleCheckbox, handleCheckedStatus, handleCancelation, handleSingleFileInput } from '../../../store/dashboard/dashboard.actions';
-import { handleChangesManageBarbers, updateBarberData } from '../../../store/firestore/staff/staff.actions';
+import { handleChangesManageBarbers, updateBarberDataValidation } from '../../../store/firestore/staff/staff.actions';
 import TextInput from '../../form/inputText';
 import SwitchInput from '../../form/inputSwitch';
 import Button from '../../button/button';
 import DisabledButton from '../../button/buttonDisabled';
+import LoadingButton from '../../button/buttonLoading';
 import FileInput from '../../form/inputFile';
+import AccountCircleSvg from '../../svg/accountCircleSvg';
 
 class manageBarberDetails extends Component {
-  handleChange(e) {
-    console.log(e.target.files[0])
-  }
-
   render() {
     let { 
       selectedBarber, 
@@ -24,20 +22,26 @@ class manageBarberDetails extends Component {
       handleSingleCheckbox, 
       barberDisableStatus, 
       handleCheckedStatus,
-      updateBarberData,
+      updateBarberDataValidation,
       handleCancelation,
       fileSizeError,
       handleSingleFileInput,
       file,
-      hasEditStatusFile
+      hasEditStatusFile,
+      loadingStatus,
     } = this.props
-    console.log('manageBarberDetails', this.props)
+    // console.log('manageBarberDetails', this.props)
     return (
       <div className="col m12 Container-wrap-center-cross Margin-b-10">
         <div className="col m11 Container-nowrap-center-cross Margin-b-16">
           <div className="col m3 offset-m1 l2">
             <div className="col m12 No-margin No-padding">
-              <img className="Barber-image-inner" src={ selectedBarber.picture } alt="inner-img"/>
+              {
+                selectedBarber.picture.length <= 0 ?
+                <AccountCircleSvg className="" width="100%" height="100%" color="#666666" />
+                :
+                <img className="Barber-image-inner" src={ selectedBarber.picture } alt="inner-img"/>
+              }
             </div>
           </div>
           <div className="col m7 offset-m1 l10 Container-wrap-center-cross">
@@ -75,9 +79,9 @@ class manageBarberDetails extends Component {
         </div>
         <div className="col m12 No-margin No-padding Container-nowrap-end Margin-b-10">
           {
-            selectedBarber.name !== barberName || 
-            selectedBarber.disableStatus !== barberDisableStatus ||
-            hasEditStatusFile ?
+            (selectedBarber.name !== barberName && loadingStatus === false) || 
+            (selectedBarber.disableStatus !== barberDisableStatus && loadingStatus === false) ||
+            (hasEditStatusFile && loadingStatus === false) ?
             <Button 
               text="Cancel"
               type="Btn-blue"
@@ -91,14 +95,19 @@ class manageBarberDetails extends Component {
             />
           }
           {
-            selectedBarber.name !== barberName || 
-            selectedBarber.disableStatus !== barberDisableStatus ||
-            hasEditStatusFile ?
+            (selectedBarber.name !== barberName && loadingStatus === false) || 
+            (selectedBarber.disableStatus !== barberDisableStatus && loadingStatus === false) ||
+            (hasEditStatusFile && loadingStatus === false) ?
             <Button 
               text="Save"
               type="Btn-white-blue"
-              clickFunction={ updateBarberData }
-              data={{ id: selectedBarber.id, name: barberName, disableStatus: barberDisableStatus, selectedBarber, file }}
+              clickFunction={ updateBarberDataValidation }
+              data={{ selectedBarber, name: barberName, disableStatus: barberDisableStatus, file, branchId: 'dummyshop-bekasi' }}
+            />
+            :
+            loadingStatus ?
+            <LoadingButton 
+              type="Btn-white-blue Container-nowrap-center"
             />
             :
             <DisabledButton 
@@ -123,6 +132,7 @@ const mapStateToProps = state => {
     fileSizeError: state.staff.fileSizeError,
     file: state.nav.file,
     hasEditStatusFile: state.staff.hasEditStatusFile,
+    loadingStatus: state.staff.loadingStatus,
   }
 }
 
@@ -130,7 +140,7 @@ const mapDispatchToProps = dispatch => bindActionCreators({
   handleChangesManageBarbers,
   handleSingleCheckbox,
   handleCheckedStatus,
-  updateBarberData,
+  updateBarberDataValidation,
   handleCancelation,
   handleSingleFileInput
 }, dispatch)
