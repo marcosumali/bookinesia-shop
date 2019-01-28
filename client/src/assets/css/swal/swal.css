@@ -3,6 +3,11 @@
   background-color: #5499c3 !important;
 }
 
+.swal-button {
+  padding: 5px;
+  min-width: 4em;
+}
+
 .swal-title {
   font-family: Montserrat;
   font-size: 23px !important;

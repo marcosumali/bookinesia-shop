@@ -1,7 +1,7 @@
 import { getAppointmentsDate } from '../appointment/appointment.actions';
 import { setActiveTab } from '../../dashboard/dashboard.actions';
-import { setSelectedStaffServices, setHasEditStatus, addNewStaffServicesData } from '../../firestore/staffService/staffService.actions';
-import { setSelectedStaffSchedules, setHasEditStatusStaffSchedule, addNewStaffSchedulesData } from '../../firestore/staffSchedule/staffSchedule.actions';
+import { setSelectedStaffServices, setHasEditStatus, addNewStaffServicesData, setStaffServiceInputError } from '../../firestore/staffService/staffService.actions';
+import { setSelectedStaffSchedules, setHasEditStatusStaffSchedule, addNewStaffSchedulesData, setStaffScheduleInputError } from '../../firestore/staffSchedule/staffSchedule.actions';
 import swal from 'sweetalert';
 
 export const emptyError = 'This section must be filled.'
@@ -9,29 +9,19 @@ export const maxFileSizeError = 'Maximum file size is 1 MB.'
 export const maxStaffError = 'Maximum number of barbers is 5 person per branch. Contact our care center for futher queries.'
 
 // Get barbers data based on provided branchId with disableStatus is false
-export const getStaffsAndOtherData = (branchId) => {
+export const getStaffsAndOtherData = (branchId, allBarbers) => {
   return (dispatch, getState, { getFirebase, getFirestore }) => {
-    let firestore = getFirestore()
-    let staffRef = firestore.collection('staff')
-    
-    staffRef
-    .where('branchId', '==', branchId)
-    .where('job', '==', 'barber')
-    .where('disableStatus', '==', false)
-    .onSnapshot(function (querySnapshot) {
-      let branchBarbers = []
-      if (querySnapshot.empty === false) {
-        querySnapshot.forEach(function(doc) {
-          let data = doc.data()
-          let id = doc.id
-          data['id'] = id
-          branchBarbers.push(data)
-        })
-        dispatch(getAppointmentsDate(branchId, branchBarbers))
-      } else {
-        dispatch(setBarbersFailed(false))
+
+    let enabledBarbers = []
+
+    allBarbers && allBarbers.map((barber) => {
+      if (barber.disableStatus === false) {
+        enabledBarbers.push(barber)
       }
+      return ''
     })
+
+    dispatch(getAppointmentsDate(branchId, enabledBarbers))
   }
 }
 
@@ -42,15 +32,8 @@ export const setBarbersSuccess = (barbers) => {
   }
 }
 
-const setBarbersFailed = (status) => {
-  return {
-    type: 'SET_BARBERS_FAILED',
-    payload: status
-  }
-}
-
 // Get all barbers data based on provided branchId
-export const getAllStaffs = (branchId) => {
+export const getAllStaffsAndOtherData = (branchId) => {
   return (dispatch, getState, { getFirebase, getFirestore }) => {
     let firestore = getFirestore()
     let staffRef = firestore.collection('staff')
@@ -67,6 +50,7 @@ export const getAllStaffs = (branchId) => {
           data['id'] = id
           branchBarbers.push(data)
         })
+        dispatch(getStaffsAndOtherData(branchId, branchBarbers))
         dispatch(setAllBarbersSuccess(branchBarbers))
       } else {
         dispatch(setAllBarbersFailed(false))
@@ -92,14 +76,22 @@ const setAllBarbersFailed = (status) => {
 // To set selected barbers to display it on content section
 export const setSelectedBarberAndOtherData = (barber, staffServices, staffSchedules) => {
   return (dispatch, getState, { getFirebase, getFirestore }) => {
+    // Set selected barber
     dispatch(selectedBarberAction(barber))
+    dispatch(setSelectedStaffSchedules(barber, staffSchedules))
+    // Pre input selected barber information
     dispatch(setBarberInfo(barber))
     dispatch(setActiveTab('Details'))
     dispatch(setSelectedStaffServices(barber, staffServices))
+    // Remove edit status
     dispatch(setHasEditStatusFile(false))
     dispatch(setHasEditStatus(false))
     dispatch(setHasEditStatusStaffSchedule(false))
-    dispatch(setSelectedStaffSchedules(barber, staffSchedules))
+    // Remove input error
+    dispatch(setBarberNameInputError(false))
+    dispatch(setFileSizeInputError(false))
+    dispatch(setStaffServiceInputError(false))
+    dispatch(setStaffScheduleInputError(false))
   }
 }
 
@@ -153,6 +145,13 @@ export const setBarberDisableStatusInput = (data) => {
   }
 }
 
+const setFileSizeInputError = (data) => {
+  return {
+    type: 'SET_FILE_SIZE_ERROR',
+    payload: data
+  }
+}
+
 // Vaildate data before update to firestore or cloud storage
 export const updateBarberDataValidation = (data) => {
   return (dispatch, getState, { getFirebase, getFirestore }) => {
@@ -181,7 +180,7 @@ export const updateBarberDataValidation = (data) => {
     if (name.length > 0) {
       swal({
         title: 'Are you sure?',
-        text: "Barber's detail information will be updated including their availibility status in the shop's website.",
+        text: "Provider's detail information will be updated including their availibility status in the shop's website.",
         icon: 'warning',
         buttons: ['Cancel', 'OK']
       })
@@ -297,14 +296,6 @@ export const updateBarberFileAndData = (file, selectedBarber, lowercasedName, di
   }
 }
 
-
-const setFileSizeInputError = (data) => {
-  return {
-    type: 'SET_FILE_SIZE_ERROR',
-    payload: data
-  }
-}
-
 // To set has click input file button status
 export const setHasEditStatusFile = (clickStatus) => {
   return (dispatch, getState, { getFirebase, getFirestore }) => {
@@ -405,7 +396,7 @@ export const addNewStaffAndOtherData = (data) => {
         // success condition
         if (staffScheduleDispatchStatus && staffServiceDispatchStatus) {
           dispatch(setStaffLoadingStatus(false))
-          swal("New Barber Added", "", "success")
+          swal("New Provider Added", "", "success")
           dispatch(setAddBarberNameInput(""))
         }
       })

@@ -3,16 +3,16 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Modal } from 'react-materialize';
 
-import '../../modal.css';
-import CloseSvg from '../../../svg/closeSvg';
-import AddBoxSvg from '../../../svg/addBoxSvg';
-import TextInput from '../../../form/inputText';
-import Button from '../../../button/button';
-import DisabledButton from '../../../button/buttonDisabled';
-import LoadingButton from '../../../button/buttonLoading';
-import { handleChangesAddBarber, addNewStaffAndOtherData, clearAddBarberData } from '../../../../store/firestore/staff/staff.actions';
+import '../modal.css';
+import CloseSvg from '../../svg/closeSvg';
+import AddBoxSvg from '../../svg/addBoxSvg';
+import TextInput from '../../form/inputText';
+import Button from '../../button/button';
+import DisabledButton from '../../button/buttonDisabled';
+import LoadingButton from '../../button/buttonLoading';
+import { handleChangesAddBarber, addNewStaffAndOtherData, clearAddBarberData } from '../../../store/firestore/staff/staff.actions';
 
-class modalAddBarber extends Component {
+class modalAddProvider extends Component {
   render() {
     let { 
       addBarberName, 
@@ -24,13 +24,13 @@ class modalAddBarber extends Component {
       clearAddBarberData,
       loadingStatus,
     } = this.props
-    console.log('modalAddBarber', this.props)
+    // console.log('modalAddBarber', this.props)
     return (
       <Modal
         header={ 
           <div className="row No-margin Container-one-line">
             <div className="col m10 No-margin No-padding">
-              <div>Add New Barber</div>
+              <div>Add New Provider</div>
             </div>
             <div className="col m2 No-margin No-padding Container-nowrap-end modal-close" onClick={ () => clearAddBarberData() }>
               <CloseSvg width="1.25em" height="1.25em" color="#ffffff" />
@@ -38,7 +38,7 @@ class modalAddBarber extends Component {
           </div> 
         }
         trigger={
-          <div className="Container-wrap-center-cross animated fadeIn faster">
+          <div className="Container-wrap-center-cross">
             <AddBoxSvg width="80%" height="80%" color="#f68606" />
           </div>
         }>
@@ -54,7 +54,7 @@ class modalAddBarber extends Component {
               />
             </div>
             <div className="col m12 No-margin No-padding Margin-b-10">
-              <div className="Modal-info-text"><span style={{ fontWeight: 'bold' }} >FYI</span>, newly added barber's attributes including details, provided services and schedules are disabled and need to be manually editted in manage barbers' tab. Disabled barbers will not be reflected in the shop's booking website.</div>
+              <div className="Modal-info-text"><span style={{ fontWeight: 'bold' }} >FYI</span>, newly added provider's attributes including details, provided services and schedules are disabled and need to be manually editted in manage providers' tab. Disabled providers will not be reflected in the shop's booking website.</div>
             </div>
           </div>
           <div className="col m12 No-margin No-padding Modal-body-box Container-nowrap-end">
@@ -102,4 +102,4 @@ const mapDispatchToProps = dispatch => bindActionCreators({
 }, dispatch)
 
 
-export default connect(mapStateToProps, mapDispatchToProps) (modalAddBarber);
+export default connect(mapStateToProps, mapDispatchToProps) (modalAddProvider);

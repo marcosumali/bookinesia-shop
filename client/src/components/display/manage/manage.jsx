@@ -13,6 +13,7 @@ import { handleActiveTab } from '../../../store/dashboard/dashboard.actions';
 import ManageBarberDetails from './manageBarberDetails';
 import ManageBarberServices from './manageBarberServices';
 import ManageBarberWorkingHours from './manageBarberHours';
+import ManageService from './manageService';
 
 class serviceProviders extends Component {
   componentDidUpdate() {
@@ -33,6 +34,8 @@ class serviceProviders extends Component {
   render() {
     let { 
       selectedBarber,
+      displayToShow,
+      selectedService
     } = this.props
     // console.log('manage', this.props)
     return (
@@ -42,7 +45,7 @@ class serviceProviders extends Component {
         </div>
         <div className="col m8 No-margin No-padding Height-100cent Manage-content-box">
           {
-            this.props.displayToShow === 'Barbers' && this.props.selectedBarber.id ?
+            displayToShow === 'Providers' && selectedBarber.id ?
             <div className="col m12 No-margin No-padding Manage-content-card">
               <div className="col m12 No-margin No-padding Manage-content-header-box">
                 <div className="col m12 No-margin No-padding">
@@ -71,9 +74,21 @@ class serviceProviders extends Component {
                     <div></div>
                   }
                 </div>
-
               </div>
-
+            </div>
+            :
+            displayToShow === 'Services' && selectedService.id ?
+            <div className="col m12 No-margin No-padding Manage-content-card">
+              <div className="col m12 No-margin No-padding Manage-content-header-box">
+                <div className="col m12 No-margin No-padding">
+                  <div className="Manage-content-header-text">{ selectedService.name }</div>
+                </div>
+                <div className="col m12 No-margin No-padding">
+                  <div className="col m12 No-margin No-padding Manage-content-body-box">
+                    <ManageService />
+                  </div>
+                </div>
+              </div>
             </div>
             :
             <ManageContentStart />
@@ -89,6 +104,7 @@ const mapStateToProps = state => {
   return {
     displayToShow: state.nav.displayToShow,
     selectedBarber: state.staff.selectedBarber,
+    selectedService: state.service.selectedService,
     activeTab: state.nav.activeTab,
   }
 }

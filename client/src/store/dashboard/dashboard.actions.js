@@ -4,6 +4,7 @@ import { saveDashboardMenuStatus, getLatestDashboardMenuStatus } from '../../hel
 import { setBarberDisableStatusInput, setBarberInfo, setHasEditStatusFile, setBarberNameInputError } from '../firestore/staff/staff.actions';
 import { setSelectedServicesInput, setHasEditStatus, setStaffServiceInputError } from '../firestore/staffService/staffService.actions';
 import { setSelectedStaffSchedulesInput, setHasEditStatusStaffSchedule, setStaffScheduleInputError } from '../firestore/staffSchedule/staffSchedule.actions';
+import { setServiceNameInput, setServiceDurationInput, setServicePriceInput, setServiceTypeInput, setServiceDisableStatus, setAddServiceTypeInput } from '../firestore/service/service.actions';
 
 // ---------------------------------------------- DASHBOARD ACTION ----------------------------------------------
 // To get DMS cookies and dispatch to store
@@ -115,7 +116,7 @@ export const dispatchToSetSubMenuToShow = (props) => {
     displayToShow = text
     dispatch(setDisplayToShow(displayToShow))
     
-    if (text === 'Barbers' || text === 'Services' || text === 'Users') {
+    if (text === 'Providers' || text === 'Services' || text === 'Users') {
       menuToShow = 'Manage'
       dispatch(setMenuToShow(menuToShow))
     } else if (text === 'Transactions') {
@@ -218,6 +219,13 @@ export const handleSingleCheckbox = (e) => {
         status = true
       }
       dispatch(setBarberDisableStatusInput(status))
+    } else if (id === 'serviceStatus' && type === 'checkbox') {
+      if (status) {
+        status = false
+      } else {
+        status = true
+      }
+      dispatch(setServiceDisableStatus(status))
     }
   }
 }
@@ -277,9 +285,17 @@ export const handleMultipleCheckboxStatus = (service, selectedServicesInput) => 
 export const handleCancelation = (data) => {
   return (dispatch, getState, { getFirebase, getFirestore }) => {
     let { functionToBeExecuted, requiredData, section } = data
+    let swalText = ''
+
+    if (functionToBeExecuted === 'setSelectedServicesInput' || functionToBeExecuted === 'setBarberInfo' || functionToBeExecuted === 'setSelectedStaffSchedulesInput') {
+      swalText = `Provider's ${section} information will be restored to previous settings.` 
+    } else if (functionToBeExecuted === 'reverseServiceInput') {
+      swalText = `Service's information will be restored to previous settings.` 
+    }
+
     swal({
       title: 'Are you sure?',
-      text: `Barber's ${section} information will be restored to previous settings.`,
+      text: swalText,
       icon: 'warning',
       buttons: ['Cancel', 'OK']
     })
@@ -299,6 +315,14 @@ export const handleCancelation = (data) => {
           dispatch(setHasEditStatusStaffSchedule(false))
           dispatch(setSelectedStaffSchedulesInput(requiredData))
           dispatch(setStaffScheduleInputError(false))
+        
+        } else if (functionToBeExecuted === 'reverseServiceInput') {
+          dispatch(setServiceNameInput(requiredData.name))
+          dispatch(setServiceDurationInput(requiredData.duration))
+          dispatch(setServicePriceInput(requiredData.price))
+          dispatch(setServiceTypeInput(requiredData.type))
+          dispatch(setServiceDisableStatus(requiredData.disableStatus))
+
         }
       }
     })  
@@ -353,6 +377,7 @@ export const handleMultipleSelectOption = (e, value, purpose, time, data) => {
     let target = e.target
     let id = target.id            // represent id of input
     let type = target.type        // type of input e.g. radio or checkbox
+    let value = target.value
 
     if (purpose === 'manageBarberHours' && type === 'select-one') {
       // Here data represent selected staff services
@@ -386,6 +411,11 @@ export const handleMultipleSelectOption = (e, value, purpose, time, data) => {
       }
       dispatch(setHasEditStatusStaffSchedule(true))
       dispatch(setSelectedStaffSchedulesInput(data))
+
+    } else if (purpose === 'manageService' && type === 'select-one') {
+      dispatch(setServiceTypeInput(value))
+    } else if (purpose === 'addService' && type === 'select-one') {
+      dispatch(setAddServiceTypeInput(value))
     }
   }
 }

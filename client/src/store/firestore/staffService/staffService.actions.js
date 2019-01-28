@@ -186,7 +186,7 @@ export const updateStaffServicesData = (data) => {
     if (servicesInput.length > 0 && staffServicesToBeUpdated.length > 0) {
       swal({
         title: 'Are you sure?',
-        text: "Barber's services information will be updated with the new input.",
+        text: "Provider's services information will be updated with the new input.",
         icon: 'warning',
         buttons: ['Cancel', 'OK']
       })
@@ -279,5 +279,36 @@ export const addNewStaffServicesData = (staffId, branchId, services) => {
     })
     
     return true
+  }
+}
+
+// To create new staff service data in general
+export const addStaffService = (branchId, staffId, serviceId) => {
+  return (dispatch, getState, { getFirebase, getFirestore }) => {
+    let firestore = getFirestore()
+    let disableStatus = true
+
+    let newStaffService = {
+      branchId,
+      disableStatus,
+      staffId,
+      serviceId
+    }
+
+    let splittedServiceId = serviceId.split('-')
+    let seviceIdIndex = splittedServiceId[splittedServiceId.length-1]
+
+    let uid = `${staffId}-${seviceIdIndex}`
+    let staffServiceRef = firestore.collection('staffService').doc(uid)
+
+    staffServiceRef
+    .set(newStaffService)
+    .then(() => {
+    })
+    .catch(err => {
+      console.log('ERROR: add staff service', err)
+    })
+  
+    return ''
   }
 }
