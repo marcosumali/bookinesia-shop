@@ -116,7 +116,7 @@ export const dispatchToSetSubMenuToShow = (props) => {
     displayToShow = text
     dispatch(setDisplayToShow(displayToShow))
     
-    if (text === 'Barbers' || text === 'Services' || text === 'Users') {
+    if (text === 'Providers' || text === 'Services' || text === 'Users') {
       menuToShow = 'Manage'
       dispatch(setMenuToShow(menuToShow))
     } else if (text === 'Transactions') {
