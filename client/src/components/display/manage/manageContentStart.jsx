@@ -17,8 +17,11 @@ class manageContentStart extends Component {
         <div className="col m12 No-margin No-padding Container-nowrap-center-start">
           <div className="col m8 No-margin No-padding Container-wrap-center animated fadeIn faster">
             {
-              displayToShow === 'Barbers' ?
-              <div className="Start-text">Click on any of the barbers on the list to edit, or press the + button to add a new barber.</div>
+              displayToShow === 'Providers' ?
+              <div className="Start-text">Click on any of the providers on the list to edit, or press the + button to add new provider.</div>
+              :
+              displayToShow === 'Services' ?
+              <div className="Start-text">Click on any of the services on the list to edit, or press the + button to add new service.</div>
               :
               <div></div>
             }

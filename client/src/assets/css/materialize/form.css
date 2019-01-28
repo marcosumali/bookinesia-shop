@@ -131,7 +131,10 @@ input[type="radio"].with-gap:checked+label:after {
   background-color: lightblue;
 }
 
-/* Modifying Input Switch Checkbox Materialize CSS */
+/* Modifying Input Select Materialize CSS */
+.input-field.col label {
+  left: 0;
+}
 .select-wrapper input.select-dropdown {
   margin: 0;
   font-family: Montserrat;
@@ -163,7 +166,7 @@ input[type="radio"].with-gap:checked+label:after {
   line-height: 1.2;
   letter-spacing: normal;
   color: #5499c3;
-  text-align: center;
+  /* text-align: center; */
 } /* To edit the span section of li inside select input */
 
 /* Modifying Input File Materialize CSS */

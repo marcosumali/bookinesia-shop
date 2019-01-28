@@ -47,7 +47,7 @@ class dashboardMenu extends Component {
           {
             this.props.manageShowStatus === true ?
             <div>
-              <SubMenuItem text="Barbers"/>
+              <SubMenuItem text="Providers"/>
               <SubMenuItem text="Services"/>
               <SubMenuItem text="Users"/>
             </div>
