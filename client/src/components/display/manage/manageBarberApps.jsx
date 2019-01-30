@@ -20,7 +20,7 @@ class manageBarberApps extends Component {
       filteredAppointments,
       handleBasicDateInput,
     } = this.props
-    console.log('manageBarberApps', this.props)
+    // console.log('manageBarberApps', this.props)
     return (
       <div className="col m12 No-margin No-padding">
         <label htmlFor="id" className="Form-text-active-blue">FILTER SELECTED APPOINTMENTS (max. 7 days)</label>

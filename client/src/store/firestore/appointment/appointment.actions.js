@@ -382,10 +382,17 @@ export const updateSelectedAppointment = (data) => {
       errors.push(incorrectHoursError)
     }
 
+    // If exist: check whether selected date = input date
+    // If no, it means that the user try to change to new date which already exist
+    // if yest, it means the the user try to change other data on the same date
     let isExist = await dispatch(isAppointmentExists(branchId, staffId, updateDateInput))
     if (isExist) {
-      errors.push(doubleAppError)
-    }
+      if (selectedAppointment.date !== updateDateInput) {
+        errors.push(doubleAppError)
+      } else {
+        isExist = false
+      }
+    } 
     
     // Validation if OK
     if (updateMaxQueueInput.length > 0 && Number(updateMaxQueueInput) > 0) {
