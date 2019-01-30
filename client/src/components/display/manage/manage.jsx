@@ -13,6 +13,7 @@ import { handleActiveTab } from '../../../store/dashboard/dashboard.actions';
 import ManageBarberDetails from './manageBarberDetails';
 import ManageBarberServices from './manageBarberServices';
 import ManageBarberWorkingHours from './manageBarberHours';
+import ManageBarberAppointments from './manageBarberApps';
 import ManageService from './manageService';
 
 class serviceProviders extends Component {
@@ -58,6 +59,7 @@ class serviceProviders extends Component {
                     <Tab title="Details"></Tab>
                     <Tab title="Services"></Tab>
                     <Tab title="Working Hours"></Tab>
+                    <Tab title="Appointments"></Tab>
                   </Tabs>
                 </div>
                 <div className="col m12 No-margin No-padding Manage-content-body-box">
@@ -70,6 +72,9 @@ class serviceProviders extends Component {
                     :
                     this.props.activeTab === 'Working Hours' ?
                     <ManageBarberWorkingHours />
+                    :
+                    this.props.activeTab === 'Appointments' ?
+                    <ManageBarberAppointments />
                     :
                     <div></div>
                   }

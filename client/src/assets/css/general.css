@@ -11,6 +11,14 @@
   margin: 0px !important;
 }
 
+.Margin-t-5 {
+  margin-top: 0.3125em !important;
+}
+
+.Margin-t-10 {
+  margin-left: 0.625em !important;
+}
+
 .Margin-t-40 {
   margin-top: 2.5em !important;
 }
@@ -55,6 +63,11 @@
 .Margin-b-24 {
   margin-bottom: 1.5em !important;
 }
+
+.Padding-t-5 {
+  padding-top: 0.3125em !important;
+}
+
 
 .Width-10 {
   width: 10vw;

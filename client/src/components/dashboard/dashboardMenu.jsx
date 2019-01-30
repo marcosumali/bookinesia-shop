@@ -7,7 +7,7 @@ import SubMenuItem from './subMenuItem';
 
 class dashboardMenu extends Component {
   render() {
-    console.log('from dashboardMenu', this.props)
+    // console.log('from dashboardMenu', this.props)
     return (
       <div className="Dashboard-menu-box">
         <div className="Menu-box Margin-t-40">
