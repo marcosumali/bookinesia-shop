@@ -11,7 +11,6 @@ import BasicDateInput from '../../form/inputDateBasic';
 import NumberInput from '../../form/inputNumber';
 import SelectInput from '../../form/inputSelect';
 import SwitchInput from '../../form/inputSwitch';
-// import AddBoxSvg from '../../svg/addBoxSvg';
 import Button from '../../button/button';
 import DisabledButton from '../../button/buttonDisabled';
 import LoadingButton from '../../button/buttonLoading';
@@ -58,8 +57,9 @@ class modalUpdateApp extends Component {
       updateSelectedAppointment,
       clearUpdateAppointment,
     } = this.props
-    console.log('modalUpdteApp', this.props)
+    // console.log('modalUpdteApp', this.props)
     const options = {
+      dismissible: false,
       ready: function() {
         setSelectedAppointmentInput(filteredAppointment)
       }
@@ -291,6 +291,8 @@ class modalUpdateApp extends Component {
                   updateEndMinutes,
                   updateDisableStatus,
                   selectedAppointment,
+                  branchId: 'dummyshop-bekasi',
+                  selectedBarber
                 }}
               />
             }

@@ -38,6 +38,12 @@ import {
   setUpdateAppointmentStartMinutesInput,
   setUpdateAppointmentEndHoursInput,
   setUpdateAppointmentEndMinutesInput,
+  setAddAppointmentDateInput,
+  setAddAppointmentMaxQueueInput,
+  setAddAppointmentStartHoursInput,
+  setAddAppointmentStartMinutesInput,
+  setAddAppointmentEndHoursInput,
+  setAddAppointmentEndMinutesInput,
 } from '../firestore/appointment/appointment.actions';
 
 
@@ -470,6 +476,16 @@ export const handleMultipleSelectOption = (e, value, purpose, time, data) => {
       } else if (id === 'endMinutes') {
         dispatch(setUpdateAppointmentEndMinutesInput(value))
       }
+    } else if (purpose === 'addAppointment' && type === 'select-one') {
+      if (id === 'startHours') {
+        dispatch(setAddAppointmentStartHoursInput(value))
+      } else if (id === 'startMinutes') {
+        dispatch(setAddAppointmentStartMinutesInput(value))
+      } else if (id === 'endHours') {
+        dispatch(setAddAppointmentEndHoursInput(value))
+      } else if (id === 'endMinutes') {
+        dispatch(setAddAppointmentEndMinutesInput(value))
+      }
     }
   }
 }
@@ -511,7 +527,6 @@ export const handleDateInput = (e, value) => {
   }
 }
 
-
 // To handle date input
 export const handleBasicDateInput = (e) => {
   return (dispatch, getState, { getFirebase, getFirestore }) => {
@@ -530,6 +545,8 @@ export const handleBasicDateInput = (e) => {
       dispatch(setFilterEndDate(acceptedDate))
     } else if (inputId === 'updateDate') {
       dispatch(setUpdateAppointmentDateInput(acceptedDate))
+    } else if (inputId === 'addDate') {
+      dispatch(setAddAppointmentDateInput(acceptedDate))
     }
   }
 }
@@ -544,7 +561,9 @@ export const handleNumberInput = (e) => {
 
     if (inputId === 'updateMaxQueue') {
       dispatch(setUpdateAppointmentMaxQueueInput(value))
-    } 
+    } else if (inputId === 'addMaxQueue') {
+      dispatch(setAddAppointmentMaxQueueInput(value))
+    }
   }
 }
 

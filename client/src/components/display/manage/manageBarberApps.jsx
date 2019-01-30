@@ -7,6 +7,7 @@ import BasicDateInput from '../../form/inputDateBasic';
 import { handleBasicDateInput } from '../../../store/dashboard/dashboard.actions';
 import { getFilteredAppointments } from '../../../store/firestore/appointment/appointment.actions';
 import ModalUpdateAppointment from '../../modal/manage/modalUpdateApp';
+import ModalAddAppointment from '../../modal/manage/modalAddApp';
 
 class manageBarberApps extends Component {
   render() {
@@ -42,10 +43,15 @@ class manageBarberApps extends Component {
               handleChangesDateFunction={ handleBasicDateInput }              
             />
           </div>
-          <div className="col m2 No-margin No-padding Container-nowrap-center">
+          <div className="col m1 No-margin No-padding Container-nowrap-center">
             <div className="Search-box" onClick={ () => getFilteredAppointments(startDate, endDate, selectedBarber) }>
               <SearchSvg height="1em" width="1em" color="#5499c3" />
             </div>
+          </div>
+          <div className="col m1 No-margin No-padding Container-nowrap-center">
+            <ModalAddAppointment 
+              filteredAppointment=""
+            />
           </div>
         </div>
         <div className="col m12 No-margin No-padding Container-wrap-center-cross Margin-b-10">

@@ -19,6 +19,14 @@ let initialState = {
   updateDisableStatus: '',
   loadingStatus: false,
   updateAppointmentErrors: [],
+  addDateInput: '',
+  addMaxQueueInput: '',
+  addMaxQueueInputError: false,
+  addStartHours: '',
+  addStartMinutes: '',
+  addEndHours: '',
+  addEndMinutes: '',
+  addAppointmentErrors: [],
 }
 
 const appointmentDataList = (state = { ...initialState }, action) => {
@@ -118,6 +126,46 @@ const appointmentDataList = (state = { ...initialState }, action) => {
       return ({
         ...state,
         loadingStatus: action.payload,
+      })
+    case 'SET_ADD_APPOINTMENT_DATE_INPUT':
+      return ({
+        ...state,
+        addDateInput: action.payload,
+      })
+    case 'SET_ADD_APPOINTMENT_MAX_QUEUE_INPUT':
+      return ({
+        ...state,
+        addMaxQueueInput: action.payload,
+      })
+    case 'SET_ADD_APPOINTMENT_START_HOURS_INPUT':
+      return ({
+        ...state,
+        addStartHours: action.payload,
+      })
+    case 'SET_ADD_APPOINTMENT_START_MINUTES_INPUT':
+      return ({
+        ...state,
+        addStartMinutes: action.payload,
+      })
+    case 'SET_ADD_APPOINTMENT_END_HOURS_INPUT':
+      return ({
+        ...state,
+        addEndHours: action.payload,
+      })
+    case 'SET_ADD_APPOINTMENT_END_MINUTES_INPUT':
+      return ({
+        ...state,
+        addEndMinutes: action.payload,
+      })
+    case 'SET_ADD_APPOINTMENT_MAX_QUEUE_ERROR':
+      return ({
+        ...state,
+        addMaxQueueInputError: action.payload,
+      })
+    case 'SET_ADD_APPOINTMENT_ERROR':
+      return ({
+        ...state,
+        addAppointmentErrors: action.payload,
       })
     default:
       return state;

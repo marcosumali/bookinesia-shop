@@ -6,6 +6,7 @@ let maxFilterError = `The preferred appointment's date that can be chosen is up 
 let incorrectFilterError = `The start date must be earlier than or equal to the end date.`
 let notFilledError = `All section must filled.`
 let incorrectHoursError = `The start hour must be earlier than the end hour.`
+let doubleAppError = `Appointment for selected date and barber is already exist.`
 
 // To get appointments date per branch based on staffs to listen real time on next action
 export const getAppointmentsDate = (branchId, staffs) => {
@@ -364,7 +365,11 @@ export const updateSelectedAppointment = (data) => {
       updateEndMinutes,
       updateDisableStatus,
       selectedAppointment,
+      branchId,
+      selectedBarber,
     } = data
+    let staffId = selectedBarber.id
+    let updatedDate = new Date(Date.now())
 
     let errors = []
     // Validation if wrong
@@ -376,16 +381,25 @@ export const updateSelectedAppointment = (data) => {
     if (Number(updateEndHours) <= Number(updateStartHours)) {
       errors.push(incorrectHoursError)
     }
+
+    let isExist = await dispatch(isAppointmentExists(branchId, staffId, updateDateInput))
+    if (isExist) {
+      errors.push(doubleAppError)
+    }
     
     // Validation if OK
-    if (updateMaxQueueInput.length > 0 && Number(updateMaxQueueInput) > 0 && Number(updateEndHours) > Number(updateStartHours)) {
+    if (updateMaxQueueInput.length > 0 && Number(updateMaxQueueInput) > 0) {
+      dispatch(setUpdateMaxQueueInputError(false))
+    }
+
+    if (updateMaxQueueInput.length > 0 && Number(updateMaxQueueInput) > 0 && Number(updateEndHours) > Number(updateStartHours) && isExist === false) {
       errors = []
       dispatch(setUpdateMaxQueueInputError(false))
     }
 
     dispatch(setUpdateAppInputError(errors))
 
-    if (updateMaxQueueInput.length > 0 && Number(updateMaxQueueInput) > 0 && Number(updateEndHours) > Number(updateStartHours)) {
+    if (updateMaxQueueInput.length > 0 && Number(updateMaxQueueInput) > 0 && Number(updateEndHours) > Number(updateStartHours) && isExist === false) {
       swal({
         title: 'Are you sure?',
         text: "Appointment's information will be updated with the new input.",
@@ -407,7 +421,8 @@ export const updateSelectedAppointment = (data) => {
             startMinutes: updateStartMinutes,
             endHours: updateEndHours,
             endMinutes: updateEndMinutes,
-            disableStatus: updateDisableStatus
+            disableStatus: updateDisableStatus,
+            updatedDate,
           }
     
           appointmentRef
@@ -421,7 +436,8 @@ export const updateSelectedAppointment = (data) => {
               startMinutes: updateStartMinutes,
               endHours: updateEndHours,
               endMinutes: updateEndMinutes,
-              disableStatus: updateDisableStatus
+              disableStatus: updateDisableStatus,
+              updatedDate,
             }
             dispatch(setAppointmentLoadingStatus(false))
             dispatch(setSelectedFilteredAppointment(revisedAppointment))
@@ -464,4 +480,221 @@ export const clearUpdateAppointment = () => {
     dispatch(setUpdateAppInputError(errors))
     dispatch(setUpdateMaxQueueInputError(false))
   } 
+}
+
+export const setAddAppointmentDateInput = (data) => {
+  return {
+    type: 'SET_ADD_APPOINTMENT_DATE_INPUT',
+    payload: data
+  }
+}
+
+export const setAddAppointmentMaxQueueInput = (data) => {
+  return {
+    type: 'SET_ADD_APPOINTMENT_MAX_QUEUE_INPUT',
+    payload: data
+  }
+}
+
+export const setAddAppointmentStartHoursInput = (data) => {
+  return {
+    type: 'SET_ADD_APPOINTMENT_START_HOURS_INPUT',
+    payload: data
+  }
+}
+
+export const setAddAppointmentStartMinutesInput = (data) => {
+  return {
+    type: 'SET_ADD_APPOINTMENT_START_MINUTES_INPUT',
+    payload: data
+  }
+}
+
+export const setAddAppointmentEndHoursInput = (data) => {
+  return {
+    type: 'SET_ADD_APPOINTMENT_END_HOURS_INPUT',
+    payload: data
+  }
+}
+
+export const setAddAppointmentEndMinutesInput = (data) => {
+  return {
+    type: 'SET_ADD_APPOINTMENT_END_MINUTES_INPUT',
+    payload: data
+  }
+}
+
+// To validate and add appointment with input 
+export const addAppointment = (data) => {
+  return async (dispatch, getState, { getFirebase, getFirestore }) => {
+    let { 
+      addDateInput,
+      addMaxQueueInput,
+      addStartHours,
+      addStartMinutes,
+      addEndHours,
+      addEndMinutes,
+      branchId,
+      selectedBarber
+    } = data
+    let addDisableStatus = true
+    let startHours = ''
+    let startMinutes = ''
+    let endHours = ''
+    let endMinutes = ''
+    let createdDate = new Date(Date.now())
+    let updatedDate = new Date(Date.now())
+    let currentQueue = "0"
+    let currentTransaction = "0"
+    let staffId = selectedBarber.id
+
+    // Change time "" to "00"
+    if (addStartHours.length <= 0) {
+      startHours = '00'
+    } else {
+      startHours = addStartHours
+    }
+
+    if (addStartMinutes.length <= 0) {
+      startMinutes = '00'
+    } else {
+      startMinutes = addStartMinutes
+    }
+
+    if (addEndHours.length <= 0) {
+      endHours = '00'
+    } else {
+      endHours = addEndHours
+    }
+
+    if (addEndMinutes.length <= 0) {
+      endMinutes = '00'
+    } else {
+      endMinutes = addEndMinutes
+    }
+
+    let errors = []
+    // Validation if wrong
+    if (addMaxQueueInput.length <= 0 || Number(addMaxQueueInput) <= 0) {
+      errors.push(notFilledError)
+      dispatch(setAddMaxQueueInputError('Empty'))
+    }
+
+    if (Number(addEndHours) <= Number(addStartHours)) {
+      errors.push(incorrectHoursError)
+    }
+    
+    let isExist = await dispatch(isAppointmentExists(branchId, staffId, addDateInput))
+    if (isExist) {
+      errors.push(doubleAppError)
+    }
+    
+    // Validation if OK
+    if (addMaxQueueInput.length > 0 && Number(addMaxQueueInput) > 0) {
+      dispatch(setAddMaxQueueInputError(false))
+    }
+
+    if (addMaxQueueInput.length > 0 && Number(addMaxQueueInput) > 0 && Number(addEndHours) > Number(addStartHours) && isExist === false) {
+      errors = []
+      dispatch(setAddMaxQueueInputError(false))
+    }
+
+    dispatch(setAddAppInputError(errors))
+
+    if (addMaxQueueInput.length > 0 && Number(addMaxQueueInput) > 0 && Number(addEndHours) > Number(addStartHours) && isExist === false) {
+      dispatch(setAppointmentLoadingStatus(true))
+
+      let firestore = getFirestore()
+      let appointmentRef = firestore.collection('appointment')
+      
+      let addAppointmentData = {
+        branchId,
+        date: addDateInput,
+        currentQueue,
+        currentTransaction,
+        maxQueue: addMaxQueueInput,
+        startHours,
+        startMinutes,
+        endHours,
+        endMinutes,
+        disableStatus: addDisableStatus,
+        staffId,
+        createdDate,
+        updatedDate,
+      }
+
+      appointmentRef
+      .add(addAppointmentData)
+      .then(() => {
+        dispatch(setAppointmentLoadingStatus(false))
+        dispatch(setAddAppointmentDateInput(""))
+        dispatch(setAddAppointmentMaxQueueInput(""))
+        dispatch(setAddAppointmentStartHoursInput(""))
+        dispatch(setAddAppointmentStartMinutesInput(""))
+        dispatch(setAddAppointmentEndHoursInput(""))
+        dispatch(setAddAppointmentEndMinutesInput(""))
+        swal("New Appointment Created", "", "success")
+      })
+      .catch(err => {
+        console.log('ERROR: add appointment data', err)
+      })
+    }
+  }
+}
+
+const setAddMaxQueueInputError = (data) => {
+  return {
+    type: 'SET_ADD_APPOINTMENT_MAX_QUEUE_ERROR',
+    payload: data
+  }
+}
+
+const setAddAppInputError = (data) => {
+  return {
+    type: 'SET_ADD_APPOINTMENT_ERROR',
+    payload: data
+  }
+}
+
+// To clear add appointment input error when click modal close
+export const clearAddAppointment = () => {
+  return (dispatch, getState, { getFirebase, getFirestore }) => {
+    let errors = []
+    dispatch(setAddAppInputError(errors))
+    dispatch(setAddMaxQueueInputError(false))
+    dispatch(setAddAppointmentDateInput(""))
+    dispatch(setAddAppointmentMaxQueueInput(""))
+    dispatch(setAddAppointmentStartHoursInput(""))
+    dispatch(setAddAppointmentStartMinutesInput(""))
+    dispatch(setAddAppointmentEndHoursInput(""))
+    dispatch(setAddAppointmentEndMinutesInput(""))
+  } 
+}
+
+
+// To check whether specific date of appointment for selected barber is exists or not
+export const isAppointmentExists = (branchId, staffId, date) => {
+  return async (dispatch, getState, { getFirebase, getFirestore }) => {
+    let firestore = getFirestore()
+    let appointmentRef = firestore.collection('appointment')
+    let status = ""
+
+    await appointmentRef
+    .where("branchId", "==", branchId)
+    .where("staffId", "==", staffId)
+    .where("date", "==", date)
+    .get()
+    .then(querySnapshot => {
+      if (querySnapshot.empty === false) {
+        status = true
+      } else {
+        status = false
+      }
+    })
+    .catch(err => {
+      console.log('ERROR: is appointment exist', err)
+    })
+
+    return status
+  }
 }
