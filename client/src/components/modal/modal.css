@@ -91,3 +91,8 @@ h4 {
   text-align: justify;
   color: #f68606;
 }
+
+.Update-barber-box {
+  padding: 5px 5px 10px 5px !important;
+  border-bottom: 1px solid #EAEAEA;
+}

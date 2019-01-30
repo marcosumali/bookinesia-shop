@@ -98,7 +98,7 @@
 .Manage-content-body-box {
   margin-top: 0.75em !important;
   padding: 0.625em !important;
-  padding-top: 1.5em !important;
+  padding-top: 1em !important;
   border-top: 1px solid #EAEAEA;
 }
 
@@ -166,4 +166,15 @@
 
 .Schedule-box {
   height: 3.5rem;
+}
+
+.Search-box {
+  border: 1px solid #5499c3;
+  border-radius: 5px;
+  padding: 5px;
+  height: 2em;
+}
+
+.Error-box {
+  line-height: 1;
 }

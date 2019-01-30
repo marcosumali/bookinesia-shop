@@ -4,9 +4,18 @@ input[type=text],
 input[type=password], 
 input[type=email],
 input[type=tel],
-input[type=number]  {
+input[type=number] {
+  margin: 0px;
   height: 1.5rem;
 }
+input[type=date] {
+  margin: 0px;
+  height: 2rem;
+}
+.Input-date-box {
+  margin-top: 1rem !important;
+}
+
 /* label color */
 .input-field {
   margin-top: 0.25rem;
@@ -16,6 +25,13 @@ input[type=number]  {
   top: 7.5px !important;
   font-size: 0.75em;
 }
+.col .input-field {
+  width: 95%;
+}
+.row .col.m4 {
+  margin: 0px;
+}
+
 /* label focus color */
 .input-field input[type=text]:focus + label {
   color: #5499c3;
@@ -32,6 +48,10 @@ input[type=number]  {
 .input-field input[type=password]:focus + label {
   color: #5499c3;
 }
+.input-field input[type=date]:focus + label {
+  color: #5499c3;
+}
+
 /* label underline focus color */
 .input-field input[type=text]:focus {
   border-bottom: 1px solid #5499c3;
@@ -53,6 +73,11 @@ input[type=number]  {
   border-bottom: 1px solid #5499c3;
   box-shadow: 0 1px 0 0 #5499c3;
 }
+.input-field input[type=date]:focus {
+  border-bottom: 1px solid #5499c3;
+  box-shadow: 0 1px 0 0 #5499c3;
+}
+
  /* valid color */
 .input-field input[type=text].valid {
   border-bottom: 1px solid #5499c3;
@@ -74,6 +99,11 @@ input[type=number]  {
   border-bottom: 1px solid #5499c3;
   box-shadow: 0 1px 0 0 #5499c3;
 }
+.input-field input[type=date].valid {
+  border-bottom: 1px solid #5499c3;
+  box-shadow: 0 1px 0 0 #5499c3;
+}
+
 /* invalid color */
 .input-field input[type=text].invalid {
   border-bottom: 1px solid #d00;
@@ -174,7 +204,7 @@ input[type="radio"].with-gap:checked+label:after {
   height: inherit;
   line-height: inherit;
 }
-.btn, .btn-large, .btn-flat {
+.btn {
   height: inherit;
   line-height: inherit;
   padding: 0 5px;
@@ -213,7 +243,51 @@ input[type="radio"].with-gap:checked+label:after {
   color: #666666;
 }
 
+.Form-text-active-blue {
+  font-family: Montserrat;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.2;
+  letter-spacing: normal;
+  font-size: 0.6rem;
+  color: #5499c3;
+}
+
 .Input-info-error {
   font-size: 0.75em;
   color: #d00; 
+}
+
+/* Modifying Date Picker File Materialize CSS */
+.btn-large, .btn-flat {
+  height: inherit;
+  line-height: inherit;
+  padding: 0 5px;
+  background-color: transparent;
+  text-transform: capitalize;
+}
+
+.picker__close, .picker__today {
+  color: #5499c3;
+}
+
+.picker__day.picker__day--today {
+  color: #5499c3;
+}
+
+.picker__day.picker__day--today.picker__day--selected {
+  color: #ffffff;
+}
+
+.picker__day--selected, .picker__day--selected:hover, .picker--focused .picker__day--selected {
+  background-color: #5499c3;
+}
+
+.picker__date-display {
+  background-color: #5499c3;
+}
+
+.picker__weekday-display {
+  background-color: #5FAAD8;
 }

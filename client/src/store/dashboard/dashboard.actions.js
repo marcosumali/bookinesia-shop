@@ -1,10 +1,45 @@
 import swal from 'sweetalert';
 
-import { saveDashboardMenuStatus, getLatestDashboardMenuStatus } from '../../helpers/dashboard';
-import { setBarberDisableStatusInput, setBarberInfo, setHasEditStatusFile, setBarberNameInputError } from '../firestore/staff/staff.actions';
-import { setSelectedServicesInput, setHasEditStatus, setStaffServiceInputError } from '../firestore/staffService/staffService.actions';
-import { setSelectedStaffSchedulesInput, setHasEditStatusStaffSchedule, setStaffScheduleInputError } from '../firestore/staffSchedule/staffSchedule.actions';
-import { setServiceNameInput, setServiceDurationInput, setServicePriceInput, setServiceTypeInput, setServiceDisableStatus, setAddServiceTypeInput } from '../firestore/service/service.actions';
+import { 
+  saveDashboardMenuStatus, 
+  getLatestDashboardMenuStatus 
+} from '../../helpers/dashboard';
+import { 
+  setBarberDisableStatusInput, 
+  setBarberInfo, 
+  setHasEditStatusFile, 
+  setBarberNameInputError 
+} from '../firestore/staff/staff.actions';
+import { 
+  setSelectedServicesInput, 
+  setHasEditStatus, 
+  setStaffServiceInputError 
+} from '../firestore/staffService/staffService.actions';
+import { 
+  setSelectedStaffSchedulesInput, 
+  setHasEditStatusStaffSchedule, 
+  setStaffScheduleInputError 
+} from '../firestore/staffSchedule/staffSchedule.actions';
+import { 
+  setServiceNameInput, 
+  setServiceDurationInput, 
+  setServicePriceInput, 
+  setServiceTypeInput, 
+  setServiceDisableStatus, 
+  setAddServiceTypeInput 
+} from '../firestore/service/service.actions';
+import { 
+  setFilterEndDate, 
+  setFilterStartDate, 
+  setUpdateAppointmentDateInput, 
+  setUpdateAppointmentDisableStatusInput, 
+  setUpdateAppointmentMaxQueueInput,
+  setUpdateAppointmentStartHoursInput,
+  setUpdateAppointmentStartMinutesInput,
+  setUpdateAppointmentEndHoursInput,
+  setUpdateAppointmentEndMinutesInput,
+} from '../firestore/appointment/appointment.actions';
+
 
 // ---------------------------------------------- DASHBOARD ACTION ----------------------------------------------
 // To get DMS cookies and dispatch to store
@@ -192,6 +227,8 @@ export const handleActiveTab = (tabIndex) => {
       activeTab = 'Services'
     } else if (index === 2) {
       activeTab = 'Working Hours'
+    } else if (index === 3) {
+      activeTab = 'Appointments'
     }
     dispatch(setActiveTab(activeTab))
   }
@@ -226,6 +263,13 @@ export const handleSingleCheckbox = (e) => {
         status = true
       }
       dispatch(setServiceDisableStatus(status))
+    } else if (id === 'updateAppointmentStatus' && type === 'checkbox') {
+      if (status) {
+        status = false
+      } else {
+        status = true
+      }
+      dispatch(setUpdateAppointmentDisableStatusInput(status))
     }
   }
 }
@@ -416,6 +460,16 @@ export const handleMultipleSelectOption = (e, value, purpose, time, data) => {
       dispatch(setServiceTypeInput(value))
     } else if (purpose === 'addService' && type === 'select-one') {
       dispatch(setAddServiceTypeInput(value))
+    } else if (purpose === 'updateAppointment' && type === 'select-one') {
+      if (id === 'startHours') {
+        dispatch(setUpdateAppointmentStartHoursInput(value))
+      } else if (id === 'startMinutes') {
+        dispatch(setUpdateAppointmentStartMinutesInput(value))
+      } else if (id === 'endHours') {
+        dispatch(setUpdateAppointmentEndHoursInput(value))
+      } else if (id === 'endMinutes') {
+        dispatch(setUpdateAppointmentEndMinutesInput(value))
+      }
     }
   }
 }
@@ -437,5 +491,62 @@ export const setSingleFileInput = (data) => {
     payload: data
   }
 }
+
+// To handle date input
+export const handleDateInput = (e, value) => {
+  return (dispatch, getState, { getFirebase, getFirestore }) => {
+    let target = e.target
+    let inputId = target.id
+    let inputDate = new Date(value)
+    let year = inputDate.getFullYear()
+    let month = inputDate.getMonth() + 1
+    let date = inputDate.getDate()
+    let acceptedDate = `${year}-${month}-${date}`
+
+    if (inputId === 'startDate') {
+      dispatch(setFilterStartDate(acceptedDate))
+    } else if (inputId === 'endDate') {
+      dispatch(setFilterEndDate(acceptedDate))
+    }
+  }
+}
+
+
+// To handle date input
+export const handleBasicDateInput = (e) => {
+  return (dispatch, getState, { getFirebase, getFirestore }) => {
+    let target = e.target
+    let inputId = target.id
+    let value = target.value
+    let inputDate = new Date(value)
+    let year = inputDate.getFullYear()
+    let month = inputDate.getMonth() + 1
+    let date = inputDate.getDate()
+    let acceptedDate = `${year}-${month}-${date}`
+
+    if (inputId === 'startDate') {
+      dispatch(setFilterStartDate(acceptedDate))
+    } else if (inputId === 'endDate') {
+      dispatch(setFilterEndDate(acceptedDate))
+    } else if (inputId === 'updateDate') {
+      dispatch(setUpdateAppointmentDateInput(acceptedDate))
+    }
+  }
+}
+
+
+// To handle number input
+export const handleNumberInput = (e) => {
+  return (dispatch, getState, { getFirebase, getFirestore }) => {
+    let target = e.target
+    let inputId = target.id
+    let value = target.value
+
+    if (inputId === 'updateMaxQueue') {
+      dispatch(setUpdateAppointmentMaxQueueInput(value))
+    } 
+  }
+}
+
 
 

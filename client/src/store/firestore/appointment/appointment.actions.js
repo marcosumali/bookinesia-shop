@@ -1,4 +1,11 @@
+import swal from 'sweetalert';
 import { getTransactions } from '../transaction/transaction.actions';
+
+let filterEmptyError = 'To filter preferred appointments for selected provider, start and end dates must be filled.'
+let maxFilterError = `The preferred appointment's date that can be chosen is up to 7 days.`
+let incorrectFilterError = `The start date must be earlier than or equal to the end date.`
+let notFilledError = `All section must filled.`
+let incorrectHoursError = `The start hour must be earlier than the end hour.`
 
 // To get appointments date per branch based on staffs to listen real time on next action
 export const getAppointmentsDate = (branchId, staffs) => {
@@ -180,4 +187,281 @@ export const getAppointments = (branchId, branchAppointments, staffs) => {
       }
     })
   }
+}
+
+// To validate and get filtered appointments based on start and end date 
+export const getFilteredAppointments = (startDate, endDate, selectedBarber) => {
+  return async (dispatch, getState, { getFirebase, getFirestore }) => {
+    let newStartDate = new Date(startDate)
+    let newEndDate = new Date(endDate)
+
+    let timeDifference = Math.abs(newEndDate.getTime() - newStartDate.getTime())
+    let differenceInDays = Math.ceil(timeDifference / (1000 * 3600 * 24))
+
+    let errors = []
+    // Validation error
+    if (startDate.length <= 0 || endDate.length <= 0) {
+      errors.push(filterEmptyError)
+    }
+
+    if (newStartDate > newEndDate) {
+      errors.push(incorrectFilterError)
+    }
+
+    if (differenceInDays > 7) {
+      errors.push(maxFilterError)
+    }
+
+    // Validation OK
+    if (startDate.length > 0 && endDate.length > 0 && newStartDate <= newEndDate && differenceInDays <= 7) {
+      errors = []
+    }
+
+    dispatch(setFilterError(errors))
+    
+    if (startDate.length > 0 && endDate.length > 0 && newStartDate <= newEndDate && differenceInDays <= 7) {
+      let staffId = selectedBarber.id
+      let firestore = getFirestore()
+
+      let appointmentRef = firestore.collection('appointment')
+
+      appointmentRef
+      .where('staffId', '==', staffId)
+      .where('date', '>=', startDate)
+      .where('date', '<=', endDate)
+      .onSnapshot(function(querySnapshot) {
+        let appointments = []
+        if (querySnapshot.empty === false) {
+          querySnapshot.forEach(function(doc) {
+            let id = doc.id
+            let data = doc.data()
+            data['id'] = id
+            appointments.push(data)
+          })
+          dispatch(setFilteredAppointments(appointments))
+        } else {
+          let emptyObj = {
+            message: 'empty',
+            staffId
+          }
+          appointments.push(emptyObj)
+          dispatch(setFilteredAppointments(appointments))
+        }
+      })
+    }
+  }
+}
+
+export const setFilterStartDate = (data) => {
+  return {
+    type: 'SET_FILTER_START_DATE',
+    payload: data
+  }
+}
+
+export const setFilterEndDate = (data) => {
+  return {
+    type: 'SET_FILTER_END_DATE',
+    payload: data
+  }
+}
+
+const setFilterError = (data) => {
+  return {
+    type: 'SET_FILTER_ERROR',
+    payload: data
+  }
+}
+
+const setFilteredAppointments = (data) => {
+  return {
+    type: 'SET_FILTERED_APPOINTMENTS',
+    payload: data
+  }
+}
+
+
+// To set selected appointment to form inputs on update appointment form 
+export const setSelectedAppointmentInput = (filteredAppointment) => {
+  return async (dispatch, getState, { getFirebase, getFirestore }) => {
+    let { date, maxQueue, startHours, startMinutes, endHours, endMinutes, disableStatus } = filteredAppointment
+    dispatch(setSelectedFilteredAppointment(filteredAppointment))
+    dispatch(setUpdateAppointmentDateInput(date))
+    dispatch(setUpdateAppointmentMaxQueueInput(maxQueue))
+    dispatch(setUpdateAppointmentStartHoursInput(startHours))
+    dispatch(setUpdateAppointmentStartMinutesInput(startMinutes))
+    dispatch(setUpdateAppointmentEndHoursInput(endHours))
+    dispatch(setUpdateAppointmentEndMinutesInput(endMinutes))
+    dispatch(setUpdateAppointmentDisableStatusInput(disableStatus))
+  }
+}
+
+const setSelectedFilteredAppointment = (data) => {
+  return {
+    type: 'SET_SELECTED_FILTERED_APPOINTMENT',
+    payload: data
+  }
+}
+
+export const setUpdateAppointmentDateInput = (data) => {
+  return {
+    type: 'SET_UPDATE_APPOINTMENT_DATE_INPUT',
+    payload: data
+  }
+}
+
+export const setUpdateAppointmentMaxQueueInput = (data) => {
+  return {
+    type: 'SET_UPDATE_APPOINTMENT_MAX_QUEUE_INPUT',
+    payload: data
+  }
+}
+
+export const setUpdateAppointmentStartHoursInput = (data) => {
+  return {
+    type: 'SET_UPDATE_APPOINTMENT_START_HOURS_INPUT',
+    payload: data
+  }
+}
+
+export const setUpdateAppointmentStartMinutesInput = (data) => {
+  return {
+    type: 'SET_UPDATE_APPOINTMENT_START_MINUTES_INPUT',
+    payload: data
+  }
+}
+
+export const setUpdateAppointmentEndHoursInput = (data) => {
+  return {
+    type: 'SET_UPDATE_APPOINTMENT_END_HOURS_INPUT',
+    payload: data
+  }
+}
+
+export const setUpdateAppointmentEndMinutesInput = (data) => {
+  return {
+    type: 'SET_UPDATE_APPOINTMENT_END_MINUTES_INPUT',
+    payload: data
+  }
+}
+
+export const setUpdateAppointmentDisableStatusInput = (data) => {
+  return {
+    type: 'SET_UPDATE_APPOINTMENT_DISABLE_STATUS_INPUT',
+    payload: data
+  }
+}
+
+// To validate and update appointment with input 
+export const updateSelectedAppointment = (data) => {
+  return async (dispatch, getState, { getFirebase, getFirestore }) => {
+    let { 
+      updateDateInput,
+      updateMaxQueueInput,
+      updateStartHours,
+      updateStartMinutes,
+      updateEndHours,
+      updateEndMinutes,
+      updateDisableStatus,
+      selectedAppointment,
+    } = data
+
+    let errors = []
+    // Validation if wrong
+    if (updateMaxQueueInput.length <= 0 || Number(updateMaxQueueInput) <= 0) {
+      errors.push(notFilledError)
+      dispatch(setUpdateMaxQueueInputError('Empty'))
+    }
+
+    if (Number(updateEndHours) <= Number(updateStartHours)) {
+      errors.push(incorrectHoursError)
+    }
+    
+    // Validation if OK
+    if (updateMaxQueueInput.length > 0 && Number(updateMaxQueueInput) > 0 && Number(updateEndHours) > Number(updateStartHours)) {
+      errors = []
+      dispatch(setUpdateMaxQueueInputError(false))
+    }
+
+    dispatch(setUpdateAppInputError(errors))
+
+    if (updateMaxQueueInput.length > 0 && Number(updateMaxQueueInput) > 0 && Number(updateEndHours) > Number(updateStartHours)) {
+      swal({
+        title: 'Are you sure?',
+        text: "Appointment's information will be updated with the new input.",
+        icon: 'warning',
+        buttons: ['Cancel', 'OK']
+      })
+      .then(result => {
+        if (result) {
+          dispatch(setAppointmentLoadingStatus(true))
+
+          let firestore = getFirestore()
+          let uid = selectedAppointment.id
+          let appointmentRef = firestore.collection('appointment').doc(uid)
+          
+          let updatedAppointmentData = {
+            date: updateDateInput,
+            maxQueue: updateMaxQueueInput,
+            startHours: updateStartHours,
+            startMinutes: updateStartMinutes,
+            endHours: updateEndHours,
+            endMinutes: updateEndMinutes,
+            disableStatus: updateDisableStatus
+          }
+    
+          appointmentRef
+          .update(updatedAppointmentData)
+          .then(() => {
+            let revisedAppointment = {
+              ...selectedAppointment,
+              date: updateDateInput,
+              maxQueue: updateMaxQueueInput,
+              startHours: updateStartHours,
+              startMinutes: updateStartMinutes,
+              endHours: updateEndHours,
+              endMinutes: updateEndMinutes,
+              disableStatus: updateDisableStatus
+            }
+            dispatch(setAppointmentLoadingStatus(false))
+            dispatch(setSelectedFilteredAppointment(revisedAppointment))
+            swal("Information Updated", "", "success")
+          })
+          .catch(err => {
+            console.log('ERROR: update appointment data', err)
+          })
+        }
+      })
+    }
+  }
+}
+
+const setUpdateMaxQueueInputError = (data) => {
+  return {
+    type: 'SET_UPDATE_APPOINTMENT_MAX_QUEUE_ERROR',
+    payload: data
+  }
+}
+
+const setUpdateAppInputError = (data) => {
+  return {
+    type: 'SET_UPDATE_APPOINTMENT_ERROR',
+    payload: data
+  }
+}
+
+const setAppointmentLoadingStatus = (data) => {
+  return {
+    type: 'SET_APPOINTMENT_LOADING_STATUS',
+    payload: data
+  }
+}
+
+// To clear update appointment input error when click modal close
+export const clearUpdateAppointment = () => {
+  return (dispatch, getState, { getFirebase, getFirestore }) => {
+    let errors = []
+    dispatch(setUpdateAppInputError(errors))
+    dispatch(setUpdateMaxQueueInputError(false))
+  } 
 }
