@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { withCookies } from 'react-cookie';
 
+import './App.css';
 import HomePage from './pages/home/homePage';
 import DashboardPage from './pages/dashboard/dashboardPage';
 import NotFoundPage from './pages/error/notFound';

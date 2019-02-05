@@ -10,7 +10,7 @@ input[type=number] {
 }
 input[type=date] {
   margin: 0px;
-  height: 2rem;
+  height: 1rem;
 }
 .Input-date-box {
   margin-top: 1rem !important;

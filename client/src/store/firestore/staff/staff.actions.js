@@ -1,5 +1,5 @@
-import { getAppointmentsDate } from '../appointment/appointment.actions';
 import { setActiveTab } from '../../dashboard/dashboard.actions';
+import { getAppointmentsAndCalendar } from '../../firestore/appointment/appointment.actions';
 import { setSelectedStaffServices, setHasEditStatus, addNewStaffServicesData, setStaffServiceInputError } from '../../firestore/staffService/staffService.actions';
 import { setSelectedStaffSchedules, setHasEditStatusStaffSchedule, addNewStaffSchedulesData, setStaffScheduleInputError } from '../../firestore/staffSchedule/staffSchedule.actions';
 import swal from 'sweetalert';
@@ -9,7 +9,7 @@ export const maxFileSizeError = 'Maximum file size is 1 MB.'
 export const maxStaffError = 'Maximum number of barbers is 5 person per branch. Contact our care center for futher queries.'
 
 // Get barbers data based on provided branchId with disableStatus is false
-export const getStaffsAndOtherData = (branchId, allBarbers) => {
+export const getStaffsAndOtherData = (allBarbers) => {
   return (dispatch, getState, { getFirebase, getFirestore }) => {
 
     let enabledBarbers = []
@@ -21,7 +21,7 @@ export const getStaffsAndOtherData = (branchId, allBarbers) => {
       return ''
     })
 
-    dispatch(getAppointmentsDate(branchId, enabledBarbers))
+    dispatch(setBarbersSuccess(enabledBarbers))
   }
 }
 
@@ -33,7 +33,7 @@ export const setBarbersSuccess = (barbers) => {
 }
 
 // Get all barbers data based on provided branchId
-export const getAllStaffsAndOtherData = (branchId) => {
+export const getAllStaffsAndCalendar = (branchId, date) => {
   return (dispatch, getState, { getFirebase, getFirestore }) => {
     let firestore = getFirestore()
     let staffRef = firestore.collection('staff')
@@ -50,8 +50,10 @@ export const getAllStaffsAndOtherData = (branchId) => {
           data['id'] = id
           branchBarbers.push(data)
         })
-        dispatch(getStaffsAndOtherData(branchId, branchBarbers))
+
         dispatch(setAllBarbersSuccess(branchBarbers))
+        dispatch(getAppointmentsAndCalendar(branchId, date, branchBarbers))
+
       } else {
         dispatch(setAllBarbersFailed(false))
       }

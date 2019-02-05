@@ -5,6 +5,8 @@ let initialState = {
   dashboards: [],
   dashboardsExists: true,
   dashboardsLoading: true,
+  paymentMethod: 'Cash',
+  showPaymentMethodStatus: false,
 }
 
 const transactionDataList = (state = { ...initialState }, action) => {
@@ -25,6 +27,16 @@ const transactionDataList = (state = { ...initialState }, action) => {
       return ({
         ...state,
         transactionsExist: action.payload,
+      })
+    case 'SET_PAYMENT_METHOD':
+      return ({
+        ...state,
+        paymentMethod: action.payload,
+      })
+    case 'SET_SHOW_PAYMENT_METHOD_STATUS':
+      return ({
+        ...state,
+        showPaymentMethodStatus: action.payload,
       })
     default:
       return state;

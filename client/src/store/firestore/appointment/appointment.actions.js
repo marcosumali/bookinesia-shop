@@ -1,5 +1,7 @@
 import swal from 'sweetalert';
-import { getTransactions } from '../transaction/transaction.actions';
+import { getTransactions, getTransactionsCalendar, setDashboardSuccess, updateTransactionStatus } from '../transaction/transaction.actions';
+import { getAllStaffsAndCalendar } from '../staff/staff.actions';
+import { setDashboardLoadingStatus } from '../../dashboard/dashboard.actions';
 
 let filterEmptyError = 'To filter preferred appointments for selected provider, start and end dates must be filled.'
 let maxFilterError = `The preferred appointment's date that can be chosen is up to 7 days.`
@@ -7,6 +9,7 @@ let incorrectFilterError = `The start date must be earlier than or equal to the 
 let notFilledError = `All section must filled.`
 let incorrectHoursError = `The start hour must be earlier than the end hour.`
 let doubleAppError = `Appointment for selected date and barber is already exist.`
+let transactionAppError = `Can't change appointment's date that has active transactions.`
 
 // To get appointments date per branch based on staffs to listen real time on next action
 export const getAppointmentsDate = (branchId, staffs) => {
@@ -59,32 +62,50 @@ const setAppointmentsFailed = (status) => {
 }
 
 // To set appointment date index to show which date on dashboard
-export const setAppointmentDateIndex = (status, index, dates) => {
+export const setAppointmentDateIndex = (branchId, status, selectedDate) => {
   return async (dispatch, getState, { getFirebase, getFirestore }) => {
+    let inputDate = new Date(selectedDate)
+    
     if (status === 'next') {
-      dispatch(setAppointmentDateIndexSuccess(Number(index)+1))
-      dispatch(setSelectedDateSuccess(dates[Number(index)+1].originalDate))
+      let tomorrowDate = new Date(inputDate.setDate(inputDate.getDate() + 1))
+      let year = tomorrowDate.getFullYear()
+      let month = tomorrowDate.getMonth() + 1
+      let date = tomorrowDate.getDate()  
+      let acceptedDate = `${year}-${month}-${date}`
+      dispatch(getAllStaffsAndCalendar(branchId, acceptedDate))
+      dispatch(setSelectedDateSuccess(acceptedDate))
     } else if (status === 'previous') {
-      dispatch(setAppointmentDateIndexSuccess(Number(index)-1))
-      dispatch(setSelectedDateSuccess(dates[Number(index)-1].originalDate))
+      let yesterdayDate = new Date(inputDate.setDate(inputDate.getDate() - 1))
+      let year = yesterdayDate.getFullYear()
+      let month = yesterdayDate.getMonth() + 1
+      let date = yesterdayDate.getDate()  
+      let acceptedDate = `${year}-${month}-${date}`
+      dispatch(getAllStaffsAndCalendar(branchId, acceptedDate))
+      dispatch(setSelectedDateSuccess(acceptedDate))
     }
   }
 }
 
 // To set appointment date index to 0 to show today date on dashboard
-export const setTodayDateIndex = (dates) => {
+export const setTodayDateIndex = (branchId) => {
   return async (dispatch, getState, { getFirebase, getFirestore }) => {
-    dispatch(setAppointmentDateIndexSuccess(0))
-    dispatch(setSelectedDateSuccess(dates[0].originalDate))
+    let inputDate = new Date(Date.now())
+    let year = inputDate.getFullYear()
+    let month = inputDate.getMonth() + 1
+    let date = inputDate.getDate()
+    let acceptedDate = `${year}-${month}-${date}`
+
+    dispatch(getAllStaffsAndCalendar(branchId, acceptedDate))
+    dispatch(setSelectedDateSuccess(acceptedDate))
   }
 }
 
-const setAppointmentDateIndexSuccess = (data) => {
-  return {
-    type: 'SET_APPOINTMENT_DATE_INDEX',
-    payload: data
-  }
-}
+// const setAppointmentDateIndexSuccess = (data) => {
+//   return {
+//     type: 'SET_APPOINTMENT_DATE_INDEX',
+//     payload: data
+//   }
+// }
 
 export const setSelectedDateSuccess = (data) => {
   return {
@@ -189,6 +210,96 @@ export const getAppointments = (branchId, branchAppointments, staffs) => {
     })
   }
 }
+
+// To get appointments data per branch based on specific date 
+export const getAppointmentsAndCalendar = (branchId, date, staffs) => {
+  return async (dispatch, getState, { getFirebase, getFirestore }) => {
+    let firestore = getFirestore()
+    let appointmentRef = firestore.collection('appointment')
+    
+    dispatch(setDashboardLoadingStatus(true))
+
+    appointmentRef
+    .where('branchId', '==', branchId)
+    .where('date', '==', date)
+    .onSnapshot(function(querySnapshot) {
+      if (querySnapshot.empty === false) {
+        let appointments = []
+        querySnapshot.forEach(doc => {
+          let data = doc.data()
+          let id = doc.id
+          data['id'] = id
+          appointments.push(data)
+        })
+
+        // Process to obtain unique appointment date to be shown on dashboard
+        let emptyDashboard = [{ date }]
+
+        // Process to obtain unique appointment date with its maxQueue to create blank dashboard
+        let appointmentsMaxQueue = [...new Set(appointments.map(appointment => appointment.maxQueue))]
+        let maxQueueRelatedDate = Math.max(...appointmentsMaxQueue)
+        emptyDashboard[0]['maxQueue'] = maxQueueRelatedDate
+        emptyDashboard[0]['data'] = []
+
+
+        // Process to create transaction board per queuing number
+        for (let i = 0; i < emptyDashboard[0].maxQueue; i++) {
+          let data = {
+            queueNo: String(i+1),
+            transactions: []
+          }
+          emptyDashboard[0].data.push(data)
+        } 
+
+        // Process to fill up the transaction board with empty object to be filled up with transaction on next actions
+        for (let j = 0; j < emptyDashboard[0].data.length; j++ ) {
+          for (let i = 0; i < staffs.length; i++ ) {
+            emptyDashboard[0].data[j].transactions.push({})
+          }
+        }
+        // console.log('step3--', emptyDashboard)
+
+        dispatch(getTransactionsCalendar(branchId, emptyDashboard, staffs, appointments))
+
+      } else {
+
+        // No appointment found in the database
+        // Process to obtain unique appointment date to be shown on dashboard
+        let emptyDashboard = [{ date }]
+
+        // Process to obtain unique appointment date with its maxQueue to create blank dashboard
+        emptyDashboard[0]['maxQueue'] = 15
+        emptyDashboard[0]['data'] = []
+
+
+        // Process to create transaction board per queuing number
+        for (let i = 0; i < emptyDashboard[0].maxQueue; i++) {
+          let data = {
+            queueNo: String(i+1),
+            transactions: []
+          }
+          emptyDashboard[0].data.push(data)
+        } 
+
+        // Process to fill up the transaction board with empty object to be filled up with transaction on next actions
+        for (let j = 0; j < emptyDashboard[0].data.length; j++ ) {
+          for (let i = 0; i < staffs.length; i++ ) {
+            let statusObj = {
+              status: 'no-appointment'
+            }
+            // to show no-appointment in html and css
+            emptyDashboard[0].data[j].transactions.push(statusObj)
+          }
+        }
+
+        dispatch(setDashboardLoadingStatus(false))
+        dispatch(setDashboardSuccess(emptyDashboard))
+        dispatch(setSelectedDateSuccess(date))
+      }
+    })
+  }
+}
+
 
 // To validate and get filtered appointments based on start and end date 
 export const getFilteredAppointments = (startDate, endDate, selectedBarber) => {
@@ -369,6 +480,7 @@ export const updateSelectedAppointment = (data) => {
       selectedBarber,
     } = data
     let staffId = selectedBarber.id
+    let currentTransaction = selectedAppointment.currentTransaction
     let updatedDate = new Date(Date.now())
 
     let errors = []
@@ -392,21 +504,31 @@ export const updateSelectedAppointment = (data) => {
       } else {
         isExist = false
       }
-    } 
+    }
+
+    let hasTransaction = false
+    if (selectedAppointment.date !== updateDateInput && currentTransaction > 0) {
+      errors.push(transactionAppError)
+      hasTransaction =  true
+    }
     
     // Validation if OK
     if (updateMaxQueueInput.length > 0 && Number(updateMaxQueueInput) > 0) {
       dispatch(setUpdateMaxQueueInputError(false))
     }
 
-    if (updateMaxQueueInput.length > 0 && Number(updateMaxQueueInput) > 0 && Number(updateEndHours) > Number(updateStartHours) && isExist === false) {
+    if (selectedAppointment.date !== updateDateInput && currentTransaction <= 0) {
+      hasTransaction =  false
+    }
+
+    if (updateMaxQueueInput.length > 0 && Number(updateMaxQueueInput) > 0 && Number(updateEndHours) > Number(updateStartHours) && isExist === false && hasTransaction === false) {
       errors = []
       dispatch(setUpdateMaxQueueInputError(false))
     }
 
     dispatch(setUpdateAppInputError(errors))
 
-    if (updateMaxQueueInput.length > 0 && Number(updateMaxQueueInput) > 0 && Number(updateEndHours) > Number(updateStartHours) && isExist === false) {
+    if (updateMaxQueueInput.length > 0 && Number(updateMaxQueueInput) > 0 && Number(updateEndHours) > Number(updateStartHours) && isExist === false && hasTransaction === false) {
       swal({
         title: 'Are you sure?',
         text: "Appointment's information will be updated with the new input.",
@@ -705,3 +827,39 @@ export const isAppointmentExists = (branchId, staffId, date) => {
     return status
   }
 }
+
+// To update appointment status from shop
+export const updateAppointmentStatus = (shop, branch, status, appointment, transaction, user, paymentMethod, nextTransaction, afterNextTransaction) => {
+  return async (dispatch, getState, { getFirebase, getFirestore }) => {
+    // console.log('cek app', status, appointment)
+    let nowDate = new Date(Date.now())
+    let id = appointment.id
+    let currentTransaction = Number(appointment.currentTransaction)
+    let updatedCurrentTransaction = currentTransaction + 1
+    let currentQueue = Number(appointment.currentQueue)
+    let updatedCurrentQueue = currentQueue + 1
+    let firestore = getFirestore()
+    let appointmentRef = firestore.collection('appointment').doc(id)
+
+    let dataToUpdate = {
+      updatedDate: nowDate
+    }
+    if (status === 'booking confirmed') {
+      dataToUpdate['currentTransaction'] = updatedCurrentTransaction
+    } else if (status === 'skipped' || status === 'on progress') {
+      dataToUpdate['currentQueue'] = updatedCurrentQueue
+    }
+    
+    appointmentRef.update(dataToUpdate)
+    .then(() => {
+      // success condition: swal or send email
+      if (status === 'skipped' || status === 'on progress') {
+        dispatch(updateTransactionStatus(shop, branch, status, appointment, transaction, user, paymentMethod, nextTransaction, afterNextTransaction))
+      }
+    })
+    .catch(err => {
+      console.log('ERROR: update appointment status', err)
+    })     
+  }
+}
+

@@ -1,54 +1,10 @@
 /* BUTTON CSS */
-.Button-cancel {
-  padding: 3px;
-  color: #666666;
-  border-radius: 6px;
-  border: 1px solid #666666;
-  min-width: 4em;
-  text-align: center;
-  font-size: 0.9em;
-}
-
-.Button-skip {
-  padding: 3px;
-  color: #5499c3;
-  border-radius: 6px;
-  border: 1px solid #5499c3;
-  margin-left: 10px;
-  min-width: 4em;
-  text-align: center;
-  font-size: 0.9em;
-}
-
 .Button-edit {
   padding: 3px;
   color: #ffffff;
   background-color: #5499c3;
   border-radius: 6px;
   border: 1px solid #5499c3;
-  margin-left: 10px;
-  min-width: 4em;
-  text-align: center;
-  font-size: 0.9em;
-}
-
-.Button-start {
-  padding: 3px;
-  color: #ffffff;
-  background-color: #f68606;
-  border-radius: 6px;
-  border: 1px solid #f68606;
-  min-width: 4em;
-  text-align: center;
-  font-size: 0.9em;
-}
-
-.Button-finish {
-  padding: 3px;
-  color: #ffffff;
-  background-color: #27B50A;
-  border-radius: 6px;
-  border: 1px solid #27B50A;
   min-width: 4em;
   text-align: center;
   font-size: 0.9em;

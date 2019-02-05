@@ -89,9 +89,11 @@ class modalUpdateApp extends Component {
                 </div>
               </div>
             </div>
-            <div className="col m5 No-margin No-padding Margin-b-10">
+            <div className="col m5 No-padding Margin-b-10" style={{ marginTop: '0.9rem' }}>
               <BasicDateInput 
                 inputId="addDate"
+                className="input-field Input-date-box"
+                inputLabelStatus={ true }
                 inputLabel="Appointment Date"
                 openingStatus={ false }
                 openingDate=""
@@ -204,6 +206,7 @@ class modalUpdateApp extends Component {
               loadingStatus ?
               <LoadingButton 
                 type="Btn-white-blue Container-nowrap-center"
+                color="#ffffff"
               />
               :
               <Button 

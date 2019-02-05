@@ -44,8 +44,13 @@ import {
   setAddAppointmentStartMinutesInput,
   setAddAppointmentEndHoursInput,
   setAddAppointmentEndMinutesInput,
+  getAppointmentsAndCalendar,
+  updateAppointmentStatus,
 } from '../firestore/appointment/appointment.actions';
-
+import { 
+  updateTransactionStatus,
+  setPaymentMethod
+} from '../firestore/transaction/transaction.actions';
 
 // ---------------------------------------------- DASHBOARD ACTION ----------------------------------------------
 // To get DMS cookies and dispatch to store
@@ -114,7 +119,7 @@ export const dispatchToSetDisplayToShow = (props) => {
       menuToShow,
     }
     // console.log('====', dashboardMenuStatus)
-
+    dispatch(setActiveTab('Details'))
     saveDashboardMenuStatus(cookies, dashboardMenuStatus)
   }
 }
@@ -174,6 +179,7 @@ export const dispatchToSetSubMenuToShow = (props) => {
     }
     // console.log('===x', dashboardMenuStatus)
 
+    dispatch(setActiveTab('Details'))
     saveDashboardMenuStatus(cookies, dashboardMenuStatus)
   }
 }
@@ -486,6 +492,8 @@ export const handleMultipleSelectOption = (e, value, purpose, time, data) => {
       } else if (id === 'endMinutes') {
         dispatch(setAddAppointmentEndMinutesInput(value))
       }
+    } else if (purpose === 'selectPaymentMethod' && type === 'select-one') {
+      dispatch(setPaymentMethod(value))
     }
   }
 }
@@ -528,7 +536,7 @@ export const handleDateInput = (e, value) => {
 }
 
 // To handle date input
-export const handleBasicDateInput = (e) => {
+export const handleBasicDateInput = (e, branchId, staffs) => {
   return (dispatch, getState, { getFirebase, getFirestore }) => {
     let target = e.target
     let inputId = target.id
@@ -547,10 +555,11 @@ export const handleBasicDateInput = (e) => {
       dispatch(setUpdateAppointmentDateInput(acceptedDate))
     } else if (inputId === 'addDate') {
       dispatch(setAddAppointmentDateInput(acceptedDate))
+    } else if (inputId === 'calendarDate') {
+      dispatch(getAppointmentsAndCalendar(branchId, acceptedDate, staffs))
     }
   }
 }
-
 
 // To handle number input
 export const handleNumberInput = (e) => {
@@ -567,5 +576,76 @@ export const handleNumberInput = (e) => {
   }
 }
 
+export const setDashboardLoadingStatus = (data) => {
+  return {
+    type: 'SET_DASHBOARD_LOADING_STATUS',
+    payload: data
+  }
+}
 
 
+// To handle update transaction and appointment
+export const handleUpdateStatus = (data) => {
+  return async (dispatch, getState, { getFirebase, getFirestore }) => {
+    let { shop, branch, status, appointment, transaction, user, paymentMethod, dashboardData, barbers } = data
+    
+    let swalText = ''
+    if (status === 'skipped') {
+      swalText = 'Related transaction will be updated and customer will be notified.'
+    } else if (status === 'on progress') {
+      swalText = 'Related transaction will be started.'
+    } else if (status === 'finished') {
+      let upperCasedPaymentMethod = paymentMethod.toUpperCase()
+      swalText = `Related transaction will be marked as finised with payment made by ${upperCasedPaymentMethod}`
+    }
+
+    swal({
+      title: 'Are you sure?',
+      text: swalText,
+      icon: 'warning',
+      buttons: ['Cancel', 'OK']
+    })
+    .then(async result => {
+      if (result) {
+
+        dispatch(setUpdateLoadingStatus(true))
+
+        if (status === 'skipped') {
+          
+          dispatch(updateAppointmentStatus(shop, branch, status, appointment, transaction, user, paymentMethod, null, null))
+
+        } else if (status === 'on progress') {
+
+          let queueNo = transaction.queueNo
+          let nextQueueNo = String(Number(queueNo) + 1)
+          let afterNextQueueNo = String(Number(queueNo) + 2)
+          let staff = transaction.staff
+
+          let nextIndex = dashboardData.findIndex(data => data.queueNo === nextQueueNo)
+          let afterNextIndex = dashboardData.findIndex(data => data.queueNo === afterNextQueueNo)
+          let staffIndex = barbers.findIndex(barber => barber.id === staff.id)
+
+          let nextTransactionsData = dashboardData[nextIndex].transactions
+          let nextTransaction = nextTransactionsData[staffIndex]
+
+          let afterNextTransactionData = dashboardData[afterNextIndex].transactions
+          let afterNextTransaction = afterNextTransactionData[staffIndex]
+
+          dispatch(updateAppointmentStatus(shop, branch, status, appointment, transaction, user, paymentMethod, nextTransaction, afterNextTransaction))
+        
+        } else if (status === 'finished') {
+
+          dispatch(updateTransactionStatus(shop, branch, status, appointment, transaction, user, paymentMethod, null, null))
+
+        }
+      }
+    })  
+  }
+}
+
+export const setUpdateLoadingStatus = (data) => {
+  return {
+    type: 'SET_UPDATE_LOADING_STATUS',
+    payload: data
+  }
+}

@@ -2,12 +2,14 @@
   width: 100%;
   height: 8vh;
   padding: 0.5em;
+  border-top: 1px solid #EAEAEA;
 }
 
 .Calendar-body-box {
   width: 100%;
   height: 84.5vh;
-  overflow: auto;
+  overflow-x: scroll;
+  overflow-y: scroll;
   /* border: 1px solid black; */
 }
 /* Height was set as combination with calender header box height and dashboardPage height  */
@@ -53,6 +55,7 @@
 
 .Number-box {
   width: 8vh;
+  min-width: 8vh;
   border: 1px solid #EAEAEA;
   font-family: Montserrat;
   font-size: 1.25em;
@@ -65,11 +68,33 @@
 }
 
 .Content-box {
-  width: 15.7vw;
+  width: 15vw;
+  min-width: 15vw;
   border-top: 1px solid #EAEAEA;
   border-right: 1px solid #EAEAEA;
   border-bottom: 1px solid #EAEAEA;
   padding: 5px;
+}
+
+.Content-box-inner {
+  width: 15vw;
+  min-width: 15vw;
+  border-top: 1px solid #EAEAEA;
+  border-right: 1px solid #EAEAEA;
+  border-bottom: 1px solid #EAEAEA;
+}
+
+.Background-no-appointment {
+  background-color: gainsboro;
+  padding: 5px;
+}
+
+.Background-blank {
+  padding: 5px;
+}
+
+.Text-no-appointment {
+  color: gainsboro !important;
 }
 
 .Staff-text{
@@ -116,4 +141,3 @@ td, th {
 tr {
   height: 8vh;
 }
-
