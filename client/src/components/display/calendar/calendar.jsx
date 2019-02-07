@@ -31,10 +31,9 @@ class calendar extends Component {
                             <th className="Content-box" key={ 'barber' + index }>
                               <div className="Container-nowrap-spacebetween">
                                 <div className="Staff-text Text-capitalize">{ barber.name }</div>
-                                {/* <div className="Height-100cent Container-nowrap-center">
-                                  <AddBoxSvg height="1.6em" width="1.6em" color="#F68606"/>
-                                </div> */}
-                                <ModalAddTransaction />
+                                <ModalAddTransaction 
+                                  barber={ barber }
+                                />
                               </div>
                             </th>
                           )
@@ -99,6 +98,11 @@ const mapStateToProps = state => {
     selectedDate: state.appointment.selectedDate,
     transactions: state.transaction.transactions,
     loadingStatus: state.nav.loadingStatus,
+    selectedPrimaryService: state.transaction.selectedPrimaryService,
+    selectedSecondaryServices: state.transaction.selectedSecondaryServices,
+    addName: state.transaction.addName,
+    addPhone: state.transaction.addPhone,
+    addEmail: state.transaction.addEmail,
   }
 }
 

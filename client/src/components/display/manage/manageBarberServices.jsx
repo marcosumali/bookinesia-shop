@@ -37,6 +37,10 @@ class manageBarberServices extends Component {
                     handleChangesFunction={ handleMultipleCheckbox }
                     handleCheckedFunction={ handleMultipleCheckboxStatus }
                     multipleData={ selectedServicesInput }
+                    purpose="manageBarberServices"
+                    checkedStatus={ true }
+                    className="Manage-barber-service-text"
+                    groupId="group1"
                   />
                 </div>
               )

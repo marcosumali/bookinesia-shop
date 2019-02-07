@@ -31,8 +31,8 @@ class manageBarberApps extends Component {
               className="input-field Input-date-box"
               inputLabelStatus={ true }
               inputLabel="Start Date"
-              openingStatus={ false }
-              openingDate=""
+              openingStatus={ true }
+              openingDate={ startDate }
               handleChangesDateFunction={ handleBasicDateInput }              
             />
           </div>
@@ -42,8 +42,8 @@ class manageBarberApps extends Component {
               className="input-field Input-date-box"
               inputLabelStatus={ true }
               inputLabel="End Date"
-              openingStatus={ false }
-              openingDate=""
+              openingStatus={ true }
+              openingDate={ endDate }
               handleChangesDateFunction={ handleBasicDateInput }              
             />
           </div>

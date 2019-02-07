@@ -1,7 +1,7 @@
 import swal from 'sweetalert';
-import { getTransactions, getTransactionsCalendar, setDashboardSuccess, updateTransactionStatus } from '../transaction/transaction.actions';
+import { getTransactions, getTransactionsCalendar, setDashboardSuccess, updateTransactionStatus, sendEmailAfterSuccess } from '../transaction/transaction.actions';
 import { getAllStaffsAndCalendar } from '../staff/staff.actions';
-import { setDashboardLoadingStatus } from '../../dashboard/dashboard.actions';
+import { setDashboardLoadingStatus, setUpdateLoadingStatus } from '../../dashboard/dashboard.actions';
 
 let filterEmptyError = 'To filter preferred appointments for selected provider, start and end dates must be filled.'
 let maxFilterError = `The preferred appointment's date that can be chosen is up to 7 days.`
@@ -835,9 +835,9 @@ export const updateAppointmentStatus = (shop, branch, status, appointment, trans
     let nowDate = new Date(Date.now())
     let id = appointment.id
     let currentTransaction = Number(appointment.currentTransaction)
-    let updatedCurrentTransaction = currentTransaction + 1
+    let updatedCurrentTransaction = String(currentTransaction + 1)
     let currentQueue = Number(appointment.currentQueue)
-    let updatedCurrentQueue = currentQueue + 1
+    let updatedCurrentQueue = String(currentQueue + 1)
     let firestore = getFirestore()
     let appointmentRef = firestore.collection('appointment').doc(id)
 
@@ -853,13 +853,56 @@ export const updateAppointmentStatus = (shop, branch, status, appointment, trans
     appointmentRef.update(dataToUpdate)
     .then(() => {
       // success condition: swal or send email
-      if (status === 'skipped' || status === 'on progress') {
+      if (status === 'skipped') {
+        if (transaction.status !== 'canceled') {
+          dispatch(updateTransactionStatus(shop, branch, status, appointment, transaction, user, paymentMethod, nextTransaction, afterNextTransaction))
+        } else {
+          dispatch(setUpdateLoadingStatus(false))
+          swal("Information Updated", "", "success")
+        }
+      } else if (status === 'on progress') {
         dispatch(updateTransactionStatus(shop, branch, status, appointment, transaction, user, paymentMethod, nextTransaction, afterNextTransaction))
+      } else if (status === 'booking confirmed') {
+        dispatch(sendEmailAfterSuccess(shop, branch, status, appointment, transaction, nextTransaction, afterNextTransaction))
       }
     })
     .catch(err => {
       console.log('ERROR: update appointment status', err)
     })     
+  }
+}
+
+
+// To check whether selected appointment exists
+export const isAppointmentExist = (branchId, staffId, date) => {
+  return async (dispatch, getState, { getFirebase, getFirestore }) => {
+    let firestore = getFirestore()
+    let appointmentRef = firestore.collection('appointment')
+    let result = ''
+
+    await appointmentRef
+    .where('branchId', '==', branchId)
+    .where('staffId', '==', staffId)
+    .where('date', '==', date)
+    .where('disableStatus', '==', false)
+    .get()
+    .then(querySnapshot => {
+      if (querySnapshot.empty === false) {
+        querySnapshot.forEach(function(doc) {
+          let data = doc.data()
+          let id = doc.id
+          data['id'] = id
+          result = data
+        })
+      } else {
+        result = false
+      }
+    })
+    .catch(err => {
+      console.log('ERROR: is appointment exists', err)
+    })
+
+    return result
   }
 }
 

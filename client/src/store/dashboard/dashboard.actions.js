@@ -7,8 +7,8 @@ import {
 import { 
   setBarberDisableStatusInput, 
   setBarberInfo, 
-  setHasEditStatusFile, 
-  setBarberNameInputError 
+  setBarberNameInputError,
+  setFileInputError,
 } from '../firestore/staff/staff.actions';
 import { 
   setSelectedServicesInput, 
@@ -49,8 +49,27 @@ import {
 } from '../firestore/appointment/appointment.actions';
 import { 
   updateTransactionStatus,
-  setPaymentMethod
+  setPaymentMethod,
+  setSelectedSecondaryServices,
+  setSelectedPrimaryService,
 } from '../firestore/transaction/transaction.actions';
+import {
+  setShopNameInput,
+  setShopNameInputError,
+} from '../firestore/shop/shop.actions';
+import {
+  setBranchTimezoneInput,
+  setBranchInfo,
+  setBranchNameInputError,
+  setBranchAddressInputError,
+  setBranchPhoneInputError,
+  setSingleFileInputBranchError,
+  setHasEditStatusFileBranch,
+  setSingleFileInputBranch,
+} from '../firestore/branch/branch.actions';
+
+export const maxFileSizeError = 'Maximum file size is 1 MB. '
+export const imageFileTypeError = 'Accepted image file are JPG/JPEG, PNG, or GIF. '
 
 // ---------------------------------------------- DASHBOARD ACTION ----------------------------------------------
 // To get DMS cookies and dispatch to store
@@ -162,7 +181,7 @@ export const dispatchToSetSubMenuToShow = (props) => {
     displayToShow = text
     dispatch(setDisplayToShow(displayToShow))
     
-    if (text === 'Providers' || text === 'Services' || text === 'Users') {
+    if (text === 'Providers' || text === 'Services' || text === 'Shop & Branch') {
       menuToShow = 'Manage'
       dispatch(setMenuToShow(menuToShow))
     } else if (text === 'Transactions') {
@@ -287,26 +306,61 @@ export const handleSingleCheckbox = (e) => {
 }
 
 // To handle each multiple checkbox
-export const handleMultipleCheckbox = (e, selectedServicesInput) => {
+export const handleRadio = (inputData, purpose) => {
+  return (dispatch, getState, { getFirebase, getFirestore }) => {
+    if (purpose === 'addNewTransaction') {
+      dispatch(setSelectedPrimaryService(inputData.id))
+    }
+  }
+}
+
+
+// To handle each multiple checkbox
+export const handleMultipleCheckbox = (e, selectedData, purpose) => {
   return (dispatch, getState, { getFirebase, getFirestore }) => {
     let target = e.target
     let id = target.id            // id represent key of product in firestore
     let type = target.type        // type of input e.g. radio or checkbox
     let status = target.checked   // true or false
     
-    let checkedIndex = selectedServicesInput.findIndex(staffService => staffService === id);
-
-    if (type === 'checkbox' && status) {
-      if (checkedIndex <= -1) {
-        selectedServicesInput.push(id)
-      } 
-    } else if (type === 'checkbox' && status === false) {
-      if (checkedIndex >= 0) {
-        selectedServicesInput.splice(checkedIndex, 1)
+    if (purpose === 'manageBarberServices') {
+      // SelectedData represent selectedServicesInput for staff services
+      let checkedIndex = selectedData.findIndex(staffService => staffService === id)
+  
+      if (type === 'checkbox' && status) {
+        if (checkedIndex <= -1) {
+          selectedData.push(id)
+        } 
+      } else if (type === 'checkbox' && status === false) {
+        if (checkedIndex >= 0) {
+          selectedData.splice(checkedIndex, 1)
+        }
       }
+      dispatch(setHasEditStatus(true))
+      dispatch(setSelectedServicesInput({ uniqueStatus: false, staffServices: selectedData }))
+
+    } else if (purpose === 'addNewTransaction') {
+      // SelectedData represent selected services
+      let checkedIndex = selectedData.findIndex(serviceId => serviceId === id)
+  
+      if (type === 'checkbox' && status) {
+        if (checkedIndex <= -1) {
+          selectedData.push(id)
+        } 
+      } else if (type === 'checkbox' && status === false) {
+        if (checkedIndex >= 0) {
+          selectedData.splice(checkedIndex, 1)
+        }
+      }
+
+      let result = []
+      selectedData && selectedData.map(data => {
+        result.push(data)
+        return ''
+      })
+
+      dispatch(setSelectedSecondaryServices(result))
     }
-    dispatch(setHasEditStatus(true))
-    dispatch(setSelectedServicesInput({ uniqueStatus: false, staffServices: selectedServicesInput }))
   }
 }
 
@@ -322,18 +376,34 @@ export const handleCheckedStatus = (status) => {
 }
 
 // To handle multiple checkbox checked status
-export const handleMultipleCheckboxStatus = (service, selectedServicesInput) => {
+export const handleMultipleCheckboxStatus = (data, selectedData, purpose) => {
   return (dispatch, getState, { getFirebase, getFirestore }) => {
     let status = false
     let breakStatus = false
-    selectedServicesInput && selectedServicesInput.map(selectedStaffService => {
-      if (service.id === selectedStaffService && breakStatus === false) {
-        status = true
-        breakStatus = true
-      }
-      return ''
-    })
-    return status  
+
+    if (purpose === 'manageBarberServices') {
+      // SelectedData represent selectedServicesInput for staff services
+
+      selectedData && selectedData.map(selectedStaffService => {
+        if (data.id === selectedStaffService && breakStatus === false) {
+          status = true
+          breakStatus = true
+        }
+        return ''
+      })
+      return status
+    } else if (purpose === 'addNewTransaction') {
+      // SelectedData represent services id inputted
+
+      selectedData && selectedData.map(serviceId => {
+        if (data.id === serviceId && breakStatus === false) {
+          status = true
+          breakStatus = true
+        }
+        return ''
+      })
+      return status
+    }
   }
 }
 
@@ -347,6 +417,10 @@ export const handleCancelation = (data) => {
       swalText = `Provider's ${section} information will be restored to previous settings.` 
     } else if (functionToBeExecuted === 'reverseServiceInput') {
       swalText = `Service's information will be restored to previous settings.` 
+    } else if (functionToBeExecuted === 'setShopInput') {
+      swalText = `Shop's information will be restored to previous settings.` 
+    } else if (functionToBeExecuted === 'setBranchInput') {
+      swalText = `Branch's information will be restored to previous settings.` 
     }
 
     swal({
@@ -363,9 +437,11 @@ export const handleCancelation = (data) => {
           dispatch(setStaffServiceInputError(false))
 
         } else if (functionToBeExecuted === 'setBarberInfo') {
-          dispatch(setHasEditStatusFile(false))
           dispatch(setBarberInfo(requiredData))
+          dispatch(setSingleFileInput({}))
           dispatch(setBarberNameInputError(false))
+          dispatch(setFileInputError(false))
+          dispatch(setHasEditStatusFile(false))
 
         } else if (functionToBeExecuted === 'setSelectedStaffSchedulesInput') {
           dispatch(setHasEditStatusStaffSchedule(false))
@@ -379,6 +455,21 @@ export const handleCancelation = (data) => {
           dispatch(setServiceTypeInput(requiredData.type))
           dispatch(setServiceDisableStatus(requiredData.disableStatus))
 
+        } else if (functionToBeExecuted === 'setShopInput') {
+          dispatch(setShopNameInput(requiredData.name))
+          dispatch(setSingleFileInput({}))
+          dispatch(setShopNameInputError(false))
+          dispatch(setSingleFileInputError(false))
+          dispatch(setHasEditStatusFile(false))
+
+        } else if (functionToBeExecuted === 'setBranchInput') {
+          dispatch(setBranchInfo(requiredData))
+          dispatch(setSingleFileInputBranch({}))
+          dispatch(setBranchNameInputError(false))
+          dispatch(setBranchPhoneInputError(false))
+          dispatch(setBranchAddressInputError(false))
+          dispatch(setSingleFileInputBranchError(false))
+          dispatch(setHasEditStatusFileBranch(false))
         }
       }
     })  
@@ -494,6 +585,8 @@ export const handleMultipleSelectOption = (e, value, purpose, time, data) => {
       }
     } else if (purpose === 'selectPaymentMethod' && type === 'select-one') {
       dispatch(setPaymentMethod(value))
+    } else if (purpose === 'manageShop' && type === 'select-one') {
+      dispatch(setBranchTimezoneInput(value))
     }
   }
 }
@@ -512,6 +605,34 @@ export const handleSingleFileInput = (e) => {
 export const setSingleFileInput = (data) => {
   return {
     type: 'SET_SINGLE_FILE_INPUT',
+    payload: data
+  }
+}
+
+export const setSingleFileInputError = (data) => {
+  return {
+    type: 'SET_SINGLE_FILE_INPUT_ERROR',
+    payload: data
+  }
+}
+
+// To set has click input file button status
+export const setHasEditStatusFile = (clickStatus) => {
+  return (dispatch, getState, { getFirebase, getFirestore }) => {
+    let status = ''
+
+    if (clickStatus) {
+      status = true
+    } else {
+      status = false
+    }
+    dispatch(setHasEditStatusFileAction(status))
+  }
+}
+
+const setHasEditStatusFileAction = (data) => {
+  return {
+    type: 'SET_HAS_EDIT_STATUS_FILE',
     payload: data
   }
 }
@@ -591,7 +712,7 @@ export const handleUpdateStatus = (data) => {
     
     let swalText = ''
     if (status === 'skipped') {
-      swalText = 'Related transaction will be updated and customer will be notified.'
+      swalText = 'Related transaction will be updated and customer will be notified if the transaction is not canceled by them.'
     } else if (status === 'on progress') {
       swalText = 'Related transaction will be started.'
     } else if (status === 'finished') {

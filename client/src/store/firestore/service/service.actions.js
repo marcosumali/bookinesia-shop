@@ -1,6 +1,6 @@
 import swal from 'sweetalert';
 
-import { emptyError } from '../staff/staff.actions';
+import { emptyError } from '../transaction/transaction.actions';
 import { addStaffService } from '../staffService/staffService.actions';
 
 // Get services data based on provided branchId

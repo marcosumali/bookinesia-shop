@@ -1,11 +1,19 @@
 import axios from 'axios';
 import swal from 'sweetalert';
 
+import { validateEmail } from '../../../helpers/form';
 import { setDashboardLoadingStatus, setUpdateLoadingStatus } from '../../dashboard/dashboard.actions';
-import { setSelectedDateSuccess } from '../appointment/appointment.actions';
+import { setSelectedDateSuccess, isAppointmentExist, updateAppointmentStatus } from '../appointment/appointment.actions';
 
 let textQueueTwoNumberAfter = 'We would like to remind you about your appointment for related transaction and your queue number is two number after the current queuing number.'
 let textQueueOneNumberAfter = `Your queuing number is almost up. Please ensure that you are nearby the shop's location when your number is up.`
+
+export const emptyError = 'This section must be filled.'
+export const phoneMinError = 'Phone number is too short, min. 8 characters.'
+const emailInvalidError = 'Invalid email.'
+const noSelectedServicesError = 'Choose one of the provided services to continue.'
+const noAppointmentError = `Related provider doesn't have an active appointment for selected date.`
+const fullyBookedError = `Number of transactions for selected appointment has reached its maximum queuing number.`
 
 // To get transactions based on branchId
 export const getTransactions = (branchId, dashboardReady, staffs) => {
@@ -227,7 +235,7 @@ export const sendEmailAfterSuccess = (shop, branch, status, appointment, transac
         shopName: shop.name,
         shopLogo: shop.logo,
         branchName: branch.name,
-        phoneNumber: branch.phoneNumber,
+        phone: branch.phone,
         queueNo: transaction.queueNo,
         staffName: transaction.staff.name,
         staffImage: transaction.staff.picture,
@@ -291,7 +299,7 @@ export const sendEmailAfterSuccess = (shop, branch, status, appointment, transac
           score = score + 1
         }
       }
-      console.log('final', score)
+      // console.log('final', score)
 
       if (score <= 2) {
         dispatch(setUpdateLoadingStatus(false))
@@ -318,6 +326,27 @@ export const sendEmailAfterSuccess = (shop, branch, status, appointment, transac
         dispatch(setUpdateLoadingStatus(false))
         swal("Information Updated & Notification Sended", "", "success")
       }
+
+    } else if (status === 'booking confirmed') {
+
+      let emailData = {
+        name: transaction.name,
+        email: transaction.email,
+        transactionId: transaction.id,
+        date: appointment.date,
+        shopName: shop.name,
+        shopLogo: shop.logo,
+        branchName: branch.name,
+        queueNo: transaction.queueNo,
+        staffName: transaction.staff.name,
+        staffImage: transaction.staff.picture,
+      }
+      
+      let sendEmailResult = await axios.post('https://us-central1-bookinesia-com.cloudfunctions.net/sendEmailBookTransaction', emailData)
+      if (sendEmailResult.status === 200) {
+        dispatch(setTransactionLoadingStatus(false))
+        swal("Transaction Added & Notification Sended", "", "success")
+      }
     }
   }
 }
@@ -334,4 +363,241 @@ export const setShowPaymentMethodStatus = (data) => {
     type: 'SET_SHOW_PAYMENT_METHOD_STATUS',
     payload: data
   }
+}
+
+// To handle changes in adding new transaction 
+export const handleChangesNewTransaction = (e) => {
+  return async (dispatch, getState, { getFirebase, getFirestore }) => {
+    let target = e.target
+    let inputId = target.id
+    let value = target.value
+
+    if (inputId === 'name') {
+      dispatch(setAddName(value))
+    } else if (inputId === 'phone') {
+      dispatch(setAddPhone(value))
+    } else if (inputId === 'email') {
+      dispatch(setAddEmail(value))
+    }
+  }
+}
+
+const setAddName = (data) => {
+  return {
+    type: 'SET_ADD_TRANSACTION_NAME_INPUT',
+    payload: data
+  }
+}
+
+const setAddNameError = (data) => {
+  return {
+    type: 'SET_ADD_TRANSACTION_NAME_INPUT_ERROR',
+    payload: data
+  }
+}
+
+const setAddPhone = (data) => {
+  return {
+    type: 'SET_ADD_TRANSACTION_PHONE_INPUT',
+    payload: data
+  }
+}
+
+const setAddPhoneError = (data) => {
+  return {
+    type: 'SET_ADD_TRANSACTION_PHONE_INPUT_ERROR',
+    payload: data
+  }
+}
+
+const setAddEmail = (data) => {
+  return {
+    type: 'SET_ADD_TRANSACTION_EMAIL_INPUT',
+    payload: data
+  }
+}
+
+const setAddEmailError = (data) => {
+  return {
+    type: 'SET_ADD_TRANSACTION_EMAIL_INPUT_ERROR',
+    payload: data
+  }
+}
+
+export const setSelectedPrimaryService = (data) => {
+  return {
+    type: 'SET_SELECTED_PRIMARY_SERVICE',
+    payload: data
+  }
+}
+
+export const setSelectedSecondaryServices = (data) => {
+  return {
+    type: 'SET_SELECTED_SECONDARY_SERVICES',
+    payload: data
+  }
+}
+
+// To validate input in adding new transaction 
+export const validateAndAddNewTransaction = (data) => {
+  return async (dispatch, getState, { getFirebase, getFirestore }) => {
+    let { name, phone, email, selectedServices, branch, staff, date } = data
+    let staffId = staff.id
+    let branchId = branch.id
+
+    // Input is ERROR
+    if (name.length <= 0) {
+      dispatch(setAddNameError(emptyError))
+    } 
+
+    if (phone.length <= 0) {
+      dispatch(setAddPhoneError(emptyError))
+    } 
+
+    if (phone.length > 0 && phone.length < 8) {
+      dispatch(setAddPhoneError(phoneMinError))
+    }
+
+    if (email.length <= 0) {
+      dispatch(setAddEmailError(emptyError))
+    } 
+
+    if (email.length > 0 && validateEmail(email) === false) {
+      dispatch(setAddEmailError(emailInvalidError))
+    }
+
+    let transactionErrors = []
+    if (selectedServices.length <= 0) {
+      transactionErrors.push(noSelectedServicesError)
+    }
+
+    let isAppExists = await dispatch(isAppointmentExist(branchId, staffId, date))
+    if (isAppExists === false) {
+      transactionErrors.push(noAppointmentError)
+    }
+    
+    if (Number(isAppExists.currentTransaction) >= Number(isAppExists.maxQueue)) {
+      transactionErrors.push(fullyBookedError)
+    }
+
+    // Input is OK
+    if (name.length > 0) {
+      dispatch(setAddNameError(false))
+    } 
+
+    if (phone.length >= 8) {
+      dispatch(setAddPhoneError(false))
+    } 
+
+    if (email.length > 0 && validateEmail(email)) {
+      dispatch(setAddEmailError(false))
+    }
+
+    if (selectedServices.length > 0) {
+      let errorIndex = transactionErrors.indexOf(noSelectedServicesError)
+      if (errorIndex > -1) {
+        transactionErrors.splice(errorIndex, 1)
+      }
+    }
+
+    if (isAppExists.id) {
+      let errorIndex = transactionErrors.indexOf(noAppointmentError)
+      if (errorIndex > -1) {
+        transactionErrors.splice(errorIndex, 1)
+      }
+    }
+  
+    if (Number(isAppExists.currentTransaction) < Number(isAppExists.maxQueue)) {
+      let errorIndex = transactionErrors.indexOf(fullyBookedError)
+      if (errorIndex > -1) {
+        transactionErrors.splice(errorIndex, 1)
+      }
+    }
+
+    dispatch(setAddTransactionErros(transactionErrors))
+
+    if (name.length > 0 && phone.length >= 8 && email.length > 0 && validateEmail(email) && selectedServices.length > 0 && isAppExists.id && Number(isAppExists.currentTransaction) < Number(isAppExists.maxQueue)) {
+      data['appointment'] = isAppExists
+      dispatch(setTransactionLoadingStatus(true))
+      dispatch(createNewTransaction(data))
+    }
+  }
+}
+
+export const setAddTransactionErros = (data) => {
+  return {
+    type: 'SET_TRANSACTION_ERRORS',
+    payload: data
+  }
+}
+
+export const createNewTransaction = (data) => {
+  return async (dispatch, getState, { getFirebase, getFirestore }) => {
+    let { name, phone, email, selectedServices, branch, staff, shop, appointment, user } = data
+    let firestore = getFirestore()
+    let transactionRef = firestore.collection('transaction')
+
+    let shopId = shop.id
+    let branchId = branch.id
+    let queueNo = String(Number(appointment.currentTransaction) + 1)
+    let startDate = ''
+    let endDate = ''
+    let status = 'booking confirmed'
+    let createdDate = new Date(Date.now())
+    let updatedDate = new Date(Date.now())
+    let createdBy = user
+    let updatedBy = user
+    let paymentMethod = ''
+
+    let newTransaction = {
+      shopId,
+      branchId,
+      service: selectedServices,
+      staff,
+      appointment,
+      customerId: '',
+      name,
+      phone,
+      email,
+      queueNo,
+      startDate,
+      endDate,
+      status,
+      createdDate,
+      updatedDate,
+      createdBy,
+      updatedBy,
+      paymentMethod,
+    }
+
+    transactionRef.add(newTransaction)
+    .then(ref => {
+      newTransaction['id'] = ref.id
+      dispatch(updateAppointmentStatus(shop, branch, status, appointment, newTransaction, user, null, null, null))
+    })
+    .catch(err => {
+      console.log('ERROR: add new transaction', err)
+    })
+  }
+}
+
+export const setTransactionLoadingStatus = (data) => {
+  return {
+    type: 'SET_TRANSACTION_LOADING_STATUS',
+    payload: data
+  }
+}
+
+// To clear add transaction input error when click modal close
+export const clearAddTransaction = () => {
+  return (dispatch, getState, { getFirebase, getFirestore }) => {
+    let errors = []
+    dispatch(setAddTransactionErros(errors))
+    dispatch(setAddNameError(false))
+    dispatch(setAddPhoneError(false))
+    dispatch(setAddEmailError(false))
+    dispatch(setAddName(""))
+    dispatch(setAddPhone(""))
+    dispatch(setAddEmail(""))
+  } 
 }

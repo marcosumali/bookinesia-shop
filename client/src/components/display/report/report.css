@@ -1,0 +1,31 @@
+.Report-box {
+  background-color: #FAFAFA;
+  padding: 0.625em;
+  height: 100%;
+  width: 100%;
+}
+
+.Report-inner-box {
+  border: 1px solid #EAEAEA;
+  border-radius: 0.3125em;
+  height: 100%;
+  width: 100%;
+  background-color: #ffffff;
+}
+
+.Report-header-box {
+  background-color: #5499c3;
+  border-radius: 0.3125em 0.3125em 0em 0em;
+  padding: 0.625em !important;
+}
+
+.Report-header-text {
+  font-family: Montserrat;
+  font-size: 1.25em;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.2;
+  letter-spacing: normal;
+  color: #ffffff;
+}

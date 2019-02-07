@@ -28,9 +28,6 @@ import {
 } from '../../../store/firestore/appointment/appointment.actions';
 
 class modalUpdateApp extends Component {
-  hanlde () {
-    console.log('asd')
-  }
   render() {
     let { 
       filteredAppointment,

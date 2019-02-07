@@ -7,6 +7,16 @@ let initialState = {
   dashboardsLoading: true,
   paymentMethod: 'Cash',
   showPaymentMethodStatus: false,
+  addName: '',
+  addNameError: false,
+  addPhone: '',
+  addPhoneError: false,
+  addEmail: '',
+  addEmailError: false,
+  selectedPrimaryService: '',
+  selectedSecondaryServices: [],
+  transactionErrors: [],
+  loadingStatus: false,
 }
 
 const transactionDataList = (state = { ...initialState }, action) => {
@@ -37,6 +47,56 @@ const transactionDataList = (state = { ...initialState }, action) => {
       return ({
         ...state,
         showPaymentMethodStatus: action.payload,
+      })
+    case 'SET_ADD_TRANSACTION_NAME_INPUT':
+      return ({
+        ...state,
+        addName: action.payload,
+      })
+    case 'SET_ADD_TRANSACTION_NAME_INPUT_ERROR':
+      return ({
+        ...state,
+        addNameError: action.payload,
+      })
+    case 'SET_ADD_TRANSACTION_EMAIL_INPUT':
+      return ({
+        ...state,
+        addEmail: action.payload,
+      })
+    case 'SET_ADD_TRANSACTION_EMAIL_INPUT_ERROR':
+      return ({
+        ...state,
+        addEmailError: action.payload,
+      })
+    case 'SET_ADD_TRANSACTION_PHONE_INPUT':
+      return ({
+        ...state,
+        addPhone: action.payload,
+      })
+    case 'SET_ADD_TRANSACTION_PHONE_INPUT_ERROR':
+      return ({
+        ...state,
+        addPhoneError: action.payload,
+      })
+    case 'SET_SELECTED_PRIMARY_SERVICE':
+      return ({
+        ...state,
+        selectedPrimaryService: action.payload,
+      })
+    case 'SET_SELECTED_SECONDARY_SERVICES':
+      return ({
+        ...state,
+        selectedSecondaryServices: action.payload,
+      })
+    case 'SET_TRANSACTION_ERRORS':
+      return ({
+        ...state,
+        transactionErrors: action.payload,
+      })
+    case 'SET_TRANSACTION_LOADING_STATUS':
+      return ({
+        ...state,
+        loadingStatus: action.payload,
       })
     default:
       return state;

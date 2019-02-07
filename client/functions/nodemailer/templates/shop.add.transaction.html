@@ -79,7 +79,7 @@
                                   <th style="text-align: left;">
                                     <div style="font-size: 1.5em; margin-bottom: 0.5em; margin-top: 0.5em; text-transform: capitalize;">Hi {{name}},</div>
 
-                                    <table align="center" class="container header float-center" style="background-color: #F68606; color: #ffffff; border-radius: 0.3125em;margin-bottom: 0.25em;">
+                                    <table align="center" class="container header float-center" style="background-color: #F68606; color: #ffffff; border-radius: 0.3125em;margin-bottom: 1em;">
                                       <tbody>
                                         <tr>
                                           <td>
@@ -91,8 +91,8 @@
                                                       <tbody>
                                                         <tr>
                                                           <th>
-                                                            <div class="text-center" style="font-size: 0.75em; line-height: 1.2;text-align: center; font-weight: bold; font-style: normal; font-stretch: normal; letter-spacing: 0.75em;">Current</div>
-                                                            <div class="text-center" style="font-size: 1.5em; line-height: 1.2;text-align: center; font-weight: bold; font-style: normal; font-stretch: normal; letter-spacing: normal;">Queue No. {{ currentQueue }}</div>
+                                                            <div class="text-center" style="font-size: 0.75em; line-height: 1.2;text-align: center; font-weight: bold; font-style: normal; font-stretch: normal; letter-spacing: normal; margin-bottom: 0.1em;">Your Queue No.</div>
+                                                            <div class="text-center" style="font-size: 2em; line-height: 1.2;text-align: center; font-weight: bold; font-style: normal; font-stretch: normal; letter-spacing: normal;">{{ queueNo }}</div>
                                                           </th>
                                                           <th class="expander"></th>
                                                         </tr>
@@ -106,9 +106,8 @@
                                         </tr>
                                       </tbody>
                                     </table>
-                                    <div style="color: #F68606;font-size: 0.8em; line-height: 1.2;text-align: center; font-weight: bold; font-style: normal; font-stretch: normal; letter-spacing: normal; margin-bottom: 1em;">Your Queue No. {{ queueNo }}</div>
 
-                                    <div style="color: #666666; font-size: 0.8em; line-height: 1.2;text-align: justify; margin-bottom: 1em; font-weight: normal; font-style: normal; font-stretch: normal; letter-spacing: normal;">{{ text }}</div>
+                                    <div style="color: #666666; font-size: 0.8em; line-height: 1.2;text-align: justify; margin-bottom: 1em; font-weight: normal; font-style: normal; font-stretch: normal; letter-spacing: normal;">We are from <a  style="text-decoration-color: #5499c3; color: #5499c3; text-decoration: underline;" href="https://www.bookinesia.com" target="_blank">bookinesia</a>, an online booking service to help customer easily connect with their favourite service provider in Indonesia. You're receiving this email because you previously booked an appointment directly at <span style="text-transform: capitalize">{{ shopName }}, {{ branchName }}</span>. Please treat this email as your booking receipt. We will remind you about your appointment when it is almost up.</div>
                                     <div style="border: 0.5px solid #EAEAEA; background-color: #EAEAEA; margin-bottom: 1em"></div> 
                                     <div style="color: #666666; font-size: 0.6em;line-height: 1.2;text-align: justify; margin-bottom: 1em; font-weight: bold; font-style: normal; font-stretch: normal; letter-spacing: normal;">TRANSACTION DETAILS</div>
                                     <div style="color: #666666; font-size: 0.6em;line-height: 1.2;text-align: justify; margin-bottom: 2em; font-weight: normal; font-style: normal; font-stretch: normal; letter-spacing: normal; text-transform: uppercase;">TRANSACTION CODE: {{ transactionId }}</div>

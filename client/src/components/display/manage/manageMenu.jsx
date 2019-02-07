@@ -92,7 +92,7 @@ class manageMenu extends Component {
                     className="col m12 No-margin No-padding Manage-box Container-nowrap-center-cross animated fadeIn faster"
                     onClick={ () => setSelectedBarberAndOtherData(singleData, staffServices, staffSchedules) }
                   >
-                    <div className="col m2 l1 No-margin No-padding Container-nowrap-center Barber-image-box">
+                    <div className="col m2 No-margin No-padding Container-nowrap-center Barber-image-box">
                       {
                         singleData.picture.length <= 0 ?
                         <AccountCircleSvg className="Disabled" width="100%" height="100%" color="#666666" />
@@ -100,7 +100,7 @@ class manageMenu extends Component {
                         <img className="Barber-image Disabled" src={ singleData.picture } alt={ "image" + index }/>
                       }
                     </div>
-                    <div className="col m10 l11 No-margin No-padding Container-nowrap-center-cross">
+                    <div className="col m10 No-margin No-padding Container-nowrap-center-cross">
                       <div className="Manage-text Disabled">{ singleData.name }</div>
                     </div>
                   </div>
@@ -109,7 +109,7 @@ class manageMenu extends Component {
                     className="col m12 No-margin No-padding Manage-box Container-nowrap-center-cross animated fadeIn faster"
                     onClick={ () => setSelectedBarberAndOtherData(singleData, staffServices, staffSchedules) }
                   >
-                    <div className="col m2 l1 No-margin No-padding Container-nowrap-center Barber-image-box">
+                    <div className="col m2 No-margin No-padding Container-nowrap-center Barber-image-box">
                       {
                         singleData.picture.length <= 0 ?
                         <AccountCircleSvg className="" width="100%" height="100%" color="#666666" />
@@ -117,7 +117,7 @@ class manageMenu extends Component {
                         <img className="Barber-image" src={ singleData.picture } alt={ "image" + index }/>
                       }
                     </div>
-                    <div className="col m10 l11 No-margin No-padding Container-nowrap-center-cross">
+                    <div className="col m10 No-margin No-padding Container-nowrap-center-cross">
                       <div className="Manage-text">{ singleData.name }</div>
                     </div>
                   </div>

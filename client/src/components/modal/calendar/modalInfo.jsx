@@ -4,11 +4,11 @@ import { bindActionCreators } from 'redux';
 import { Modal } from 'react-materialize';
 
 import '../modal.css';
-import './modalInfo.css';
 import CloseSvg from '../../../components/svg/closeSvg';
 import Button from '../../button/button';
 import LoadingButton from '../../button/buttonLoading';
 import DisabledButton from '../../button/buttonDisabled';
+import StatusBox from '../../statusBox/statusBox';
 import SelectInput from '../../form/inputSelect';
 import { formatMoney, getTotalTransaction } from '../../../helpers/currency';
 import { 
@@ -36,11 +36,11 @@ class modalInfo extends Component {
       updateLoadingStatus,
       dashboardData
     } = this.props
+    let appointment = transaction.appointment
     let user = {
       type: 'Admin',
       id: 'ZIicQDSyxFM49MXox1dAJIK4A5C3'
     }
-    let appointment = transaction.appointment
 
     let buttonDisableStatus = true
 
@@ -50,7 +50,7 @@ class modalInfo extends Component {
       let barberIndex = barbers.findIndex(barber => barber.id === transaction.staff.id)
       let transactionBefore = selectedTransactions.transactions[barberIndex]
       
-      if (transactionBefore.status === 'finished') {
+      if (transactionBefore.status === 'finished' || transactionBefore.status === 'skipped' || (transactionBefore.status === 'canceled' && Number(appointment.currentQueue) >= Number(transactionBefore.queueNo))) {
         buttonDisableStatus = false
       }
     } else {
@@ -72,7 +72,12 @@ class modalInfo extends Component {
         }
         trigger={
           <div className="Container-wrap-center-cross animated fadeIn faster">
-            <div className="Customer-text Text-capitalize">{ transaction.name }</div>
+            {
+              transaction.queueNo === appointment.currentQueue ?
+              <div className="Customer-text-highlighted Text-capitalize">{ transaction.name }</div>
+              :
+              <div className="Customer-text Text-capitalize">{ transaction.name }</div>
+            }
             <div className="Customer-phone">{ transaction.phone }</div>
           </div>
         }>
@@ -87,7 +92,7 @@ class modalInfo extends Component {
                   <div className="Text-blue Text-center">:</div>
                 </div>
                 <div className="col m8 No-margin No-padding">
-                  <div className="Text-grey Text-uppercase">{ transaction.id }</div>
+                  <div className="Text-grey">{ transaction.id }</div>
                 </div>
               </div>
               <div className="col m12 No-margin No-padding Transaction-box">
@@ -114,13 +119,18 @@ class modalInfo extends Component {
               </div>
               <div className="col m12 No-margin No-padding Transaction-box">
                 <div className="col m3 No-margin No-padding">
-                  <div className="Text-blue">Queue No.</div>
+                  <div className="Text-blue">QueueNo.</div>
                 </div>
                 <div className="col m1 No-margin No-padding">
                   <div className="Text-blue Text-center">:</div>
                 </div>
-                <div className="col m8 No-margin No-padding">
-                  <div className="Text-grey">{ transaction.queueNo } { transaction.status } </div>
+                <div className="col m8 No-margin No-padding Container-nowrap-center-cross">
+                  <div className="col m6 No-margin No-padding">
+                    <div className="Text-grey">{ transaction.queueNo }</div>
+                  </div>
+                  <div className="col m6 No-margin Container-nowrap-end" style={{ paddingRight: '0.625em' }}>
+                    <StatusBox status={ transaction.status } />
+                  </div>
                 </div>
               </div>
             </div>
@@ -155,7 +165,7 @@ class modalInfo extends Component {
               </div>
               <div className="col m12 No-margin No-padding Transaction-box">
                 <div className="col m3 No-margin No-padding">
-                  <div className="Text-blue">Phone No.</div>
+                  <div className="Text-blue">PhoneNo.</div>
                 </div>
                 <div className="col m1 No-margin No-padding">
                   <div className="Text-blue Text-center">:</div>
@@ -236,14 +246,21 @@ class modalInfo extends Component {
             buttonDisableStatus === false ?
             <div className="col m12 No-margin No-padding Modal-body-box">
               <div className="col m6 No-margin No-padding Container-nowrap-start">
+                {/* EDIT BUTTON */}
                 {
-                  transaction.status === 'booking confirmed' || transaction.status === 'on progress' ?
-                  <div className="Button-edit">Edit</div>
+                  transaction.status === 'booking confirmed' || transaction.status === 'on progress' || (transaction.status === 'canceled' && Number(appointment.currentQueue) < Number(transaction.queueNo)) ?
+                  <Button 
+                    text="Edit"
+                    type="Btn-white-blue No-margin"
+                    clickFunction=""
+                    data=""
+                  />
                   :
                   <div></div>
                 }
+                {/* SKIP BUTTON */}
                 {
-                  transaction.status === 'booking confirmed' ?
+                  transaction.status === 'booking confirmed' || (transaction.status === 'canceled' && Number(appointment.currentQueue) < Number(transaction.queueNo)) ?
                   <div>
                     {
                       updateLoadingStatus ?
@@ -263,6 +280,7 @@ class modalInfo extends Component {
                   :
                   <div></div>
                 }
+                {/* Happens when status has been changed to skipped but still sending email */}
                 {
                   transaction.status === 'skipped' && updateLoadingStatus ?
                   <LoadingButton 
@@ -274,6 +292,7 @@ class modalInfo extends Component {
                 }
               </div>
               <div className="col m6 No-margin No-padding Container-nowrap-end">
+                {/* Happens when status has been changed to finished but still sending email */}
                 {
                   transaction.status === 'finished' && updateLoadingStatus ?
                   <LoadingButton 
@@ -283,6 +302,7 @@ class modalInfo extends Component {
                   :
                   <div></div>
                 }
+                {/* FINISH BUTTON */}
                 {
                   transaction.status === 'on progress' ?
                   <div>
@@ -319,8 +339,9 @@ class modalInfo extends Component {
                   :
                   <div></div>
                 }
+                {/* START BUTTON */}
                 {
-                  transaction.status === 'booking confirmed' ?
+                  transaction.status === 'booking confirmed' || (transaction.status === 'canceled' && Number(appointment.currentQueue) < Number(transaction.queueNo)) ?
                   <div>
                     {
                       updateLoadingStatus ?

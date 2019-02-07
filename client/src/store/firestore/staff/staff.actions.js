@@ -1,11 +1,10 @@
-import { setActiveTab } from '../../dashboard/dashboard.actions';
+import { setActiveTab, maxFileSizeError, setHasEditStatusFile, imageFileTypeError } from '../../dashboard/dashboard.actions';
 import { getAppointmentsAndCalendar } from '../../firestore/appointment/appointment.actions';
 import { setSelectedStaffServices, setHasEditStatus, addNewStaffServicesData, setStaffServiceInputError } from '../../firestore/staffService/staffService.actions';
 import { setSelectedStaffSchedules, setHasEditStatusStaffSchedule, addNewStaffSchedulesData, setStaffScheduleInputError } from '../../firestore/staffSchedule/staffSchedule.actions';
+import { emptyError } from '../transaction/transaction.actions';
 import swal from 'sweetalert';
 
-export const emptyError = 'This section must be filled.'
-export const maxFileSizeError = 'Maximum file size is 1 MB.'
 export const maxStaffError = 'Maximum number of barbers is 5 person per branch. Contact our care center for futher queries.'
 
 // Get barbers data based on provided branchId with disableStatus is false
@@ -91,7 +90,7 @@ export const setSelectedBarberAndOtherData = (barber, staffServices, staffSchedu
     dispatch(setHasEditStatusStaffSchedule(false))
     // Remove input error
     dispatch(setBarberNameInputError(false))
-    dispatch(setFileSizeInputError(false))
+    dispatch(setFileInputError(false))
     dispatch(setStaffServiceInputError(false))
     dispatch(setStaffScheduleInputError(false))
   }
@@ -147,9 +146,9 @@ export const setBarberDisableStatusInput = (data) => {
   }
 }
 
-const setFileSizeInputError = (data) => {
+export const setFileInputError = (data) => {
   return {
-    type: 'SET_FILE_SIZE_ERROR',
+    type: 'SET_FILE_ERROR',
     payload: data
   }
 }
@@ -159,46 +158,69 @@ export const updateBarberDataValidation = (data) => {
   return (dispatch, getState, { getFirebase, getFirestore }) => {
     let { selectedBarber, name, disableStatus, file, branchId } = data
     let lowercasedName = name.toLowerCase()
-    let maxFileZie = 1 * 1024 * 1024 
+    let maxFileSize = 1 * 1024 * 1024 
 
     // Input Validation: Error
     if (name.length <= 0) {
       dispatch(setBarberNameInputError(emptyError))
     }
-
-    if (file.size > maxFileZie) {
-      dispatch(setFileSizeInputError(maxFileSizeError))
+ 
+    if (file.type) {
+      let error = ''
+      if (file.size > maxFileSize) {
+        error = error + maxFileSizeError
+      }
+  
+      if (file.type !== 'image/jpeg' && file.type !== 'image/gif' && file.type !== 'image/png' && file.type !== 'image/svg+xml') {
+        error = error + imageFileTypeError
+      }
+      dispatch(setFileInputError(error))
     }
+
 
     // Input Validation: OK
     if (name.length > 0) {
       dispatch(setBarberNameInputError(false))
     }
 
-    if (file.size <= maxFileZie) {
-      dispatch(setFileSizeInputError(false))
+    if (file.type) {
+      if (file.size <= maxFileSize && (file.type === 'image/jpeg' || file.type === 'image/gif' || file.type === 'image/png' || file.type === 'image/svg+xml')) {
+        dispatch(setFileInputError(false))
+      }
     }
 
     if (name.length > 0) {
-      swal({
-        title: 'Are you sure?',
-        text: "Provider's detail information will be updated including their availibility status in the shop's website.",
-        icon: 'warning',
-        buttons: ['Cancel', 'OK']
-      })
-      .then(result => {
-        if (result) {
-          dispatch(setStaffLoadingStatus(true))
-          dispatch(setHasEditStatusFile(false))
-          if (Object.keys(file).length === 0 && file.constructor === Object) {
-            dispatch(updateBarberData(null, selectedBarber, lowercasedName, disableStatus, null))            
-          } else {
-            if (file.size <= maxFileZie) {
+      if (file.type) {
+        if (file.size <= maxFileSize && (file.type === 'image/jpeg' || file.type === 'image/gif' || file.type === 'image/png' || file.type === 'image/svg+xml')) {
+          swal({
+            title: 'Are you sure?',
+            text: "Provider's detail information will be updated including their availibility status in the shop's website.",
+            icon: 'warning',
+            buttons: ['Cancel', 'OK']
+          })
+          .then(result => {
+            if (result) {
+              dispatch(setStaffLoadingStatus(true))
+              dispatch(setHasEditStatusFile(false))
               dispatch(updateBarberFileAndData(file, selectedBarber, lowercasedName, disableStatus, branchId))
             }
-          }
+          })
         }
-      })
+      } else {
+        swal({
+          title: 'Are you sure?',
+          text: "Provider's detail information will be updated including their availibility status in the shop's website.",
+          icon: 'warning',
+          buttons: ['Cancel', 'OK']
+        })
+        .then(result => {
+          if (result) {
+            dispatch(setStaffLoadingStatus(true))
+            dispatch(setHasEditStatusFile(false))
+            dispatch(updateBarberData(null, selectedBarber, lowercasedName, disableStatus, null))
+          }
+        })
+      }
     }
   }
 }
@@ -297,28 +319,6 @@ export const updateBarberFileAndData = (file, selectedBarber, lowercasedName, di
     }
   }
 }
-
-// To set has click input file button status
-export const setHasEditStatusFile = (clickStatus) => {
-  return (dispatch, getState, { getFirebase, getFirestore }) => {
-    let status = ''
-
-    if (clickStatus) {
-      status = true
-    } else {
-      status = false
-    }
-    dispatch(setHasEditStatusFileAction(status))
-  }
-}
-
-const setHasEditStatusFileAction = (data) => {
-  return {
-    type: 'SET_HAS_EDIT_STATUS_FILE',
-    payload: data
-  }
-}
-
 
 // To handle changes in input from add new barber
 export const handleChangesAddBarber = (e) => {

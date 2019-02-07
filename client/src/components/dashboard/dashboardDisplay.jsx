@@ -6,8 +6,8 @@ import '../../assets/css/general.css';
 import Welcome from '../display/welcome';
 import Calendar from '../display/calendar/calendar';
 import Manage from '../display/manage/manage';
-import ManageUsers from '../display/manageUsers';
-import ReportsTransaction from '../display/reportsTransaction';
+import ManageShopAndBranch from '../display/manage/manageShop&Branch';
+import ReportsTransaction from '../display/report/reportsTransaction';
 import Loading from '../display/loading/loading';
 import { getAllStaffsAndCalendar } from '../../store/firestore/staff/staff.actions';
 import { getAllServices } from '../../store/firestore/service/service.actions';
@@ -61,8 +61,8 @@ class dashboardDisplay extends Component {
               this.props.displayToShow === 'Services' ?
               <Manage />
               :
-              this.props.displayToShow === 'Users' ?
-              <ManageUsers />
+              this.props.displayToShow === 'Shop & Branch' ?
+              <ManageShopAndBranch />
               :
               this.props.displayToShow === 'Transactions' ?
               <ReportsTransaction />
