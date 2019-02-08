@@ -17,6 +17,11 @@ let initialState = {
   selectedSecondaryServices: [],
   transactionErrors: [],
   loadingStatus: false,
+  startDate: '',
+  endDate: '',
+  filterErrors: [],
+  filteredTransactions: [],
+  reportHeaders: ['Transaction ID', 'Appointment Date', 'Provider Name', 'Service Name', 'Service Price', 'Customer Name', 'Customer Phone', 'Transaction Status', 'Payment Method'],
 }
 
 const transactionDataList = (state = { ...initialState }, action) => {
@@ -97,6 +102,26 @@ const transactionDataList = (state = { ...initialState }, action) => {
       return ({
         ...state,
         loadingStatus: action.payload,
+      })
+    case 'SET_FILTER_TRANSACTION_START_DATE':
+      return ({
+        ...state,
+        startDate: action.payload,
+      })
+    case 'SET_FILTER_TRANSACTION_END_DATE':
+      return ({
+        ...state,
+        endDate: action.payload,
+      })
+    case 'SET_FILTER_TRANSACTION_ERRORS':
+      return ({
+        ...state,
+        filterErrors: action.payload,
+      })
+    case 'SET_FILTER_TRANSACTIONS':
+      return ({
+        ...state,
+        filteredTransactions: action.payload,
       })
     default:
       return state;

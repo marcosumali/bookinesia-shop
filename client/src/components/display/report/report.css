@@ -29,3 +29,51 @@
   letter-spacing: normal;
   color: #ffffff;
 }
+
+.Border-line {
+  border: 1px solid #EAEAEA;
+  margin: 0.625em;
+}
+
+.Result-box {
+  max-height: 75%;
+  overflow-y: scroll;
+  margin-bottom: 0.625em;
+}
+
+.Report-text-orange {
+  font-family: Montserrat;
+  font-size: 0.75em;
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.2;
+  letter-spacing: normal;
+  color: #F68606;
+}
+
+.TR-box {
+  border-bottom: 1px solid #EAEAEA;
+}
+
+.Table-text {
+  font-family: Montserrat;
+  font-size: 0.75em;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.2;
+  letter-spacing: normal;
+  color: #000000;
+}
+
+.Table-text-header {
+  font-family: Montserrat;
+  font-size: 0.75em;
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.2;
+  letter-spacing: normal;
+  color: #000000;
+}

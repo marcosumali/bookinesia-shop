@@ -54,7 +54,7 @@
   text-transform: capitalize;
 }
 
-.Manage-text-gray {
+.Manage-text-orange {
   font-family: Montserrat;
   font-size: 0.75em;
   font-weight: normal;
@@ -62,7 +62,7 @@
   font-stretch: normal;
   line-height: 1.2;
   letter-spacing: normal;
-  color: #666666;
+  color: #f68606;
   text-transform: capitalize;
 }
 

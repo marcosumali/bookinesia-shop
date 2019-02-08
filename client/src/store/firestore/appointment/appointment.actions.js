@@ -3,13 +3,13 @@ import { getTransactions, getTransactionsCalendar, setDashboardSuccess, updateTr
 import { getAllStaffsAndCalendar } from '../staff/staff.actions';
 import { setDashboardLoadingStatus, setUpdateLoadingStatus } from '../../dashboard/dashboard.actions';
 
-let filterEmptyError = 'To filter preferred appointments for selected provider, start and end dates must be filled.'
-let maxFilterError = `The preferred appointment's date that can be chosen is up to 7 days.`
-let incorrectFilterError = `The start date must be earlier than or equal to the end date.`
-let notFilledError = `All section must filled.`
-let incorrectHoursError = `The start hour must be earlier than the end hour.`
-let doubleAppError = `Appointment for selected date and barber is already exist.`
-let transactionAppError = `Can't change appointment's date that has active transactions.`
+const filterEmptyError = 'To filter preferred appointments for selected provider, start and end dates must be filled.'
+const maxFilterError = `The preferred appointment's date that can be chosen is up to 7 days.`
+export const incorrectFilterError = `The start date must be earlier than or equal to the end date.`
+const notFilledError = `All section must filled.`
+const incorrectHoursError = `The start hour must be earlier than the end hour.`
+const doubleAppError = `Appointment for selected date and barber is already exist.`
+const transactionAppError = `Can't change appointment's date that has active transactions.`
 
 // To get appointments date per branch based on staffs to listen real time on next action
 export const getAppointmentsDate = (branchId, staffs) => {

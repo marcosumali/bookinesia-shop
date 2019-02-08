@@ -52,6 +52,8 @@ import {
   setPaymentMethod,
   setSelectedSecondaryServices,
   setSelectedPrimaryService,
+  setFilterTransactionStartDate,
+  setFilterTransactionEndDate,
 } from '../firestore/transaction/transaction.actions';
 import {
   setShopNameInput,
@@ -678,6 +680,10 @@ export const handleBasicDateInput = (e, branchId, staffs) => {
       dispatch(setAddAppointmentDateInput(acceptedDate))
     } else if (inputId === 'calendarDate') {
       dispatch(getAppointmentsAndCalendar(branchId, acceptedDate, staffs))
+    } else if (inputId === 'transStartDate') {
+      dispatch(setFilterTransactionStartDate(acceptedDate))
+    } else if (inputId === 'transEndDate') {
+      dispatch(setFilterTransactionEndDate(acceptedDate))
     }
   }
 }

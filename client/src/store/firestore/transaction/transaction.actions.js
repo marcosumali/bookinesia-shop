@@ -1,12 +1,14 @@
 import axios from 'axios';
 import swal from 'sweetalert';
+import XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
 
 import { validateEmail } from '../../../helpers/form';
 import { setDashboardLoadingStatus, setUpdateLoadingStatus } from '../../dashboard/dashboard.actions';
-import { setSelectedDateSuccess, isAppointmentExist, updateAppointmentStatus } from '../appointment/appointment.actions';
+import { setSelectedDateSuccess, isAppointmentExist, updateAppointmentStatus, incorrectFilterError } from '../appointment/appointment.actions';
 
-let textQueueTwoNumberAfter = 'We would like to remind you about your appointment for related transaction and your queue number is two number after the current queuing number.'
-let textQueueOneNumberAfter = `Your queuing number is almost up. Please ensure that you are nearby the shop's location when your number is up.`
+const textQueueTwoNumberAfter = 'We would like to remind you about your appointment for related transaction and your queue number is two number after the current queuing number.'
+const textQueueOneNumberAfter = `Your queuing number is almost up. Please ensure that you are nearby the shop's location when your number is up.`
 
 export const emptyError = 'This section must be filled.'
 export const phoneMinError = 'Phone number is too short, min. 8 characters.'
@@ -14,6 +16,8 @@ const emailInvalidError = 'Invalid email.'
 const noSelectedServicesError = 'Choose one of the provided services to continue.'
 const noAppointmentError = `Related provider doesn't have an active appointment for selected date.`
 const fullyBookedError = `Number of transactions for selected appointment has reached its maximum queuing number.`
+const transFilterEmptyError = 'To filter selected transactions to be downloaded, start and end dates must be filled.'
+const max31FilterError = `The preferred transaction's date that can be chosen is up to 31 days.`
 
 // To get transactions based on branchId
 export const getTransactions = (branchId, dashboardReady, staffs) => {
@@ -536,6 +540,7 @@ export const createNewTransaction = (data) => {
     let { name, phone, email, selectedServices, branch, staff, shop, appointment, user } = data
     let firestore = getFirestore()
     let transactionRef = firestore.collection('transaction')
+    let lowercasedName = name.toLowerCase()
 
     let shopId = shop.id
     let branchId = branch.id
@@ -556,7 +561,7 @@ export const createNewTransaction = (data) => {
       staff,
       appointment,
       customerId: '',
-      name,
+      name: lowercasedName,
       phone,
       email,
       queueNo,
@@ -600,4 +605,137 @@ export const clearAddTransaction = () => {
     dispatch(setAddPhone(""))
     dispatch(setAddEmail(""))
   } 
+}
+
+// To get filtered transactions based on request
+export const getFilteredTransactions = (startDate, endDate, branchId) => {
+  return (dispatch, getState, { getFirebase, getFirestore }) => {
+    let firestore = getFirestore()
+    let transactionRef = firestore.collection('transaction')
+    let newStartDate = new Date(startDate)
+    let newEndDate = new Date(endDate)
+
+    let timeDifference = Math.abs(newEndDate.getTime() - newStartDate.getTime())
+    let differenceInDays = Math.ceil(timeDifference / (1000 * 3600 * 24))
+
+    let errors = []
+    // Validation error
+    if (startDate.length <= 0 || endDate.length <= 0) {
+      errors.push(transFilterEmptyError)
+    }
+
+    if (newStartDate > newEndDate) {
+      errors.push(incorrectFilterError)
+    }
+
+    if (differenceInDays > 31) {
+      errors.push(max31FilterError)
+    }
+
+    // Validation OK
+    if (startDate.length > 0 && endDate.length > 0 && newStartDate <= newEndDate && differenceInDays <= 31) {
+      errors = []
+    }
+
+    dispatch(setFilterTransactionErrors(errors))
+    
+    if (startDate.length > 0 && endDate.length > 0 && newStartDate <= newEndDate && differenceInDays <= 31) {
+      transactionRef
+      .where('branchId', '==', branchId)
+      .where('appointment.date', '>=', startDate)
+      .where('appointment.date', '<=', endDate)
+      .get()
+      .then(function(querySnapshot) {
+        let transactions = []
+        if (querySnapshot.empty === false) {
+          querySnapshot.forEach(function(doc) {
+            let id = doc.id
+            let data = doc.data()
+            data['id'] = id
+
+            data.service && data.service.map((service) => {
+              let revisedData = {
+                ...data,
+                service
+              }
+              transactions.push(revisedData)
+              return ''
+            })
+
+          })
+          dispatch(setFilterTransaction(transactions))
+        } else {
+          let emptyObj = {
+            message: 'empty',
+          }
+          transactions.push(emptyObj)
+          dispatch(setFilterTransaction(transactions))
+        }
+      })
+      .catch(err => {
+        console.log('ERROR: get filtered transactions', err)
+      })
+    }
+  }
+}
+
+export const setFilterTransactionStartDate = (data) => {
+  return {
+    type: 'SET_FILTER_TRANSACTION_START_DATE',
+    payload: data
+  }
+}
+
+export const setFilterTransactionEndDate = (data) => {
+  return {
+    type: 'SET_FILTER_TRANSACTION_END_DATE',
+    payload: data
+  }
+}
+
+const setFilterTransaction = (data) => {
+  return {
+    type: 'SET_FILTER_TRANSACTIONS',
+    payload: data
+  }
+}
+
+const setFilterTransactionErrors = (data) => {
+  return {
+    type: 'SET_FILTER_TRANSACTION_ERRORS',
+    payload: data
+  }
+}
+
+
+// To export table html to excel file
+export const exportToExcel = (data) => {
+  return (dispatch, getState, { getFirebase, getFirestore }) => {
+    let { document, shop, branch, startDate, endDate } = data
+    let tableToExcel = document.getElementById('Table-to-excel')
+
+    let workbook = XLSX.utils.book_new()
+
+    workbook.Props = {
+      Title: "Transactions Report",
+      Subject: "Transactions Report",
+      Author: "Bookinesia",
+      CreatedDate: new Date(Date.now())
+    }
+
+    let worksheet = XLSX.utils.table_to_sheet(tableToExcel)
+    workbook.SheetNames.push("Transactions Report")
+    workbook.Sheets["Transactions Report"] = worksheet
+ 
+    var workbook_out = XLSX.write(workbook, { bookType:'xlsx', bookSST:true, type: 'binary' })
+
+    function BinaryToOctet(workbook_out) {
+      let buf = new ArrayBuffer(workbook_out.length)
+      let view = new Uint8Array(buf)
+      for (let i = 0; i < workbook_out.length; i++) view[i] = workbook_out.charCodeAt(i) & 0xFF
+      return buf
+    }
+
+    saveAs(new Blob([BinaryToOctet(workbook_out)],{ type:"application/octet-stream" }), `TR_${shop.id}_${branch.name}_${startDate}_${endDate}.xlsx`);
+  }
 }
