@@ -44,6 +44,7 @@ class modalUpdateApp extends Component {
       addAppointmentErrors,
       addAppointment,
       clearAddAppointment,
+      user
     } = this.props
     // console.log('modalAddApp', this.props)
     const options = {
@@ -95,8 +96,8 @@ class modalUpdateApp extends Component {
                 className="input-field Input-date-box"
                 inputLabelStatus={ true }
                 inputLabel="Appointment Date"
-                openingStatus={ false }
-                openingDate=""
+                openingStatus={ true }
+                openingDate={ addDateInput }
                 handleChangesDateFunction={ handleBasicDateInput }              
               />
             </div>
@@ -221,7 +222,7 @@ class modalUpdateApp extends Component {
                   addEndHours,
                   addEndMinutes,
                   addDisableStatus,
-                  branchId: "dummyshop-bekasi",
+                  branchId: user.branchId,
                   selectedBarber,
                 }}
               />
@@ -248,6 +249,7 @@ const mapStateToProps = state => {
     addAppointmentErrors: state.appointment.addAppointmentErrors,
     hours: state.nav.hours,
     minutes: state.nav.minutes,
+    user: state.auth.user,
   }
 }
 

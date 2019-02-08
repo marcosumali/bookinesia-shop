@@ -34,12 +34,13 @@ class modalInfo extends Component {
       setShowPaymentMethodStatus,
       showPaymentMethodStatus,
       updateLoadingStatus,
-      dashboardData
+      dashboardData,
+      authUser
     } = this.props
     let appointment = transaction.appointment
     let user = {
-      type: 'Admin',
-      id: 'ZIicQDSyxFM49MXox1dAJIK4A5C3'
+      type: authUser.job,
+      id: authUser.id
     }
 
     let buttonDisableStatus = true
@@ -401,6 +402,7 @@ const mapStateToProps = state => {
     paymentMethod: state.transaction.paymentMethod,
     showPaymentMethodStatus: state.transaction.showPaymentMethodStatus,
     updateLoadingStatus: state.nav.updateLoadingStatus,
+    authUser: state.auth.user,
   }
 }
 

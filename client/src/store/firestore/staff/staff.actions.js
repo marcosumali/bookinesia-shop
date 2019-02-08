@@ -75,14 +75,18 @@ const setAllBarbersFailed = (status) => {
 }
 
 // To set selected barbers to display it on content section
-export const setSelectedBarberAndOtherData = (barber, staffServices, staffSchedules) => {
+export const setSelectedBarberAndOtherData = (barber, staffServices, staffSchedules, user) => {
   return (dispatch, getState, { getFirebase, getFirestore }) => {
     // Set selected barber
     dispatch(selectedBarberAction(barber))
     dispatch(setSelectedStaffSchedules(barber, staffSchedules))
     // Pre input selected barber information
     dispatch(setBarberInfo(barber))
-    dispatch(setActiveTab('Details'))
+    if (user.job === 'admin') {
+      dispatch(setActiveTab('Appointments'))
+    } else {
+      dispatch(setActiveTab('Details'))
+    }
     dispatch(setSelectedStaffServices(barber, staffServices))
     // Remove edit status
     dispatch(setHasEditStatusFile(false))

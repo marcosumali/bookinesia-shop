@@ -38,7 +38,8 @@ class manageMenu extends Component {
       staffServices, 
       staffSchedules, 
       services, 
-      setSelectedServiceAndOtherData 
+      setSelectedServiceAndOtherData,
+      user,
     } = this.props
     
     if (displayToShow === 'Providers') {
@@ -90,7 +91,7 @@ class manageMenu extends Component {
                   singleData.disableStatus ?
                   <div 
                     className="col m12 No-margin No-padding Manage-box Container-nowrap-center-cross animated fadeIn faster"
-                    onClick={ () => setSelectedBarberAndOtherData(singleData, staffServices, staffSchedules) }
+                    onClick={ () => setSelectedBarberAndOtherData(singleData, staffServices, staffSchedules, user) }
                   >
                     <div className="col m2 No-margin No-padding Container-nowrap-center Barber-image-box">
                       {
@@ -107,7 +108,7 @@ class manageMenu extends Component {
                   :
                   <div 
                     className="col m12 No-margin No-padding Manage-box Container-nowrap-center-cross animated fadeIn faster"
-                    onClick={ () => setSelectedBarberAndOtherData(singleData, staffServices, staffSchedules) }
+                    onClick={ () => setSelectedBarberAndOtherData(singleData, staffServices, staffSchedules, user) }
                   >
                     <div className="col m2 No-margin No-padding Container-nowrap-center Barber-image-box">
                       {
@@ -182,6 +183,7 @@ const mapStateToProps = state => {
     filterInput: state.nav.filterInput,
     staffServices: state.staffService.staffServices,
     staffSchedules: state.staffSchedule.staffSchedules,
+    user: state.auth.user,
   }
 }
 

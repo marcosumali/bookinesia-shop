@@ -53,6 +53,7 @@ class modalUpdateApp extends Component {
       updateAppointmentErrors,
       updateSelectedAppointment,
       clearUpdateAppointment,
+      user,
     } = this.props
     // console.log('modalUpdteApp', this.props)
     const options = {
@@ -85,7 +86,7 @@ class modalUpdateApp extends Component {
               }
             </div>
             <div className="col m12 No-margin No-padding Container-nowrap-center-cross">
-              <div className="col m3 Container-nowrap-start">
+              <div className="col m3 No-padding Container-nowrap-start">
                 {
                   filteredAppointment.disableStatus ?
                   <div className="Manage-text-gray Disabled">Start Time: { filteredAppointment.startHours }.{ filteredAppointment.startMinutes }</div>
@@ -93,7 +94,7 @@ class modalUpdateApp extends Component {
                   <div className="Manage-text-gray">Start Time: { filteredAppointment.startHours }.{ filteredAppointment.startMinutes }</div>
                 }
               </div>
-              <div className="col m3 Container-nowrap-center">
+              <div className="col m3 No-padding Container-nowrap-center">
                 {
                   filteredAppointment.disableStatus ?
                   <div className="Manage-text-gray Disabled">Finish Time: { filteredAppointment.endHours }.{ filteredAppointment.endMinutes }</div>
@@ -101,7 +102,7 @@ class modalUpdateApp extends Component {
                   <div className="Manage-text-gray">Finish Time: { filteredAppointment.endHours }.{ filteredAppointment.endMinutes }</div>
                 }
               </div>
-              <div className="col m3 Container-nowrap-center">
+              <div className="col m3 No-padding Container-nowrap-center">
                 {
                   filteredAppointment.disableStatus ?
                   <div className="Manage-text-gray Disabled">#Transaction: { filteredAppointment.currentTransaction }</div>
@@ -109,7 +110,7 @@ class modalUpdateApp extends Component {
                   <div className="Manage-text-gray">#Transaction: { filteredAppointment.currentTransaction }</div>
                 }
               </div>
-              <div className="col m3 Container-nowrap-end">
+              <div className="col m3 No-padding Container-nowrap-end">
                 {
                   filteredAppointment.disableStatus ?
                   <div className="Manage-text-gray Disabled">Max. Queue: { filteredAppointment.maxQueue }</div>
@@ -291,7 +292,7 @@ class modalUpdateApp extends Component {
                   updateEndMinutes,
                   updateDisableStatus,
                   selectedAppointment,
-                  branchId: 'dummyshop-bekasi',
+                  branchId: user.branchId,
                   selectedBarber
                 }}
               />
@@ -320,6 +321,7 @@ const mapStateToProps = state => {
     updateAppointmentErrors: state.appointment.updateAppointmentErrors,
     hours: state.nav.hours,
     minutes: state.nav.minutes,
+    user: state.auth.user,
   }
 }
 

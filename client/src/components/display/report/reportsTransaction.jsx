@@ -24,6 +24,7 @@ class reportsTransaction extends Component {
       filteredTransactions,
       reportHeaders,
       exportToExcel,
+      user,
     } = this.props
     // console.log('reportTransaction', this.props)
 
@@ -60,7 +61,7 @@ class reportsTransaction extends Component {
                 />
               </div>
               <div className="col m1 No-margin No-padding Container-nowrap-center">
-                <div className="Search-box" onClick={ () => getFilteredTransactions(startDate, endDate, 'dummyshop-bekasi') }>
+                <div className="Search-box" onClick={ () => getFilteredTransactions(startDate, endDate, user.branchId) }>
                   <SearchSvg height="1em" width="1em" color="#5499c3" />
                 </div>
               </div>
@@ -230,6 +231,7 @@ const mapStateToProps = state => {
     filterErrors: state.transaction.filterErrors,
     filteredTransactions: state.transaction.filteredTransactions,
     reportHeaders: state.transaction.reportHeaders,
+    user: state.auth.user,
   }
 }
 

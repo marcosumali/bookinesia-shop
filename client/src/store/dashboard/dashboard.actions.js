@@ -96,6 +96,7 @@ export const dispatchToSetDisplayToShow = (props) => {
   return (dispatch, getState, { getFirebase, getFirestore }) => {
     let text = props.text
     let cookies = props.cookies
+    let user = props.user
 
     let manageShowStatus = props.manageShowStatus
     let reportsShowStatus = props.reportsShowStatus
@@ -140,7 +141,11 @@ export const dispatchToSetDisplayToShow = (props) => {
       menuToShow,
     }
     // console.log('====', dashboardMenuStatus)
-    dispatch(setActiveTab('Details'))
+    if (user.job === 'admin') {
+      dispatch(setActiveTab('Appointments'))
+    } else {
+      dispatch(setActiveTab('Details'))
+    }
     saveDashboardMenuStatus(cookies, dashboardMenuStatus)
   }
 }
@@ -171,6 +176,7 @@ export const dispatchToSetSubMenuToShow = (props) => {
   return (dispatch, getState, { getFirebase, getFirestore }) => {
     let text = props.text
     let cookies = props.cookies
+    let user = props.user
 
     let manageShowStatus = props.manageShowStatus
     let reportsShowStatus = props.reportsShowStatus
@@ -200,7 +206,11 @@ export const dispatchToSetSubMenuToShow = (props) => {
     }
     // console.log('===x', dashboardMenuStatus)
 
-    dispatch(setActiveTab('Details'))
+    if (user.job === 'admin') {
+      dispatch(setActiveTab('Appointments'))
+    } else {
+      dispatch(setActiveTab('Details'))
+    }
     saveDashboardMenuStatus(cookies, dashboardMenuStatus)
   }
 }
@@ -263,6 +273,18 @@ export const handleActiveTab = (tabIndex) => {
     } else if (index === 3) {
       activeTab = 'Appointments'
     }
+    dispatch(setActiveTab(activeTab))
+  }
+}
+
+// To handle active tab on materialize css if Admin
+export const handleActiveTabAdmin = (tabIndex) => {
+  return (dispatch, getState, { getFirebase, getFirestore }) => {
+    let index = Number(tabIndex) % 10
+    let activeTab = ''
+    if (index === 0) {
+      activeTab = 'Appointments'
+    } 
     dispatch(setActiveTab(activeTab))
   }
 }

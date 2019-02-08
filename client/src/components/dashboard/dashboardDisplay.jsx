@@ -9,28 +9,8 @@ import Manage from '../display/manage/manage';
 import ManageShopAndBranch from '../display/manage/manageShop&Branch';
 import ReportsTransaction from '../display/report/reportsTransaction';
 import Loading from '../display/loading/loading';
-import { getAllStaffsAndCalendar } from '../../store/firestore/staff/staff.actions';
-import { getAllServices } from '../../store/firestore/service/service.actions';
-import { getStaffServices } from '../../store/firestore/staffService/staffService.actions';
-import { getStaffSchedules } from '../../store/firestore/staffSchedule/staffSchedule.actions';
-import { getShop } from '../../store/firestore/shop/shop.actions';
-import { getBranch } from '../../store/firestore/branch/branch.actions';
 
-class dashboardDisplay extends Component {
-  componentWillMount() {
-    let inputDate = new Date(Date.now())
-    let year = inputDate.getFullYear()
-    let month = inputDate.getMonth() + 1
-    let date = inputDate.getDate()
-    let acceptedDate = `${year}-${month}-${date}`
-    this.props.getShop('dummyshop')
-    this.props.getBranch('dummyshop-bekasi')
-    this.props.getAllStaffsAndCalendar('dummyshop-bekasi', acceptedDate)
-    this.props.getAllServices('dummyshop-bekasi')
-    this.props.getStaffServices('dummyshop-bekasi')
-    this.props.getStaffSchedules('dummyshop-bekasi')
-  }
-  
+class dashboardDisplay extends Component {  
   render() {
     // console.log('dashboardDisplay', this.props)
     return (
@@ -44,7 +24,8 @@ class dashboardDisplay extends Component {
           this.props.servicesLoading ||
           this.props.allServicesLoading ||
           this.props.staffServicesLoading ||
-          this.props.staffSchedulesLoading ?
+          this.props.staffSchedulesLoading || 
+          this.props.user.length <= 0 ?
           <Loading />
           :
           <div className="row No-margin Height-100cent">
@@ -89,16 +70,11 @@ const mapStateToProps = state => {
     shopLoading: state.shop.shopLoading,
     branchLoading: state.branch.branchLoading,
     selectedDate: state.appointment.selectedDate,
+    user: state.auth.user,
   }
 }
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  getAllStaffsAndCalendar,
-  getAllServices,
-  getStaffServices,
-  getStaffSchedules,
-  getShop,
-  getBranch,
 }, dispatch)
 
 
