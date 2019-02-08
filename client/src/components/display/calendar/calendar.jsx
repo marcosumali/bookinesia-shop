@@ -4,8 +4,9 @@ import { bindActionCreators } from 'redux';
 
 import './calendar.css';
 import CalendarHeader from './calendarHeader';
-import AddBoxSvg from '../../svg/addBoxSvg';
 import ModalInfo from '../../modal/calendar/modalInfo';
+import ModalAddTransaction from '../../modal/calendar/modalAddTrans';
+import Loading from '../loading/loading';
 
 class calendar extends Component {
   render() {
@@ -16,62 +17,71 @@ class calendar extends Component {
           <CalendarHeader />
           <div className="row No-margin animated fadeIn faster">
             <div className="Calendar-body-box">
-              <table>
-                <thead>
-                  <tr>
-                    <th className="Number-box"></th>
-                    {
-                      this.props.barbers && this.props.barbers.map((barber, index) => {
-                        return (
-                          <th className="Content-box" key={ 'barber' + index }>
-                            <div className="Container-nowrap-spacebetween">
-                              <div className="Staff-text Text-capitalize">{ barber.name }</div>
-                              <div className="Height-100cent Container-nowrap-center">
-                                <AddBoxSvg height="1.6em" width="1.6em" color="#F68606"/>
+              {
+                this.props.loadingStatus ?
+                <Loading />
+                :
+                <table>
+                  <thead>
+                    <tr>
+                      <th className="Number-box"></th>
+                      {
+                        this.props.barbers && this.props.barbers.map((barber, index) => {
+                          return (
+                            <th className="Content-box" key={ 'barber' + index }>
+                              <div className="Container-nowrap-spacebetween">
+                                <div className="Staff-text Text-capitalize">{ barber.name }</div>
+                                <ModalAddTransaction 
+                                  barber={ barber }
+                                />
                               </div>
-                            </div>
-                          </th>
+                            </th>
+                          )
+                        })
+                      }
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {
+                      this.props.dashboards[0].data.map((data, index) => {
+                        return (
+                          <tr key={ 'data' + index }>
+                            <td className="Number-box Text-center">{ data.queueNo }</td>
+                            {
+                              data.transactions.map((transaction, index) => {
+                                return Object.keys(transaction).length === 0 && transaction.constructor === Object ?
+                                <td className="Content-box-inner Background-blank" key={ 'transaction' + index }>
+                                  <div className="Container-wrap-center-cross">
+                                    <div className="Customer-text"></div>
+                                    <div className="Customer-phone"></div>
+                                  </div>
+                                </td>
+                                :
+                                transaction.status === 'no-appointment' ?
+                                <td className="Content-box-inner Background-no-appointment" key={ 'transaction' + index }>
+                                  <div className="Container-wrap-center-cross">
+                                    <div className="Customer-text Text-no-appointment"></div>
+                                    <div className="Customer-phone Text-no-appointment"></div>
+                                  </div>
+                                </td>
+                                :
+                                <td className="Content-box-inner Background-blank" key={ 'transaction' + index }>
+                                  <div className="Container-wrap-center-cross">
+                                    <ModalInfo 
+                                      transaction={ transaction } 
+                                      dashboardData={ this.props.dashboards[0].data }
+                                    />
+                                  </div>
+                                </td>
+                              })
+                            }
+                          </tr>
                         )
                       })
                     }
-                  </tr>
-                </thead>
-                {
-                  this.props.dashboards && this.props.dashboards.map((dashboard, index) => {
-                    return dashboard.originalDate === this.props.selectedDate ? 
-                      <tbody key={ 'dashboard' + index }>
-                        {
-                          dashboard.data.map((data, index) => {
-                            return (
-                              <tr key={ 'data' + index }>
-                                <td className="Number-box Text-center">{ data.queueNo }</td>
-                                {
-                                  data.transactions.map((transaction, index) => {
-                                    return (
-                                      <td className="Content-box" key={ 'transaction' + index }>
-                                        {
-                                          Object.keys(transaction).length === 0 && transaction.constructor === Object ?
-                                          <div className="Container-wrap-center-cross">
-                                            <div className="Customer-text"></div>
-                                            <div className="Customer-phone"></div>
-                                          </div>
-                                          :
-                                          <ModalInfo transaction={ transaction } />
-                                        }
-                                      </td>
-                                    )
-                                  })
-                                }
-                              </tr>
-                            )
-                          })
-                        }
-                      </tbody> 
-                    :
-                    <tbody key={ 'dashboard' + index }></tbody>
-                  })
-                }
-              </table>
+                  </tbody>
+                </table>
+              }
             </div>
           </div>
         </div>
@@ -83,10 +93,16 @@ class calendar extends Component {
 
 const mapStateToProps = state => {
   return {
-    barbers: state.staff.barbers,
+    barbers: state.staff.allBarbers,
     dashboards: state.transaction.dashboards,
     selectedDate: state.appointment.selectedDate,
     transactions: state.transaction.transactions,
+    loadingStatus: state.nav.loadingStatus,
+    selectedPrimaryService: state.transaction.selectedPrimaryService,
+    selectedSecondaryServices: state.transaction.selectedSecondaryServices,
+    addName: state.transaction.addName,
+    addPhone: state.transaction.addPhone,
+    addEmail: state.transaction.addEmail,
   }
 }
 

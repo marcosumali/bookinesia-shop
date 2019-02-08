@@ -6,17 +6,26 @@ import '../../assets/css/general.css';
 import Welcome from '../display/welcome';
 import Calendar from '../display/calendar/calendar';
 import Manage from '../display/manage/manage';
-import ManageUsers from '../display/manageUsers';
-import ReportsTransaction from '../display/reportsTransaction';
+import ManageShopAndBranch from '../display/manage/manageShop&Branch';
+import ReportsTransaction from '../display/report/reportsTransaction';
 import Loading from '../display/loading/loading';
-import { getAllStaffsAndOtherData } from '../../store/firestore/staff/staff.actions';
+import { getAllStaffsAndCalendar } from '../../store/firestore/staff/staff.actions';
 import { getAllServices } from '../../store/firestore/service/service.actions';
 import { getStaffServices } from '../../store/firestore/staffService/staffService.actions';
 import { getStaffSchedules } from '../../store/firestore/staffSchedule/staffSchedule.actions';
+import { getShop } from '../../store/firestore/shop/shop.actions';
+import { getBranch } from '../../store/firestore/branch/branch.actions';
 
 class dashboardDisplay extends Component {
   componentWillMount() {
-    this.props.getAllStaffsAndOtherData('dummyshop-bekasi')
+    let inputDate = new Date(Date.now())
+    let year = inputDate.getFullYear()
+    let month = inputDate.getMonth() + 1
+    let date = inputDate.getDate()
+    let acceptedDate = `${year}-${month}-${date}`
+    this.props.getShop('dummyshop')
+    this.props.getBranch('dummyshop-bekasi')
+    this.props.getAllStaffsAndCalendar('dummyshop-bekasi', acceptedDate)
     this.props.getAllServices('dummyshop-bekasi')
     this.props.getStaffServices('dummyshop-bekasi')
     this.props.getStaffSchedules('dummyshop-bekasi')
@@ -26,10 +35,9 @@ class dashboardDisplay extends Component {
     // console.log('dashboardDisplay', this.props)
     return (
       <div className="Height-100cent">
-        {/* DISPLAY */}
         {
-          this.props.barbersLoading || 
-          this.props.transactionsLoading || 
+          this.props.shopLoading || 
+          this.props.branchLoading || 
           this.props.dashboardsLoading || 
           !this.props.selectedDate ||
           this.props.allBarbersLoading ||
@@ -53,8 +61,8 @@ class dashboardDisplay extends Component {
               this.props.displayToShow === 'Services' ?
               <Manage />
               :
-              this.props.displayToShow === 'Users' ?
-              <ManageUsers />
+              this.props.displayToShow === 'Shop & Branch' ?
+              <ManageShopAndBranch />
               :
               this.props.displayToShow === 'Transactions' ?
               <ReportsTransaction />
@@ -72,23 +80,25 @@ const mapStateToProps = state => {
   return {
     displayToShow: state.nav.displayToShow,
     subMenuToShow: state.nav.subMenuToShow,
-    barbersLoading: state.staff.barbersLoading,
     allBarbersLoading: state.staff.allBarbersLoading,
-    transactionsLoading: state.transaction.transactionsLoading,
     dashboardsLoading: state.transaction.dashboardsLoading,
     servicesLoading: state.service.servicesLoading,
     allServicesLoading: state.service.allServicesLoading,
     staffServicesLoading: state.staffService.staffServicesLoading,
     staffSchedulesLoading: state.staffSchedule.staffSchedulesLoading,
+    shopLoading: state.shop.shopLoading,
+    branchLoading: state.branch.branchLoading,
     selectedDate: state.appointment.selectedDate,
   }
 }
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  getAllStaffsAndOtherData,
+  getAllStaffsAndCalendar,
   getAllServices,
   getStaffServices,
-  getStaffSchedules
+  getStaffSchedules,
+  getShop,
+  getBranch,
 }, dispatch)
 
 

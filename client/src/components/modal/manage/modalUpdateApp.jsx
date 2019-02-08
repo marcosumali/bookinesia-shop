@@ -28,9 +28,6 @@ import {
 } from '../../../store/firestore/appointment/appointment.actions';
 
 class modalUpdateApp extends Component {
-  hanlde () {
-    console.log('asd')
-  }
   render() {
     let { 
       filteredAppointment,
@@ -150,9 +147,11 @@ class modalUpdateApp extends Component {
               </div>
               :
               <div className="animated fadeIn faster">
-                <div className="col m3 No-margin No-padding Margin-b-10">
+                <div className="col m3 No-padding Margin-b-10" style={{ marginTop: '0.6rem' }}>
                   <BasicDateInput 
                     inputId="updateDate"
+                    className="input-field Input-date-box"
+                    inputLabelStatus={ true }
                     inputLabel="Appointment Date"
                     openingStatus={ true }
                     openingDate={ updateDateInput }
@@ -276,6 +275,7 @@ class modalUpdateApp extends Component {
               loadingStatus ?
               <LoadingButton 
                 type="Btn-white-blue Container-nowrap-center"
+                color="#ffffff"
               />
               :
               <Button 

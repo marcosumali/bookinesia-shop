@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 export default class inputFile extends Component {
   render() {
-    let { inputId, inputLabel, handleChangesFunction, fileSizeError } = this.props
+    let { inputId, inputLabel, handleChangesFunction, fileError } = this.props
     return (
       <div>
         <label htmlFor={ inputId } className="Form-text-active active">{ inputLabel }</label>
@@ -24,8 +24,8 @@ export default class inputFile extends Component {
           </div>
         </div>
         {
-          fileSizeError ?
-          <label htmlFor="image-text" className="Input-info-error Image-text-error">{ fileSizeError }</label>
+          fileError ?
+          <label htmlFor="image-text" className="Input-info-error">{ fileError }</label>
           :
           <div></div>
         }

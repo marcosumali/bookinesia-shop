@@ -24,7 +24,7 @@ class manageBarberDetails extends Component {
       handleCheckedStatus,
       updateBarberDataValidation,
       handleCancelation,
-      fileSizeError,
+      fileError,
       handleSingleFileInput,
       file,
       hasEditStatusFile,
@@ -32,10 +32,10 @@ class manageBarberDetails extends Component {
     } = this.props
     // console.log('manageBarberDetails', this.props)
     return (
-      <div className="col m12 Container-wrap-center-cross Margin-b-10">
-        <div className="col m11 Container-nowrap-center-cross Margin-b-16">
-          <div className="col m3 offset-m1 l2">
-            <div className="col m12 No-margin No-padding">
+      <div className="col m12 No-padding Container-wrap-center-cross Margin-b-10">
+        <div className="col m12 No-padding Container-nowrap-center-cross Margin-b-16">
+          <div className="col m3" style={{ paddingRight: '0px' }}>
+            <div className="col m12 No-margin No-padding Container-nowrap-center">
               {
                 selectedBarber.picture.length <= 0 ?
                 <AccountCircleSvg className="" width="100%" height="100%" color="#666666" />
@@ -44,9 +44,9 @@ class manageBarberDetails extends Component {
               }
             </div>
           </div>
-          <div className="col m7 offset-m1 l10 Container-wrap-center-cross">
+          <div className="col m9 Container-wrap-center-cross">
             <form className="col m12 No-margin No-padding Container-wrap-center-cross">
-              <div className="col m11 Margin-l-10 Margin-b-10">
+              <div className="col m12 Margin-l-10 Margin-b-10" style={{ marginTop: '1em' }}>
                 <TextInput 
                   inputId="name"
                   inputLabel="Name"
@@ -55,7 +55,7 @@ class manageBarberDetails extends Component {
                   handleChangesFunction={ handleChangesManageBarbers }
                 />
               </div>
-              <div className="col m11 Margin-l-10 Margin-b-10">
+              <div className="col m12 Margin-l-10 Margin-b-10">
                 <SwitchInput 
                   inputId="barberStatus"
                   inputLabel="Status"
@@ -66,12 +66,12 @@ class manageBarberDetails extends Component {
                   checkedStatus={ barberDisableStatus }
                 />
               </div>
-              <div className="col m11 Margin-l-10 Margin-b-10">
+              <div className="col m12 Margin-l-10 Margin-b-10">
                 <FileInput
                   inputId="image"
                   inputLabel="Picture"
                   handleChangesFunction={ handleSingleFileInput }
-                  fileSizeError={ fileSizeError }
+                  fileError={ fileError }
                 />
               </div>
             </form>
@@ -108,6 +108,7 @@ class manageBarberDetails extends Component {
             loadingStatus ?
             <LoadingButton 
               type="Btn-white-blue Container-nowrap-center"
+              color="#ffffff"
             />
             :
             <DisabledButton 
@@ -129,9 +130,9 @@ const mapStateToProps = state => {
     barberNameError: state.staff.barberNameError,
     barberDisableStatus: state.staff.barberDisableStatus,
     activeTab: state.nav.activeTab,
-    fileSizeError: state.staff.fileSizeError,
+    fileError: state.staff.fileError,
     file: state.nav.file,
-    hasEditStatusFile: state.staff.hasEditStatusFile,
+    hasEditStatusFile: state.nav.hasEditStatusFile,
     loadingStatus: state.staff.loadingStatus,
   }
 }

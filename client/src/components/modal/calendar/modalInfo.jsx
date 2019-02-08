@@ -1,14 +1,63 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { Modal } from 'react-materialize';
 
 import '../modal.css';
-import './modalInfo.css';
-import { formatMoney, getTotalTransaction } from '../../../helpers/currency';
 import CloseSvg from '../../../components/svg/closeSvg';
+import Button from '../../button/button';
+import LoadingButton from '../../button/buttonLoading';
+import DisabledButton from '../../button/buttonDisabled';
+import StatusBox from '../../statusBox/statusBox';
+import SelectInput from '../../form/inputSelect';
+import { formatMoney, getTotalTransaction } from '../../../helpers/currency';
+import { 
+  handleUpdateStatus,
+  handleMultipleSelectOption,
+} from '../../../store/dashboard/dashboard.actions';
+import {
+  setShowPaymentMethodStatus,
+} from '../../../store/firestore/transaction/transaction.actions';
 
-export default class modalInfo extends Component {
+class modalInfo extends Component {
   render() {
-    let { transaction } = this.props
+    let { 
+      transaction, 
+      handleUpdateStatus,
+      shop, 
+      branch,
+      paymentMethod,
+      dashboards,
+      barbers,
+      methods,
+      handleMultipleSelectOption,
+      setShowPaymentMethodStatus,
+      showPaymentMethodStatus,
+      updateLoadingStatus,
+      dashboardData
+    } = this.props
+    let appointment = transaction.appointment
+    let user = {
+      type: 'Admin',
+      id: 'ZIicQDSyxFM49MXox1dAJIK4A5C3'
+    }
+
+    let buttonDisableStatus = true
+
+    let dataIndex = dashboardData.findIndex(data => data.queueNo === transaction.queueNo)
+    if (dataIndex > 0) {
+      let selectedTransactions = dashboardData[dataIndex-1]
+      let barberIndex = barbers.findIndex(barber => barber.id === transaction.staff.id)
+      let transactionBefore = selectedTransactions.transactions[barberIndex]
+      
+      if (transactionBefore.status === 'finished' || transactionBefore.status === 'skipped' || (transactionBefore.status === 'canceled' && Number(appointment.currentQueue) >= Number(transactionBefore.queueNo))) {
+        buttonDisableStatus = false
+      }
+    } else {
+      buttonDisableStatus = false
+    }
+
+    // console.log('modalInfo', this.props)
     return (
       <Modal
         header={ 
@@ -23,7 +72,12 @@ export default class modalInfo extends Component {
         }
         trigger={
           <div className="Container-wrap-center-cross animated fadeIn faster">
-            <div className="Customer-text Text-capitalize">{ transaction.name }</div>
+            {
+              transaction.queueNo === appointment.currentQueue ?
+              <div className="Customer-text-highlighted Text-capitalize">{ transaction.name }</div>
+              :
+              <div className="Customer-text Text-capitalize">{ transaction.name }</div>
+            }
             <div className="Customer-phone">{ transaction.phone }</div>
           </div>
         }>
@@ -38,7 +92,7 @@ export default class modalInfo extends Component {
                   <div className="Text-blue Text-center">:</div>
                 </div>
                 <div className="col m8 No-margin No-padding">
-                  <div className="Text-grey Text-uppercase">{ transaction.id }</div>
+                  <div className="Text-grey">{ transaction.id }</div>
                 </div>
               </div>
               <div className="col m12 No-margin No-padding Transaction-box">
@@ -65,13 +119,18 @@ export default class modalInfo extends Component {
               </div>
               <div className="col m12 No-margin No-padding Transaction-box">
                 <div className="col m3 No-margin No-padding">
-                  <div className="Text-blue">Queue No.</div>
+                  <div className="Text-blue">QueueNo.</div>
                 </div>
                 <div className="col m1 No-margin No-padding">
                   <div className="Text-blue Text-center">:</div>
                 </div>
-                <div className="col m8 No-margin No-padding">
-                  <div className="Text-grey">{ transaction.queueNo }</div>
+                <div className="col m8 No-margin No-padding Container-nowrap-center-cross">
+                  <div className="col m6 No-margin No-padding">
+                    <div className="Text-grey">{ transaction.queueNo }</div>
+                  </div>
+                  <div className="col m6 No-margin Container-nowrap-end" style={{ paddingRight: '0.625em' }}>
+                    <StatusBox status={ transaction.status } />
+                  </div>
                 </div>
               </div>
             </div>
@@ -106,7 +165,7 @@ export default class modalInfo extends Component {
               </div>
               <div className="col m12 No-margin No-padding Transaction-box">
                 <div className="col m3 No-margin No-padding">
-                  <div className="Text-blue">Phone No.</div>
+                  <div className="Text-blue">PhoneNo.</div>
                 </div>
                 <div className="col m1 No-margin No-padding">
                   <div className="Text-blue Text-center">:</div>
@@ -118,7 +177,7 @@ export default class modalInfo extends Component {
             </div>
           </div>
 
-          <div className="col m12 No-margin No-padding Modal-body-box">
+          <div className="col m12 No-margin No-padding Container-wrap-center-cross Modal-body-box">
             <div className="col m6 No-margin No-padding">
               <div className="col m12 No-margin No-padding Transaction-box">
                 <div className="Text-blue-bold">Services</div>
@@ -136,6 +195,7 @@ export default class modalInfo extends Component {
                 <div className="Text-blue-bold">Total</div>
               </div>
             </div>
+
             <div className="col m2 No-margin No-padding">
               <div className="col m12 No-margin No-padding Transaction-box">
                 <div className="Text-blue-bold">Amount</div>
@@ -159,22 +219,197 @@ export default class modalInfo extends Component {
                 </div>
               </div>
             </div>
-          </div>
-
-          <div className="col m12 No-margin No-padding Modal-body-box">
-            <div className="col m6 No-margin No-padding Container-nowrap-start">
-              <div className="Button-cancel">Cancel</div>
-              <div className="Button-skip">Skip</div>
-              <div className="Button-edit">Edit</div>
-            </div>
-            <div className="col m6 No-margin No-padding Container-nowrap-end">
-              <div className="Button-start">Start</div>
-              <div className="Button-finish">Finish</div>
-            </div>
+            
+            {
+              showPaymentMethodStatus && transaction.status === 'on progress' ?
+              <div className="col m12" style={{ marginBottom: '1em', marginTop: '1.5em' }} >
+                <SelectInput 
+                  inputId="paymentMethod"
+                  className=""
+                  inputSize={ 12 }
+                  handleChangesFunction={ handleMultipleSelectOption }
+                  purpose="selectPaymentMethod"
+                  inputName="paymentMethod"
+                  selectedData={ null }
+                  showLabel={ true }
+                  inputLabel="Payment Method"
+                  inputValue={ paymentMethod }
+                  optionData={ methods }
+                />
+              </div>
+              :
+              <div></div>
+            }
           </div>
           
+          {
+            buttonDisableStatus === false ?
+            <div className="col m12 No-margin No-padding Modal-body-box">
+              <div className="col m6 No-margin No-padding Container-nowrap-start">
+                {/* EDIT BUTTON */}
+                {
+                  transaction.status === 'booking confirmed' || transaction.status === 'on progress' || (transaction.status === 'canceled' && Number(appointment.currentQueue) < Number(transaction.queueNo)) ?
+                  <Button 
+                    text="Edit"
+                    type="Btn-white-blue No-margin"
+                    clickFunction=""
+                    data=""
+                  />
+                  :
+                  <div></div>
+                }
+                {/* SKIP BUTTON */}
+                {
+                  transaction.status === 'booking confirmed' || (transaction.status === 'canceled' && Number(appointment.currentQueue) < Number(transaction.queueNo)) ?
+                  <div>
+                    {
+                      updateLoadingStatus ?
+                      <LoadingButton 
+                        type="Btn-gray Container-nowrap-center"
+                        color="#666666"
+                      />
+                      :
+                      <Button 
+                        text="Skip"
+                        type="Btn-gray"
+                        clickFunction={ handleUpdateStatus }
+                        data={{ shop, branch, status: 'skipped', appointment, transaction, user, paymentMethod: null, dashboardData: null, barbers: null }}
+                      />
+                    }
+                  </div>
+                  :
+                  <div></div>
+                }
+                {/* Happens when status has been changed to skipped but still sending email */}
+                {
+                  transaction.status === 'skipped' && updateLoadingStatus ?
+                  <LoadingButton 
+                    type="Btn-gray Container-nowrap-center"
+                    color="#666666"
+                  />
+                  :
+                  <div></div>
+                }
+              </div>
+              <div className="col m6 No-margin No-padding Container-nowrap-end">
+                {/* Happens when status has been changed to finished but still sending email */}
+                {
+                  transaction.status === 'finished' && updateLoadingStatus ?
+                  <LoadingButton 
+                    type="Btn-white-green Container-nowrap-center"
+                    color="#ffffff"
+                  />
+                  :
+                  <div></div>
+                }
+                {/* FINISH BUTTON */}
+                {
+                  transaction.status === 'on progress' ?
+                  <div>
+                    {
+                      showPaymentMethodStatus && updateLoadingStatus ?
+                      <LoadingButton 
+                        type="Btn-white-green Container-nowrap-center"
+                        color="#ffffff"
+                      />
+                      :
+                      showPaymentMethodStatus && updateLoadingStatus === false ?
+                      <Button 
+                        text="Finish"
+                        type="Btn-white-green"
+                        clickFunction={ handleUpdateStatus }
+                        data={{ shop, branch, status: 'finished', appointment, transaction, user, paymentMethod: 'cash', dashboardData: null, barbers: null }}
+                      />
+                      :
+                      showPaymentMethodStatus === false && updateLoadingStatus === false ?
+                      <Button 
+                        text="Finish"
+                        type="Btn-white-green"
+                        clickFunction={ setShowPaymentMethodStatus }
+                        data={ true }
+                      />
+                      :
+                      // Happens when status has been changed but still sending email
+                      <LoadingButton 
+                        type="Btn-white-orange Container-nowrap-center"
+                        color="#ffffff"
+                      />
+                    }
+                  </div>
+                  :
+                  <div></div>
+                }
+                {/* START BUTTON */}
+                {
+                  transaction.status === 'booking confirmed' || (transaction.status === 'canceled' && Number(appointment.currentQueue) < Number(transaction.queueNo)) ?
+                  <div>
+                    {
+                      updateLoadingStatus ?
+                      <LoadingButton 
+                        type="Btn-white-orange Container-nowrap-center"
+                        color="#ffffff"
+                      />
+                      :
+                      <Button 
+                        text="Start"
+                        type="Btn-white-orange"
+                        clickFunction={ handleUpdateStatus }
+                        data={{ shop, branch, status: 'on progress', appointment, transaction, user, paymentMethod: null, dashboardData: dashboards[0].data, barbers }}
+                      />
+                    }
+                  </div>
+                  :
+                  <div></div>
+                }
+              </div>
+            </div>
+            :
+            <div className="col m12 No-margin No-padding Modal-body-box">
+              <div className="col m6 No-margin No-padding Container-nowrap-start">
+                <DisabledButton 
+                  text="Edit"
+                  type="Btn-disabled No-margin"
+                />
+                <DisabledButton 
+                  text="Skip"
+                  type="Btn-disabled"
+                />
+              </div>
+              <div className="col m6 No-margin No-padding Container-nowrap-end">
+                <DisabledButton 
+                  text="Start"
+                  type="Btn-disabled"
+                />
+              </div>
+            </div>
+          }
+
         </div>
       </Modal>
     )
   }
 }
+
+
+const mapStateToProps = state => {
+  return {
+    shop: state.shop.shop,
+    branch: state.branch.branch,
+    barbers: state.staff.allBarbers,
+    dashboards: state.transaction.dashboards,
+    methods: state.nav.methods,
+    paymentMethod: state.transaction.paymentMethod,
+    showPaymentMethodStatus: state.transaction.showPaymentMethodStatus,
+    updateLoadingStatus: state.nav.updateLoadingStatus,
+  }
+}
+
+const mapDispatchToProps = dispatch => bindActionCreators({
+  handleUpdateStatus,
+  handleMultipleSelectOption,
+  setShowPaymentMethodStatus
+}, dispatch)
+
+
+export default connect(mapStateToProps, mapDispatchToProps) (modalInfo);
+

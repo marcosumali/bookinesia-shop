@@ -28,18 +28,22 @@ class manageBarberApps extends Component {
           <div className="col m5 No-margin No-padding Margin-r-5">
             <BasicDateInput 
               inputId="startDate"
+              className="input-field Input-date-box"
+              inputLabelStatus={ true }
               inputLabel="Start Date"
-              openingStatus={ false }
-              openingDate=""
+              openingStatus={ true }
+              openingDate={ startDate }
               handleChangesDateFunction={ handleBasicDateInput }              
             />
           </div>
           <div className="col m5 No-margin No-padding">
             <BasicDateInput 
               inputId="endDate"
+              className="input-field Input-date-box"
+              inputLabelStatus={ true }
               inputLabel="End Date"
-              openingStatus={ false }
-              openingDate=""
+              openingStatus={ true }
+              openingDate={ endDate }
               handleChangesDateFunction={ handleBasicDateInput }              
             />
           </div>

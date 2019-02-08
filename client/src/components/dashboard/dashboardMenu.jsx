@@ -49,7 +49,7 @@ class dashboardMenu extends Component {
             <div>
               <SubMenuItem text="Providers"/>
               <SubMenuItem text="Services"/>
-              <SubMenuItem text="Users"/>
+              <SubMenuItem text="Shop & Branch"/>
             </div>
             :
             <div></div>

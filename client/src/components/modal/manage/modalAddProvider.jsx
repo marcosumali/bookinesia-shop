@@ -68,6 +68,7 @@ class modalAddProvider extends Component {
               loadingStatus ?
               <LoadingButton 
                 type="Btn-white-blue Container-nowrap-center"
+                color="#ffffff"
               />
               :
               <Button 

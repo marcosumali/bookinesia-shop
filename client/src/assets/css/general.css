@@ -7,6 +7,10 @@
   padding: 0px !important;
 }
 
+.Padding-5 {
+  padding: 0.3125em !important;
+}
+
 .No-margin {
   margin: 0px !important;
 }
@@ -16,7 +20,11 @@
 }
 
 .Margin-t-10 {
-  margin-left: 0.625em !important;
+  margin-top: 0.625em !important;
+}
+
+.Margin-t-20 {
+  margin-top: 1.25em !important;
 }
 
 .Margin-t-40 {
