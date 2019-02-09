@@ -6,7 +6,7 @@ export default class statusBox extends Component {
   render() {
     let { status } = this.props
     return (
-      <div className="">
+      <div>
         {
           status === 'booking confirmed' ?
           <div className="Status-box-orange">

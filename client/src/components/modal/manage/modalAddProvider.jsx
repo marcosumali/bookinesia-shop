@@ -23,6 +23,7 @@ class modalAddProvider extends Component {
       services,
       clearAddBarberData,
       loadingStatus,
+      user,
     } = this.props
     // console.log('modalAddBarber', this.props)
     return (
@@ -75,7 +76,7 @@ class modalAddProvider extends Component {
                 text="Save"
                 type="Btn-white-blue"
                 clickFunction={ addNewStaffAndOtherData }
-                data={{ barbers, newBarberName: addBarberName, branchId: 'dummyshop-bekasi', services }}
+                data={{ barbers, newBarberName: addBarberName, branchId: user.branchId, services }}
               />
             }
           </div>
@@ -93,6 +94,7 @@ const mapStateToProps = state => {
     barbers: state.staff.allBarbers,
     services: state.service.services,
     loadingStatus: state.staff.loadingStatus,
+    user: state.auth.user,
   }
 }
 

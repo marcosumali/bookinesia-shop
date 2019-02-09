@@ -10,6 +10,8 @@ import LoadingButton from '../../button/buttonLoading';
 import DisabledButton from '../../button/buttonDisabled';
 import StatusBox from '../../statusBox/statusBox';
 import SelectInput from '../../form/inputSelect';
+import MiniStatusBox from '../../statusBox/miniStatusBox';
+import miniStatusBoxDisabled from '../../statusBox/miniStatusBoxDisabled';
 import { formatMoney, getTotalTransaction } from '../../../helpers/currency';
 import { 
   handleUpdateStatus,
@@ -34,12 +36,13 @@ class modalInfo extends Component {
       setShowPaymentMethodStatus,
       showPaymentMethodStatus,
       updateLoadingStatus,
-      dashboardData
+      dashboardData,
+      authUser
     } = this.props
     let appointment = transaction.appointment
     let user = {
-      type: 'Admin',
-      id: 'ZIicQDSyxFM49MXox1dAJIK4A5C3'
+      type: authUser.job,
+      id: authUser.id
     }
 
     let buttonDisableStatus = true
@@ -73,12 +76,41 @@ class modalInfo extends Component {
         trigger={
           <div className="Container-wrap-center-cross animated fadeIn faster">
             {
-              transaction.queueNo === appointment.currentQueue ?
-              <div className="Customer-text-highlighted Text-capitalize">{ transaction.name }</div>
+              appointment.disableStatus ?
+              <div className="Width-100cent">
+                <div className="col m11 No-margin No-padding">
+                  {
+                    transaction.queueNo === appointment.currentQueue ?
+                    <div className="Customer-text-highlighted Text-capitalize Disabled">{ transaction.name }</div>
+                    :
+                    <div className="Customer-text Text-capitalize Disabled" style={{ padding: '0.15625em' }}>{ transaction.name }</div>
+                  }
+                </div>
+                <div className="col m1 No-margin No-padding">
+                  <miniStatusBoxDisabled status={ transaction.status } />
+                </div>
+                <div className="col m12 No-margin No-padding">
+                  <div className="Customer-phone Disabled">{ transaction.phone }</div>
+                </div>
+              </div>
               :
-              <div className="Customer-text Text-capitalize">{ transaction.name }</div>
+              <div className="Width-100cent">
+                <div className="col m11 No-margin No-padding">
+                  {
+                    transaction.queueNo === appointment.currentQueue ?
+                    <div className="Customer-text-highlighted Text-capitalize">{ transaction.name }</div>
+                    :
+                    <div className="Customer-text Text-capitalize" style={{ padding: '0.15625em' }}>{ transaction.name }</div>
+                  }
+                </div>
+                <div className="col m1 No-margin No-padding">
+                  <MiniStatusBox status={ transaction.status } />
+                </div>
+                <div className="col m12 No-margin No-padding">
+                  <div className="Customer-phone">{ transaction.phone }</div>
+                </div>
+              </div>
             }
-            <div className="Customer-phone">{ transaction.phone }</div>
           </div>
         }>
         <div className="row No-margin">
@@ -125,10 +157,10 @@ class modalInfo extends Component {
                   <div className="Text-blue Text-center">:</div>
                 </div>
                 <div className="col m8 No-margin No-padding Container-nowrap-center-cross">
-                  <div className="col m6 No-margin No-padding">
+                  <div className="col m4 No-margin No-padding">
                     <div className="Text-grey">{ transaction.queueNo }</div>
                   </div>
-                  <div className="col m6 No-margin Container-nowrap-end" style={{ paddingRight: '0.625em' }}>
+                  <div className="col m8 No-margin Container-nowrap-end" style={{ paddingRight: '0.625em' }}>
                     <StatusBox status={ transaction.status } />
                   </div>
                 </div>
@@ -401,6 +433,7 @@ const mapStateToProps = state => {
     paymentMethod: state.transaction.paymentMethod,
     showPaymentMethodStatus: state.transaction.showPaymentMethodStatus,
     updateLoadingStatus: state.nav.updateLoadingStatus,
+    authUser: state.auth.user,
   }
 }
 

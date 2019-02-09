@@ -578,6 +578,15 @@ export const createNewTransaction = (data) => {
     transactionRef.add(newTransaction)
     .then(ref => {
       newTransaction['id'] = ref.id
+      dispatch(setAddTransactionErros([]))
+      dispatch(setAddNameError(false))
+      dispatch(setAddPhoneError(false))
+      dispatch(setAddEmailError(false))
+      dispatch(setAddName(""))
+      dispatch(setAddPhone(""))
+      dispatch(setAddEmail(""))
+      dispatch(setSelectedPrimaryService(""))
+      dispatch(setSelectedSecondaryServices([]))
       dispatch(updateAppointmentStatus(shop, branch, status, appointment, newTransaction, user, null, null, null))
     })
     .catch(err => {
@@ -604,6 +613,8 @@ export const clearAddTransaction = () => {
     dispatch(setAddName(""))
     dispatch(setAddPhone(""))
     dispatch(setAddEmail(""))
+    dispatch(setSelectedPrimaryService(""))
+    dispatch(setSelectedSecondaryServices([]))
   } 
 }
 

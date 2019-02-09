@@ -1,5 +1,6 @@
 let initialState = {
   cookies: '',
+  window: '',
 }
 
 const managementDataList = (state = { ...initialState }, action) => {
@@ -8,6 +9,11 @@ const managementDataList = (state = { ...initialState }, action) => {
       return ({
         ...state,
         cookies: action.payload,
+      })
+    case 'SET_WINDOW_FUNCTION':
+      return ({
+        ...state,
+        window: action.payload,
       })
     default:
       return state;

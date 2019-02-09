@@ -90,3 +90,17 @@
   font-size: 0.9em;
   margin-left: 2vw;
 }
+
+
+.Btn-large-white-blue {
+  padding: 0.25em;
+  color: #ffffff;
+  background-color: #5499c3;
+  border-radius: 0.5em;
+  border: 1px solid #5499c3;
+  min-width: 14em;
+  max-height: 2em;
+  text-align: center;
+  font-size: 1.25em;
+  margin-right: 0.75em;
+}

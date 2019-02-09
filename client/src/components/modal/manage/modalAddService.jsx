@@ -32,7 +32,8 @@ class modalAddService extends Component {
       addServiceData,
       clearAddServiceData,
       services,
-      barbers
+      barbers,
+      user,
     } = this.props
     // console.log('modalAddService', this.props)
     return (
@@ -134,7 +135,7 @@ class modalAddService extends Component {
                   duration: addServiceDuration,
                   price: addServicePrice,
                   type: addServiceType,
-                  branchId: 'dummyshop-bekasi', 
+                  branchId: user.branchId, 
                   staffs: barbers 
                 }}
               />
@@ -160,6 +161,7 @@ const mapStateToProps = state => {
     loadingStatus: state.service.loadingStatus,
     services: state.service.allServices,
     barbers: state.staff.allBarbers,
+    user: state.auth.user,
   }
 }
 

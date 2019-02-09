@@ -43,6 +43,7 @@ class modalAddTrans extends Component {
       transactionErrors,
       loadingStatus,
       clearAddTransaction,
+      authUser,
     } = this.props
     let appointmentDate = `${returnWhatDay(new Date(selectedDate).getDay())}, ${new Date(selectedDate).getDate()} ${returnWhatMonth(new Date(selectedDate).getMonth())} ${new Date(selectedDate).getFullYear()}`
 
@@ -69,8 +70,8 @@ class modalAddTrans extends Component {
     })
 
     let user = {
-      type: 'Admin',
-      id: 'ZIicQDSyxFM49MXox1dAJIK4A5C3'
+      type: authUser.job,
+      id: authUser.id
     }
     // console.log('modalAddTrans', this.props)
   
@@ -265,6 +266,7 @@ const mapStateToProps = state => {
     selectedSecondaryServices: state.transaction.selectedSecondaryServices,
     transactionErrors: state.transaction.transactionErrors,
     loadingStatus: state.transaction.loadingStatus,
+    authUser: state.auth.user,
   }
 }
 

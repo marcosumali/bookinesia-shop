@@ -14,7 +14,8 @@ class calendarHeader extends Component {
   render() {
     let {
       handleBasicDateInput,
-      allBarbers
+      allBarbers,
+      user
     } = this.props
     // console.log('calendarHeader', this.props)
     return (
@@ -27,7 +28,7 @@ class calendarHeader extends Component {
           </div> */}
           <div 
             className="col m2 No-margin No-padding Height-100cent Container-nowrap-end" 
-            onClick={ () => this.props.setAppointmentDateIndex('dummyshop-bekasi','previous', this.props.selectedDate) }
+            onClick={ () => this.props.setAppointmentDateIndex(user.branchId,'previous', this.props.selectedDate) }
           >
             <ArrowLeftSvg height="2.5rem" width="2.5rem" color="#5499c3" />
           </div>
@@ -43,18 +44,18 @@ class calendarHeader extends Component {
                 inputLabel=""
                 openingStatus={ true }
                 openingDate={ this.props.selectedDate }
-                handleChangesDateFunction={ (e) => handleBasicDateInput(e, 'dummyshop-bekasi', allBarbers) }              
+                handleChangesDateFunction={ (e) => handleBasicDateInput(e, user.branchId, allBarbers) }              
               />
             </div>
           </div>
           <div 
             className="col m2 No-margin No-padding Height-100cent Container-nowrap-start" 
-            onClick={ () => this.props.setAppointmentDateIndex('dummyshop-bekasi','next', this.props.selectedDate) }
+            onClick={ () => this.props.setAppointmentDateIndex(user.branchId,'next', this.props.selectedDate) }
           >
             <ArrowRightSvg height="2.5rem" width="2.5rem" color="#5499c3" />
           </div>
           <div className="col m3 No-margin No-padding Container-nowrap-end">
-            <div className="Show-today-box" onClick={ () => this.props.setTodayDateIndex('dummyshop-bekasi') }>
+            <div className="Show-today-box" onClick={ () => this.props.setTodayDateIndex(user.branchId) }>
               <div className="Show-today-text">Show Today</div>
             </div>
           </div>
@@ -71,6 +72,7 @@ const mapStateToProps = state => {
     appointmentDateIndex: state.appointment.datesIndex,
     selectedDate: state.appointment.selectedDate,
     allBarbers: state.staff.allBarbers,
+    user: state.auth.user,
   }
 }
 

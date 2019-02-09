@@ -1,0 +1,33 @@
+.Nav-box {
+  background-color: #5499c3;
+  margin-bottom: 1em;
+}
+
+.Nav-outer-box {
+  box-shadow: 0 0rem 1rem rgba(0, 0, 0, 0.075);
+}
+
+a.brand-logo {
+  margin-left: 1em;
+  font-family: Montserrat;
+  font-size: 1.75em;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  letter-spacing: normal;
+  color: #ffffff;
+}
+
+nav ul a {
+  font-family: Montserrat;
+  font-size: 1em;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  letter-spacing: normal;
+  color: #ffffff;
+}
+
+.right {
+  margin-right: 2em;
+}

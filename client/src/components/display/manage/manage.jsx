@@ -9,7 +9,7 @@ import '../../../assets/css/materialize/tabs.css';
 import '../../../assets/css/swal/swal.css';
 import ManageMenu from './manageMenu';
 import ManageContentStart from './manageContentStart';
-import { handleActiveTab } from '../../../store/dashboard/dashboard.actions';
+import { handleActiveTab, handleActiveTabAdmin } from '../../../store/dashboard/dashboard.actions';
 import ManageBarberDetails from './manageBarberDetails';
 import ManageBarberServices from './manageBarberServices';
 import ManageBarberWorkingHours from './manageBarberHours';
@@ -36,7 +36,8 @@ class serviceProviders extends Component {
     let { 
       selectedBarber,
       displayToShow,
-      selectedService
+      selectedService,
+      isOwner,
     } = this.props
     // console.log('manage', this.props)
     return (
@@ -55,12 +56,19 @@ class serviceProviders extends Component {
               </div>
               <div className="col m12 No-margin No-padding">
                 <div className="col m12 No-margin No-padding">
-                  <Tabs className='tab-demo z-depth-1' onChange={(tabIndex) => this.props.handleActiveTab(tabIndex) }>
-                    <Tab title="Details"></Tab>
-                    <Tab title="Services"></Tab>
-                    <Tab title="Working Hours"></Tab>
-                    <Tab title="Appointments"></Tab>
-                  </Tabs>
+                  {
+                    isOwner ?
+                    <Tabs className='tab-demo z-depth-1' onChange={(tabIndex) => this.props.handleActiveTab(tabIndex) }>
+                      <Tab title="Details"></Tab>
+                      <Tab title="Services"></Tab>
+                      <Tab title="Working Hours"></Tab>
+                      <Tab title="Appointments"></Tab>
+                    </Tabs>
+                    :
+                    <Tabs className='tab-demo z-depth-1' onChange={(tabIndex) => this.props.handleActiveTabAdmin(tabIndex) }>
+                      <Tab title="Appointments"></Tab>
+                    </Tabs>
+                  }
                 </div>
                 <div className="col m12 No-margin No-padding Manage-content-body-box">
                   {
@@ -111,11 +119,14 @@ const mapStateToProps = state => {
     selectedBarber: state.staff.selectedBarber,
     selectedService: state.service.selectedService,
     activeTab: state.nav.activeTab,
+    isOwner: state.auth.isOwner,
+    isAdmin: state.auth.isAdmin,
   }
 }
 
 const mapDispatchToProps = dispatch => bindActionCreators({
   handleActiveTab,
+  handleActiveTabAdmin,
 }, dispatch)
 
 

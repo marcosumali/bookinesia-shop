@@ -7,6 +7,9 @@ import SubMenuItem from './subMenuItem';
 
 class dashboardMenu extends Component {
   render() {
+    let {
+      isOwner,
+    } = this.props
     // console.log('from dashboardMenu', this.props)
     return (
       <div className="Dashboard-menu-box">
@@ -48,27 +51,40 @@ class dashboardMenu extends Component {
             this.props.manageShowStatus === true ?
             <div>
               <SubMenuItem text="Providers"/>
-              <SubMenuItem text="Services"/>
-              <SubMenuItem text="Shop & Branch"/>
+              {
+                isOwner ?
+                <div>
+                  <SubMenuItem text="Services"/>
+                  <SubMenuItem text="Shop & Branch"/>
+                </div>
+                :
+                <div></div>
+              }
             </div>
             :
             <div></div>
           }
 
-         
           {
-            this.props.menuToShow === 'Reports' ?
-            <div className="Active">
-              <MenuItem text='Reports' />
-            </div>
-            :
+            isOwner ?
             <div>
-              <MenuItem text='Reports' />
+              {
+                this.props.menuToShow === 'Reports' ?
+                <div className="Active">
+                  <MenuItem text='Reports' />
+                </div>
+                :
+                <div>
+                  <MenuItem text='Reports' />
+                </div>
+              }
+              {
+                this.props.reportsShowStatus === true ?
+                <SubMenuItem text="Transactions"/>
+                :
+                <div></div>
+              }
             </div>
-          }
-          {
-            this.props.reportsShowStatus === true ?
-            <SubMenuItem text="Transactions"/>
             :
             <div></div>
           }
@@ -86,7 +102,9 @@ const mapStateToProps = state => {
     reportsShowStatus: state.nav.reportsShowStatus,
     subMenuToShow: state.nav.subMenuToShow,
     menuToShow: state.nav.menuToShow,
-    cookies: state.user.cookies
+    cookies: state.user.cookies,
+    isOwner: state.auth.isOwner,
+    isAdmin: state.auth.isAdmin,
   }
 }
 

@@ -2,6 +2,7 @@ import { combineReducers } from 'redux';
 import { firebaseReducer } from 'react-redux-firebase';
 
 import dashboardReducer from './dashboard/dashboard.reducers';
+import authReducer from './firestore/auth/auth.reducers';
 import managementReducer from './firestore/management/management.reducers';
 import appointmentReducer from './firestore/appointment/appointment.reducers';
 import branchReducer from './firestore/branch/branch.reducers';
@@ -14,6 +15,7 @@ import staffScheduleReducer from './firestore/staffSchedule/staffSchedule.reduce
 
 const allReducers = combineReducers({
   nav: dashboardReducer,
+  auth: authReducer,
   user: managementReducer,
   firebase: firebaseReducer,
   appointment: appointmentReducer,

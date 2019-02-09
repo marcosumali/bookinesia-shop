@@ -3,10 +3,9 @@ import { Route, Switch } from 'react-router-dom';
 import { withCookies } from 'react-cookie';
 
 import './App.css';
-import HomePage from './pages/home/homePage';
 import DashboardPage from './pages/dashboard/dashboardPage';
 import NotFoundPage from './pages/error/notFound';
-import LoginPage from './pages/auth/loginPage';
+import NavBarPage from './pages/navBarPage';
 
 class App extends Component {
   render() {
@@ -15,15 +14,15 @@ class App extends Component {
         <Switch>
           <Route
             exact path="/" 
-            render={ (props) => (<HomePage {...props} cookies={this.props.cookies}/>) } 
+            render={ (props) => (<NavBarPage {...props} cookies={this.props.cookies}/>) } 
           />
           <Route
             exact path="/dashboard" 
             render={ (props) => (<DashboardPage {...props} cookies={this.props.cookies}/>) } 
           />
           <Route
-            exact path="/login" 
-            render={ (props) => (<LoginPage {...props} cookies={this.props.cookies}/>) } 
+            exact path="/signin" 
+            render={ (props) => (<NavBarPage {...props} cookies={this.props.cookies}/>) } 
           />
           <Route path="*" component={ NotFoundPage } />
         </Switch>
