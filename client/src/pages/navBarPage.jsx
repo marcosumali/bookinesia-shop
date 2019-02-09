@@ -32,7 +32,7 @@ class navBarPage extends Component {
           this.props.match.path === '/' ?
           <HomePage />
           :
-          this.props.match.path === '/login' ?
+          this.props.match.path === '/signin' ?
           <div>
             {
               authenticationStatus ?

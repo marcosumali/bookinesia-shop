@@ -1,6 +1,6 @@
 /* ---------- Margin & Padding Component ---------- */
 .Disabled {
-  opacity: 0.25;
+  opacity: 0.5;
 }
 
 .No-padding {
@@ -135,6 +135,12 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  align-items: center;
+}
+
+.Container-wrap-center-cross {
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
 }
 

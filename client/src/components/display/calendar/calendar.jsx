@@ -30,7 +30,12 @@ class calendar extends Component {
                           return (
                             <th className="Content-box" key={ 'barber' + index }>
                               <div className="Container-nowrap-spacebetween">
-                                <div className="Staff-text Text-capitalize">{ barber.name }</div>
+                                {
+                                  barber.disableStatus ?
+                                  <div className="Staff-text Text-capitalize Disabled">{ barber.name }</div>
+                                  :
+                                  <div className="Staff-text Text-capitalize">{ barber.name }</div>
+                                }
                                 <ModalAddTransaction 
                                   barber={ barber }
                                 />

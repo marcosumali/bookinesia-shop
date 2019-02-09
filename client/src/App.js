@@ -21,7 +21,7 @@ class App extends Component {
             render={ (props) => (<DashboardPage {...props} cookies={this.props.cookies}/>) } 
           />
           <Route
-            exact path="/login" 
+            exact path="/signin" 
             render={ (props) => (<NavBarPage {...props} cookies={this.props.cookies}/>) } 
           />
           <Route path="*" component={ NotFoundPage } />

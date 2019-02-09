@@ -22,8 +22,8 @@ class navbar extends Component {
                 Dashboard
               </NavItem>
               :
-              <NavItem href="/login">
-                Login
+              <NavItem href="/signin">
+                Sign In
               </NavItem>
             }
           </div>

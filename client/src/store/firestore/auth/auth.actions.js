@@ -9,7 +9,8 @@ import { getShop } from '../shop/shop.actions';
 import { getBranch } from '../branch/branch.actions';
 import {
   getCookies,
-  verifyCookies
+  verifyCookies,
+  removeCookies
 } from '../../../helpers/auth';
 
 export const loginError = 'The email or password you entered is incorrect. Please try again.'
@@ -92,7 +93,7 @@ export const handleCookies = (purpose, cookies) => {
     let BSID = getCookies(cookies)
     if (BSID) {
       let userData = verifyCookies(BSID)
-      console.log('check BSID', purpose, '===', userData)
+      // console.log('check BSID', purpose, '===', userData)
       if (purpose === 'handleAuth') {
         dispatch(setAuthenticationStatus(true))
         dispatch(setUser(userData))
@@ -156,6 +157,31 @@ const setOwnerStatus = (data) => {
 const setUser = (data) => {
   return {
     type: 'SET_USER',
+    payload: data
+  }
+}
+
+export const authSignOut = (cookies, window) => {
+  return (dispatch, getState, { getFirebase, getFirestore }) => {
+    let firebase = getFirebase()
+    firebase.auth().signOut().then(function() {
+      removeCookies(cookies)
+      window.location.assign('/signin')
+    }).catch(function(err) {
+      console.log('ERROR: sign out', err)
+    })
+  }
+}
+
+export const setOnlineStatus = (status) => {
+  return (dispatch, getState, { getFirebase, getFirestore }) => {
+    dispatch(setOnlineStatusAction(status))
+  }
+}
+
+const setOnlineStatusAction = (data) => {
+  return {
+    type: 'SET_ONLINE_STATUS',
     payload: data
   }
 }

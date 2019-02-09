@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import './login.css';
+import './signin.css';
 import EmailInput from '../form/inputEmail';
 import PasswordInput from '../form/inputPassword';
 import Button from '../button/button';
@@ -28,7 +28,7 @@ class login extends Component {
       <div className="row No-margin">
         <div className="col m12 Container-wrap-center Login-box">
           <div className="col m12 Login-header-box Container-wrap-center ">
-            <div className="Login-header-text">LOGIN</div>
+            <div className="Login-header-text">SIGN IN</div>
           </div>
           <div className="col m12 Login-form-box Container-wrap-center">
             <form className="col m4">
@@ -74,7 +74,7 @@ class login extends Component {
               />
               :
               <Button 
-                text="Login"
+                text="Sign In"
                 type="Btn-large-white-blue"
                 clickFunction={ authSignIn }
                 data={{ email, password, window, cookies }}

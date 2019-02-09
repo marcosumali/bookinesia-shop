@@ -10,6 +10,7 @@ let initialState = {
   isAdmin: false,
   isOwner: false,
   user: '',
+  onlineStatus: '',
 }
 
 const authDataList = (state = { ...initialState }, action) => {
@@ -68,6 +69,11 @@ const authDataList = (state = { ...initialState }, action) => {
       return ({
         ...state,
         user: action.payload,
+      })
+    case 'SET_ONLINE_STATUS':
+      return ({
+        ...state,
+        onlineStatus: action.payload,
       })
     default:
       return state;
