@@ -15,7 +15,7 @@
 /* Height was set as combination with calender header box height and dashboardPage height  */
 
 .Calendar-header-text {
-  font-family: Montserrat;
+  font-family: 'Montserrat', sans-serif;
   font-size: 1.2em;
   font-weight: normal;
   font-style: normal;
@@ -26,7 +26,7 @@
 }
 
 .Calendar-header-date {
-  font-family: Montserrat;
+  font-family: 'Montserrat', sans-serif;
   font-size: 1.1em;
   font-weight: normal;
   font-style: normal;
@@ -43,7 +43,7 @@
 }
 
 .Show-today-text {
-  font-family: Montserrat;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.8em;
   font-weight: normal;
   font-style: normal;
@@ -57,7 +57,7 @@
   width: 8vh;
   min-width: 8vh;
   border: 1px solid #EAEAEA;
-  font-family: Montserrat;
+  font-family: 'Montserrat', sans-serif;
   font-size: 1.25em;
   font-weight: normal;
   font-style: normal;
@@ -99,7 +99,7 @@
 
 .Staff-text{
   text-align: center;
-  font-family: Montserrat;
+  font-family: 'Montserrat', sans-serif;
   font-size: 1.1em;
   font-weight: normal;
   font-style: normal;
@@ -111,7 +111,7 @@
 
 .Customer-text {
   width: 100%;
-  font-family: Montserrat;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.8em;
   font-weight: normal;
   font-style: normal;
@@ -124,7 +124,7 @@
 
 .Customer-phone {
   width: 100%;
-  font-family: Montserrat;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.8em;
   font-weight: normal;
   font-style: normal;

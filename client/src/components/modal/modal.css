@@ -5,7 +5,7 @@
 
 h4 {
   background-color: #5499c3;
-  font-family: Montserrat;
+  font-family: 'Montserrat', sans-serif;
   font-size: 1.25em;
   font-weight: normal;
   font-style: normal;
@@ -36,7 +36,7 @@ h4 {
 }
 
 .Text-blue {
-  font-family: Montserrat;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.9em;
   font-weight: normal;
   font-style: normal;
@@ -48,7 +48,7 @@ h4 {
 }
 
 .Text-blue-bold {
-  font-family: Montserrat;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.9em;
   font-weight: bold;
   font-style: normal;
@@ -60,7 +60,7 @@ h4 {
 }
 
 .Text-grey {
-  font-family: Montserrat;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.9em;
   font-weight: normal;
   font-style: normal;
@@ -72,7 +72,7 @@ h4 {
 }
 
 .Text-grey-bold {
-  font-family: Montserrat;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.9em;
   font-weight: bold;
   font-style: normal;
@@ -84,7 +84,7 @@ h4 {
 }
 
 .Modal-info-text {
-  font-family: Montserrat;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.85em;
   font-weight: normal;
   font-style: normal;
@@ -101,7 +101,7 @@ h4 {
 }
 
 .Modal-text-blue {
-  font-family: Montserrat;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.9em !important;
   font-weight: normal;
   font-style: normal;
@@ -113,7 +113,7 @@ h4 {
 }
 
 .Modal-text-gray {
-  font-family: Montserrat;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.9em !important;
   font-weight: normal;
   font-style: normal;
@@ -125,7 +125,7 @@ h4 {
 }
 
 .Modal-text-orange {
-  font-family: Montserrat;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.9em !important;
   font-weight: normal;
   font-style: normal;
@@ -138,7 +138,7 @@ h4 {
 
 .Customer-text-highlighted {
   width: 100%;
-  font-family: Montserrat;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.8em;
   font-weight: normal;
   font-style: normal;
@@ -147,11 +147,40 @@ h4 {
   letter-spacing: normal;
   margin-bottom: 2px;
   padding: 0.15625em;
-  border-radius: 0.15625em 0em 0em 0.15625em;
+  border-radius: 0.15625em;
   background-color: #5499c3;
   color: #ffffff;
 }
 
 tr > td > div > div {
   width: 100%;
+}
+
+.Change-button {
+  margin-top: 1em;
+  background-color: #5499c3;
+  width: 100%;
+  border-radius: 0.3125em;
+  padding: 0.625em;
+}
+
+.Change-text {
+  color: #ffffff;
+  text-align: center;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.9em;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.2;
+  letter-spacing: normal;
+}
+
+.Password-form-box {
+  padding: 1em !important;
+  border-bottom: 1px solid #EAEAEA;
+}
+
+.Password-button-form-box {
+  padding: 1em !important;
 }

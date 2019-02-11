@@ -8,8 +8,7 @@
 }
 
 a.brand-logo {
-  margin-left: 1em;
-  font-family: Montserrat;
+  font-family: 'Montserrat', sans-serif;
   font-size: 1.75em;
   font-weight: normal;
   font-style: normal;
@@ -19,7 +18,7 @@ a.brand-logo {
 }
 
 nav ul a {
-  font-family: Montserrat;
+  font-family: 'Montserrat', sans-serif;
   font-size: 1em;
   font-weight: normal;
   font-style: normal;
@@ -30,4 +29,10 @@ nav ul a {
 
 .right {
   margin-right: 2em;
+}
+
+@media only screen and (min-width: 1024px) {
+  a.brand-logo {
+    margin-left: 1em;
+  }
 }

@@ -9,6 +9,7 @@ import Button from '../../button/button';
 import DisabledButton from '../../button/buttonDisabled';
 import { handleBasicDateInput } from '../../../store/dashboard/dashboard.actions';
 import { getFilteredTransactions, exportToExcel } from '../../../store/firestore/transaction/transaction.actions';
+import { getTotalTransaction } from '../../../helpers/currency';
 
 class reportsTransaction extends Component {
   render() {
@@ -25,6 +26,7 @@ class reportsTransaction extends Component {
       reportHeaders,
       exportToExcel,
       user,
+      salesTransactions,
     } = this.props
     // console.log('reportTransaction', this.props)
 
@@ -134,6 +136,18 @@ class reportsTransaction extends Component {
                         <th>
                           <div className="Table-text Text-capitalize">{ shop.name }</div>
                         </th>
+                        <th>
+                          <div className="Table-text-header">Start Date :</div>
+                        </th>
+                        <th>
+                          <div className="Table-text">{ startDate }</div>
+                        </th>
+                        <th>
+                          <div className="Table-text-header">Number of Sales  :</div>
+                        </th>
+                        <th>
+                          <div className="Table-text">{ salesTransactions.length }</div>
+                        </th>
                       </tr>
                       <tr style={{ height:'5vh' }}>
                         <th>
@@ -142,21 +156,17 @@ class reportsTransaction extends Component {
                         <th>
                           <div className="Table-text Text-capitalize">{ branch.name }</div>
                         </th>
-                      </tr>
-                      <tr style={{ height:'5vh' }}>
-                        <th>
-                          <div className="Table-text-header">Start Date :</div>
-                        </th>
-                        <th>
-                          <div className="Table-text">{ startDate }</div>
-                        </th>
-                      </tr>
-                      <tr style={{ height:'5vh' }}>
                         <th>
                           <div className="Table-text-header">End Date :</div>
                         </th>
                         <th>
                           <div className="Table-text">{ endDate }</div>
+                        </th>
+                        <th>
+                          <div className="Table-text-header">Total Sales  :</div>
+                        </th>
+                        <th>
+                          <div className="Table-text">{ getTotalTransaction(salesTransactions) }</div>
                         </th>
                       </tr>
                       <tr style={{ borderTop: '1px solid #EAEAEA' }}>
@@ -232,6 +242,7 @@ const mapStateToProps = state => {
     filteredTransactions: state.transaction.filteredTransactions,
     reportHeaders: state.transaction.reportHeaders,
     user: state.auth.user,
+    salesTransactions: state.transaction.salesTransactions,
   }
 }
 

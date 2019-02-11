@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import '../../assets/css/general.css';
-import Welcome from '../display/welcome';
+import Welcome from '../display/welcome/welcome';
 import Calendar from '../display/calendar/calendar';
 import Manage from '../display/manage/manage';
 import ManageShopAndBranch from '../display/manage/manageShop&Branch';

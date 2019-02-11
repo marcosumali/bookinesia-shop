@@ -13,7 +13,7 @@
 }
 
 .Header-text {
-  font-family: Montserrat;
+  font-family: 'Montserrat', sans-serif;
   font-size: 1.25em;
   font-weight: 800;
   font-style: normal;
@@ -45,7 +45,7 @@
 }
 
 .Menu-text {
-  font-family: Montserrat;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.75em;
   font-weight: normal;
   font-style: normal;
@@ -56,7 +56,7 @@
 }
 
 .Sub-menu-text {
-  font-family: Montserrat;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.75em;
   font-weight: normal;
   font-style: normal;
@@ -78,5 +78,57 @@
 }
 
 .Account-text {
+  font-family: 'Montserrat', sans-serif;
   text-transform: capitalize;
+}
+
+.Legends-box {
+  margin: 0.625em !important;
+  padding: 0.3125em !important;
+  background-color: #ffffff;
+  border-radius: 0.3125em;
+  width: 13.25% !important;
+  position: fixed;
+  bottom: 0;
+}
+
+.Legends-status-box {
+  margin-bottom: 0.5em !important;
+}
+
+.Legends-text-box {
+  margin-bottom: 2px !important;
+}
+
+.Legends-header-text {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.9em;
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.2;
+  letter-spacing: normal;
+  color: #5499c3;
+  text-align: center;
+  margin-top: 0.5em;
+  margin-bottom: 0.75em;
+}
+
+.Legends-text {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.75em;
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.2;
+  letter-spacing: normal;
+  color: #666666;
+  text-align: left;
+}
+
+/* For Laptop CSS */
+@media only screen and (min-width: 1440px) {
+  .Legends-box {
+    width: 14% !important;
+  }  
 }

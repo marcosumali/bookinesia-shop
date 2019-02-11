@@ -21,6 +21,7 @@ let initialState = {
   endDate: '',
   filterErrors: [],
   filteredTransactions: [],
+  salesTransactions: [],
   reportHeaders: ['Transaction ID', 'Appointment Date', 'Provider Name', 'Service Name', 'Service Price', 'Customer Name', 'Customer Phone', 'Transaction Status', 'Payment Method'],
 }
 
@@ -122,6 +123,11 @@ const transactionDataList = (state = { ...initialState }, action) => {
       return ({
         ...state,
         filteredTransactions: action.payload,
+      })
+    case 'SET_SALES_TRANSACTIONS':
+      return ({
+        ...state,
+        salesTransactions: action.payload,
       })
     default:
       return state;

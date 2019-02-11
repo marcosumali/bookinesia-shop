@@ -87,6 +87,9 @@ export const getDMSCookies = (cookies) => {
       dispatch(setReportsToShow(reportsShowStatus))
       dispatch(setMenuToShow(menuToShow))
       dispatch(setSubMenuToShow(subMenuToShow))
+    } else {
+      dispatch(setDisplayToShow('Welcome'))
+      dispatch(setMenuToShow('Welcome'))
     }
   }
 }

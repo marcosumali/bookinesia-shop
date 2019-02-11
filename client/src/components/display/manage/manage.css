@@ -21,8 +21,7 @@
 }
 
 .Manage-headers {
-  font-family: Montserrat;
-  font-size: 1em;
+  font-family: 'Montserrat', sans-serif;  font-size: 1em;
   font-weight: bold;
   font-style: normal;
   font-stretch: normal;
@@ -41,8 +40,7 @@
 }
 
 .Manage-text {
-  font-family: Montserrat;
-  font-size: 0.75em;
+  font-family: 'Montserrat', sans-serif;  font-size: 0.75em;
   font-weight: normal;
   font-style: normal;
   font-stretch: normal;
@@ -53,8 +51,7 @@
 }
 
 .Manage-text-gray {
-  font-family: Montserrat;
-  font-size: 0.75em;
+  font-family: 'Montserrat', sans-serif;  font-size: 0.75em;
   font-weight: normal;
   font-style: normal;
   font-stretch: normal;
@@ -65,8 +62,7 @@
 }
 
 .Manage-text-orange {
-  font-family: Montserrat;
-  font-size: 0.75em;
+  font-family: 'Montserrat', sans-serif;  font-size: 0.75em;
   font-weight: normal;
   font-style: normal;
   font-stretch: normal;
@@ -88,8 +84,7 @@
 }
 
 .Start-text {
-  font-family: Montserrat;
-  font-size: 0.9em;
+  font-family: 'Montserrat', sans-serif;  font-size: 0.9em;
   font-weight: normal;
   font-style: normal;
   font-stretch: normal;
@@ -113,8 +108,7 @@
 }
 
 .Manage-content-header-text {
-  font-family: Montserrat;
-  font-size: 1.25em;
+  font-family: 'Montserrat', sans-serif;  font-size: 1.25em;
   font-weight: normal;
   font-style: normal;
   font-stretch: normal;
@@ -167,8 +161,7 @@
 }
 
 .Manage-barber-service-text {
-  font-family: Montserrat;
-  font-weight: normal;
+  font-family: 'Montserrat', sans-serif;  font-weight: normal;
   font-style: normal;
   font-stretch: normal;
   line-height: 1.2;
@@ -179,8 +172,7 @@
 }
 
 .Manage-barber-hours-text-blue {
-  font-family: Montserrat;
-  font-size: 1em;
+  font-family: 'Montserrat', sans-serif;  font-size: 1em;
   font-weight: normal;
   font-style: normal;
   font-stretch: normal;
@@ -190,8 +182,7 @@
 }
 
 .Manage-barber-hours-text-gray {
-  font-family: Montserrat;
-  font-size: 1em;
+  font-family: 'Montserrat', sans-serif;  font-size: 1em;
   font-weight: normal;
   font-style: normal;
   font-stretch: normal;

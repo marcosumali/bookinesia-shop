@@ -190,6 +190,13 @@
   justify-content: flex-end;
 }
 
+.Container-wrap-end {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+}
+
 .Container-nowrap-center-end {
   display: flex;
   flex-wrap: nowrap;
