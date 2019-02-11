@@ -672,9 +672,18 @@ export const getFilteredTransactions = (startDate, endDate, branchId) => {
               transactions.push(revisedData)
               return ''
             })
-
           })
           dispatch(setFilterTransaction(transactions))
+
+          let sales = []
+          transactions && transactions.map((transaction) => {
+            if (transaction.status === 'finished') {
+              sales.push(transaction.service)
+            }
+            return ''
+          })
+          dispatch(setSalesTransaction(sales))
+
         } else {
           let emptyObj = {
             message: 'empty',
@@ -707,6 +716,13 @@ export const setFilterTransactionEndDate = (data) => {
 const setFilterTransaction = (data) => {
   return {
     type: 'SET_FILTER_TRANSACTIONS',
+    payload: data
+  }
+}
+
+const setSalesTransaction = (data) => {
+  return {
+    type: 'SET_SALES_TRANSACTIONS',
     payload: data
   }
 }

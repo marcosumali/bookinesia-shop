@@ -11,8 +11,8 @@ export default class inputPassword extends Component {
     }
   }
 
-  passwordVisibility() {
-    let x = document.getElementById("password")
+  passwordVisibility(inputId) {
+    let x = document.getElementById(inputId)
     if (x.type === "password") {
       x.type = "text"
       this.setState({
@@ -29,13 +29,13 @@ export default class inputPassword extends Component {
   render() {
 
     let {
-      inputId, inputLabel, inpuError, inputValue, handleChangesFunction
+      inputId, inputLabel, inputError, inputValue, handleChangesFunction
     } = this.props
 
     return (
       <div className="input-field">
         {
-          inpuError !== false?
+          inputError !== false?
           <div>
             <div className="col m11 No-margin No-padding">
               <input 
@@ -47,9 +47,9 @@ export default class inputPassword extends Component {
                 value={ inputValue }
               />
               <label htmlFor={ inputId } className="Form-text active">{ inputLabel }</label>
-              <span className="Input-info-error">{ inpuError }</span>
+              <span className="Input-info-error">{ inputError }</span>
             </div>
-            <div className="col m1 No-margin No-padding Margin-t-8 Container-wrap-center" onClick={ () => this.passwordVisibility() }>
+            <div className="col m1 No-margin No-padding Margin-t-8 Container-wrap-center" onClick={ () => this.passwordVisibility(inputId) }>
               {
                 this.state.visibilityStatus ?
                 <EyeSvg width="25px" height="22px" color="#666666" />
@@ -61,7 +61,7 @@ export default class inputPassword extends Component {
           :
           <div>
             {
-              inputValue !== "" ?
+              inputValue.length > 0 ?
               <div>
                   <div className="col m11 No-margin No-padding">
                     <input 
@@ -74,7 +74,7 @@ export default class inputPassword extends Component {
                     />
                     <label htmlFor={ inputId } className="Form-text active">{ inputLabel }</label>
                   </div>
-                  <div className="col m1 No-margin No-padding Margin-t-8 Container-wrap-center" onClick={ () => this.passwordVisibility() }>
+                  <div className="col m1 No-margin No-padding Margin-t-8 Container-wrap-center" onClick={ () => this.passwordVisibility(inputId) }>
                     {
                       this.state.visibilityStatus ?
                       <EyeSvg width="25px" height="22px" color="#666666" />
@@ -96,7 +96,7 @@ export default class inputPassword extends Component {
                   />
                   <label htmlFor={ inputId } className="Form-text">{ inputLabel }</label>
                 </div>
-                <div className="col m1 No-margin No-padding Margin-t-8 Container-wrap-center" onClick={ () => this.passwordVisibility() }>
+                <div className="col m1 No-margin No-padding Margin-t-8 Container-wrap-center" onClick={ () => this.passwordVisibility(inputId) }>
                   {
                     this.state.visibilityStatus ?
                     <EyeSvg width="25px" height="22px" color="#666666" />

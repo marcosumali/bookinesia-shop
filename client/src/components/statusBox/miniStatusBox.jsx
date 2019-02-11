@@ -5,7 +5,6 @@ import './statusBox.css';
 export default class miniStatusBox extends Component {
   render() {
     let { status } = this.props
-    console.log('asd', status)
     return (
       <div className="Inherit">
         {

@@ -1,0 +1,139 @@
+/* ----------------------- Welcome Info CSS ----------------------- */
+.Svg-box {
+  height: 7em;
+}
+
+.Info-outer-box {
+  margin-bottom: 2em !important;
+}
+
+.General-text {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2em;
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.2;
+  letter-spacing: normal;
+  color: #f68606;
+  margin-top: 0.25em;
+  margin-bottom: 1.5em;
+}
+
+.Info-header-text {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.5em;
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.2;
+  letter-spacing: normal;
+  color: #5499c3;
+  margin-bottom: 0.5em;
+}
+
+.Info-text {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.9em;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.2;
+  letter-spacing: normal;
+  color: #666666;
+  margin-bottom: 0.5em;
+  text-align: justify;
+  line-height: 175%;
+}
+
+/* ----------------------- Welcome Account CSS ----------------------- */
+.Welcome-box {
+  background-color: #FAFAFA;
+  padding: 0.625em !important;
+  height: 100%;
+  border-top: 1px solid #EAEAEA;
+}
+
+.Description-box {
+  background-color: #ffffff;
+  border: 1px solid #EAEAEA;
+  border-radius: 5px;
+  height: 100%;
+  margin-right: 0.625em;
+  padding: 0.625em !important;
+  /* overflow-y: scroll; */
+}
+
+.Detail-account-header-box {
+  margin-top: 0.5em !important;
+  height: 5vh;
+  margin-bottom: 1em !important;
+}
+
+.Detail-account-box {
+  background-color: #ffffff;
+  border: 1px solid #EAEAEA;
+  border-radius: 5px;
+  height: inherit;
+  padding: 1em !important;
+}
+
+.Detail-account-header-text {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.25em;
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.2;
+  letter-spacing: normal;
+  color: #666666;
+}
+
+.Detail-account-info-box {
+  margin-bottom: 1em !important;
+}
+
+.Url-link {
+  color: #5499c3;
+  text-decoration: underline;
+  text-decoration-color: #5499c3;
+
+  /* These are technically the same, but use both */
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+
+  -ms-word-break: break-all;
+  /* This is the dangerous one in WebKit, as it breaks things wherever */
+  word-break: break-all;
+  /* Instead use this non-standard one: */
+  word-break: break-word;
+
+  /* Adds a hyphen where the word breaks, if supported (No Blink) */
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+.Detail-account-text-gray {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1em;
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.2;
+  letter-spacing: normal;
+  color: #666666;
+  margin-bottom: 0.25em;
+}
+
+.Detail-account-text-blue {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1em;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.2;
+  letter-spacing: normal;
+  color: #5499c3;
+}

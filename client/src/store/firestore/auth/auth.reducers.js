@@ -11,6 +11,13 @@ let initialState = {
   isOwner: false,
   user: '',
   onlineStatus: '',
+  oldPassword: '',
+  oldPasswordError: false,
+  newPassword: '',
+  newPasswordError: false,
+  newPasswordConfirm: '',
+  newPasswordConfirmError: false,
+  passwordChangeErrors: [],
 }
 
 const authDataList = (state = { ...initialState }, action) => {
@@ -74,6 +81,41 @@ const authDataList = (state = { ...initialState }, action) => {
       return ({
         ...state,
         onlineStatus: action.payload,
+      })
+    case 'SET_PASSWORD_OLD':
+      return ({
+        ...state,
+        oldPassword: action.payload,
+      })
+    case 'SET_PASSWORD_NEW':
+      return ({
+        ...state,
+        newPassword: action.payload,
+      })
+    case 'SET_PASSWORD_NEW_CONFIRMATION':
+      return ({
+        ...state,
+        newPasswordConfirm: action.payload,
+      })
+    case 'SET_PASSWORD_OLD_ERROR':
+      return ({
+        ...state,
+        oldPasswordError: action.payload,
+      })
+    case 'SET_PASSWORD_NEW_ERROR':
+      return ({
+        ...state,
+        newPasswordError: action.payload,
+      })
+    case 'SET_PASSWORD_NEW_CONFIRMATION_ERROR':
+      return ({
+        ...state,
+        newPasswordConfirmError: action.payload,
+      })
+    case 'SET_PASSWORD_CHANGE_ERROR':
+      return ({
+        ...state,
+        passwordChangeErrors: action.payload,
       })
     default:
       return state;

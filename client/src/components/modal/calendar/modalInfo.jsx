@@ -11,7 +11,7 @@ import DisabledButton from '../../button/buttonDisabled';
 import StatusBox from '../../statusBox/statusBox';
 import SelectInput from '../../form/inputSelect';
 import MiniStatusBox from '../../statusBox/miniStatusBox';
-import miniStatusBoxDisabled from '../../statusBox/miniStatusBoxDisabled';
+import MiniStatusBoxDisabled from '../../statusBox/miniStatusBoxDisabled';
 import { formatMoney, getTotalTransaction } from '../../../helpers/currency';
 import { 
   handleUpdateStatus,
@@ -78,16 +78,18 @@ class modalInfo extends Component {
             {
               appointment.disableStatus ?
               <div className="Width-100cent">
-                <div className="col m11 No-margin No-padding">
-                  {
-                    transaction.queueNo === appointment.currentQueue ?
-                    <div className="Customer-text-highlighted Text-capitalize Disabled">{ transaction.name }</div>
-                    :
-                    <div className="Customer-text Text-capitalize Disabled" style={{ padding: '0.15625em' }}>{ transaction.name }</div>
-                  }
-                </div>
-                <div className="col m1 No-margin No-padding">
-                  <miniStatusBoxDisabled status={ transaction.status } />
+                <div className="col m12 No-margin No-padding Container-nowrap-center-cross">
+                  <div className="col m11 No-margin No-padding Margin-r-5">
+                    {
+                      transaction.queueNo === appointment.currentQueue ?
+                      <div className="Customer-text-highlighted Text-capitalize Disabled">{ transaction.name }</div>
+                      :
+                      <div className="Customer-text Text-capitalize Disabled" style={{ padding: '0.15625em' }}>{ transaction.name }</div>
+                    }
+                  </div>
+                  <div className="col m1 No-margin No-padding">
+                    <MiniStatusBoxDisabled status={ transaction.status } />
+                  </div>
                 </div>
                 <div className="col m12 No-margin No-padding">
                   <div className="Customer-phone Disabled">{ transaction.phone }</div>
@@ -95,16 +97,18 @@ class modalInfo extends Component {
               </div>
               :
               <div className="Width-100cent">
-                <div className="col m11 No-margin No-padding">
-                  {
-                    transaction.queueNo === appointment.currentQueue ?
-                    <div className="Customer-text-highlighted Text-capitalize">{ transaction.name }</div>
-                    :
-                    <div className="Customer-text Text-capitalize" style={{ padding: '0.15625em' }}>{ transaction.name }</div>
-                  }
-                </div>
-                <div className="col m1 No-margin No-padding">
-                  <MiniStatusBox status={ transaction.status } />
+                <div className="col m12 No-margin No-padding Container-nowrap-center-cross">
+                  <div className="col m11 No-margin No-padding Margin-r-5">
+                    {
+                      transaction.queueNo === appointment.currentQueue ?
+                      <div className="Customer-text-highlighted Text-capitalize">{ transaction.name }</div>
+                      :
+                      <div className="Customer-text Text-capitalize" style={{ padding: '0.15625em' }}>{ transaction.name }</div>
+                    }
+                  </div>
+                  <div className="col m1 No-margin No-padding">
+                    <MiniStatusBox status={ transaction.status } />
+                  </div>
                 </div>
                 <div className="col m12 No-margin No-padding">
                   <div className="Customer-phone">{ transaction.phone }</div>
