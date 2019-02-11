@@ -20,8 +20,7 @@
 }
 
 .Report-header-text {
-  font-family: Montserrat;
-  font-size: 1.25em;
+  font-family: 'Montserrat', sans-serif;  font-size: 1.25em;
   font-weight: normal;
   font-style: normal;
   font-stretch: normal;
@@ -42,8 +41,7 @@
 }
 
 .Report-text-orange {
-  font-family: Montserrat;
-  font-size: 0.75em;
+  font-family: 'Montserrat', sans-serif;  font-size: 0.75em;
   font-weight: bold;
   font-style: normal;
   font-stretch: normal;
@@ -57,8 +55,7 @@
 }
 
 .Table-text {
-  font-family: Montserrat;
-  font-size: 0.75em;
+  font-family: 'Montserrat', sans-serif;  font-size: 0.75em;
   font-weight: normal;
   font-style: normal;
   font-stretch: normal;
@@ -68,8 +65,7 @@
 }
 
 .Table-text-header {
-  font-family: Montserrat;
-  font-size: 0.75em;
+  font-family: 'Montserrat', sans-serif;  font-size: 0.75em;
   font-weight: bold;
   font-style: normal;
   font-stretch: normal;

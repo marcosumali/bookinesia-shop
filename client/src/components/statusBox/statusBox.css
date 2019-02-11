@@ -46,7 +46,7 @@
 }
 
 .Status-text {
-  font-family: Montserrat;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.75em;
   font-weight: normal;
   font-style: normal;
@@ -71,7 +71,7 @@
 }
 
 .Online-text {
-  font-family: Montserrat;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.9em;
   font-weight: bold;
   font-style: normal;
@@ -95,7 +95,7 @@
 }
 
 .Offline-text {
-  font-family: Montserrat;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.9em;
   font-weight: bold;
   font-style: normal;

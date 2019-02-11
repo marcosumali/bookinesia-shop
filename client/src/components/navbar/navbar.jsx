@@ -14,7 +14,7 @@ class navbar extends Component {
 
     return (
       <div className="Nav-outer-box">
-        <Navbar className="Nav-box" brand='Bookinesia' right fixed>
+        <Navbar className="Nav-box" brand='Bookinesia' right>
           <div>
             {
               isAuthenticated ?

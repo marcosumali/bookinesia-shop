@@ -168,7 +168,7 @@ input[type="radio"].with-gap:checked+label:after {
 }
 .select-wrapper input.select-dropdown {
   margin: 0;
-  font-family: Montserrat;
+  font-family: 'Montserrat', sans-serif;
   font-size: 1em;
   font-weight: normal;
   font-style: normal;
@@ -189,7 +189,7 @@ input[type="radio"].with-gap:checked+label:after {
 } /* To edit the li section of select input */
 .dropdown-content li>a, .dropdown-content li>span {
   padding: 5px;
-  font-family: Montserrat;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.75em;
   font-weight: normal;
   font-style: normal;
@@ -225,7 +225,7 @@ input[type="radio"].with-gap:checked+label:after {
 
 /* General Form CSS */
 .Form-text {
-  font-family: Montserrat;
+  font-family: 'Montserrat', sans-serif;
   font-weight: normal;
   font-style: normal;
   font-stretch: normal;
@@ -234,7 +234,7 @@ input[type="radio"].with-gap:checked+label:after {
 }
 
 .Form-text-active {
-  font-family: Montserrat;
+  font-family: 'Montserrat', sans-serif;
   font-weight: normal;
   font-style: normal;
   font-stretch: normal;
@@ -245,7 +245,7 @@ input[type="radio"].with-gap:checked+label:after {
 }
 
 .Form-text-active-blue {
-  font-family: Montserrat;
+  font-family: 'Montserrat', sans-serif;
   font-weight: normal;
   font-style: normal;
   font-stretch: normal;
