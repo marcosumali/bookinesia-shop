@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import { handleChangesManageBranch, validateAndUpdateBranch, handleSingleFileInputBranch } from '../../../store/firestore/branch/branch.actions';
 import { handleMultipleSelectOption, handleCancelation } from '../../../store/dashboard/dashboard.actions';
 import TextInput from '../../form/inputText';
-import NumberInput from '../../form/inputNumber';
+import TelephoneInput from '../../form/inputTelephone';
 import SelectInput from '../../form/inputSelect';
 import FileInput from '../../form/inputFile';
 import Button from '../../button/button';
@@ -74,7 +74,7 @@ class manageBranch extends Component {
                 />
               </div>
               <div className="col m12 No-padding Margin-t-10 Margin-b-10">
-                <NumberInput 
+                <TelephoneInput 
                   inputId="phone"
                   inputLabel="Phone Number"
                   inputError={ branchPhoneInputError }

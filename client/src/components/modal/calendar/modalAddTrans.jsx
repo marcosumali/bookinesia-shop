@@ -8,7 +8,7 @@ import CloseSvg from '../../../components/svg/closeSvg';
 import AccountCircleSvg from '../../../components/svg/accountCircleSvg';
 import AddBoxSvg from '../../svg/addBoxSvg';
 import TextInput from '../../form/inputText';
-import NumberInput from '../../form/inputNumber';
+import TelephoneInput from '../../form/inputTelephone';
 import EmailInput from '../../form/inputEmail';
 import CheckboxInput from '../../form/inputCheckbox';
 import RadioInput from '../../form/inputRadio';
@@ -125,7 +125,7 @@ class modalAddTrans extends Component {
               />
             </div>
             <div className="col m12 No-margin No-padding Margin-b-16">
-              <NumberInput 
+              <TelephoneInput 
                 inputId="phone"
                 inputLabel="Phone Number"
                 inputError={ addPhoneError }
