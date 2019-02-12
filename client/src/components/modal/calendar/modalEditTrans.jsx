@@ -6,7 +6,6 @@ import { Modal } from 'react-materialize';
 import '../modal.css';
 import CloseSvg from '../../../components/svg/closeSvg';
 import AccountCircleSvg from '../../../components/svg/accountCircleSvg';
-import AddBoxSvg from '../../svg/addBoxSvg';
 import TextInput from '../../form/inputText';
 import TelephoneInput from '../../form/inputTelephone';
 import EmailInput from '../../form/inputEmail';
@@ -17,33 +16,36 @@ import LoadingButton from '../../button/buttonLoading';
 import { formatMoney, getTotalTransaction } from '../../../helpers/currency';
 import { returnWhatDay, returnWhatMonth } from '../../../helpers/date';
 import { handleMultipleCheckboxStatus, handleMultipleCheckbox, handleRadio } from '../../../store/dashboard/dashboard.actions';
-import { handleChangesNewTransaction, validateAndAddNewTransaction, clearAddTransaction } from '../../../store/firestore/transaction/transaction.actions';
+import { handleChangesEditTransaction, validateAndEditTransaction, clearEditTransaction, setInitialTransaction } from '../../../store/firestore/transaction/transaction.actions';
 
-class modalAddTrans extends Component {
+class modalEditTrans extends Component {
+  doNothing() {
+  }
+
   render() {
     let {
-      shop,
-      branch,
+      transaction,
       barber,
       selectedDate,
-      handleChangesNewTransaction,
-      addName,
-      addNameError,
-      addEmail,
-      addEmailError,
-      addPhone,
-      addPhoneError,
+      handleChangesEditTransaction,
+      editName,
+      editNameError,
+      editEmail,
+      editEmailError,
+      editPhone,
+      editPhoneError,
       selectedPrimaryService,
       selectedSecondaryServices,
       services,
       handleMultipleCheckbox,
       handleMultipleCheckboxStatus,
       handleRadio,
-      validateAndAddNewTransaction,
+      validateAndEditTransaction,
       transactionErrors,
       loadingStatus,
-      clearAddTransaction,
+      clearEditTransaction,
       authUser,
+      setInitialTransaction,
     } = this.props
     let appointmentDate = `${returnWhatDay(new Date(selectedDate).getDay())}, ${new Date(selectedDate).getDate()} ${returnWhatMonth(new Date(selectedDate).getMonth())} ${new Date(selectedDate).getFullYear()}`
 
@@ -73,27 +75,41 @@ class modalAddTrans extends Component {
       type: authUser.job,
       id: authUser.id
     }
-    // console.log('modalAddTrans', this.props)
-  
+    // console.log('modalEditTrans', this.props)
+    const options = {
+      dismissible: false,
+      ready: function() {
+        setInitialTransaction(transaction.name, transaction.phone, transaction.email)
+      }
+    }
     return (
       <Modal
+        modalOptions={ options }
         header={ 
           <div className="row No-margin Container-one-line">
             <div className="col m10 No-margin No-padding">
-              <div>Add New Transaction</div>
+              <div>Edit Transaction</div>
             </div>
-            <div className="col m2 No-margin No-padding Container-nowrap-end modal-close" onClick={ () => clearAddTransaction() }>
+            <div className="col m2 No-margin No-padding Container-nowrap-end modal-close" onClick={ () => clearEditTransaction() }>
               <CloseSvg width="1.25em" height="1.25em" color="#ffffff" />
             </div> 
           </div> 
         }
         trigger={
           <div className="Height-100cent Container-nowrap-center">
-            <AddBoxSvg height="1.6em" width="1.6em" color="#F68606"/>
+            <Button 
+              text="Edit"
+              type="Btn-white-blue No-margin"
+              clickFunction={ () => this.doNothing() }
+              data=""
+            />
           </div>
         }>
         <div className="row No-margin">
           <div className="col m12 No-margin No-padding Modal-body-box">
+            <div className="col m12 No-margin No-padding Container-nowrap-center-cross Margin-b-10">
+              <div className="Modal-text-gray"><span style={{ fontWeight: 'bold' }}>Transaction Code : </span>{ transaction.id }</div>
+            </div>
             <div className="col m12 No-margin No-padding Container-nowrap-center-cross">
               <div className="col m1 No-margin No-padding Container-nowrap-center Barber-image-box">
                 {
@@ -108,7 +124,7 @@ class modalAddTrans extends Component {
                   <div className="Manage-text" style={{ fontSize: '1em' }} >{ barber.name }</div>
                 </div>
                 <div className="col m12 No-margin No-padding">
-                  <div className="Modal-text-orange Margin-b-5">Appointment Date: { appointmentDate }</div>
+                  <div className="Modal-text-orange Margin-b-5">Appointment Date : { appointmentDate }</div>
                 </div>
               </div>
             </div>
@@ -119,27 +135,27 @@ class modalAddTrans extends Component {
               <TextInput 
                 inputId="name"
                 inputLabel="Name"
-                inputError={ addNameError }
-                inputValue={ addName }
-                handleChangesFunction={ handleChangesNewTransaction }
+                inputError={ editNameError }
+                inputValue={ editName }
+                handleChangesFunction={ handleChangesEditTransaction }
               />
             </div>
             <div className="col m12 No-margin No-padding Margin-b-16">
               <TelephoneInput 
                 inputId="phone"
                 inputLabel="Phone Number"
-                inputError={ addPhoneError }
-                inputValue={ addPhone }
-                handleChangesFunction={ handleChangesNewTransaction }
+                inputError={ editPhoneError }
+                inputValue={ editPhone }
+                handleChangesFunction={ handleChangesEditTransaction }
               />
             </div>
             <div className="col m12 No-margin No-padding Margin-b-16">
               <EmailInput 
                 inputId="email"
                 inputLabel="Email"
-                inputError={ addEmailError }
-                inputValue={ addEmail }
-                handleChangesFunction={ handleChangesNewTransaction }
+                inputError={ editEmailError }
+                inputValue={ editEmail }
+                handleChangesFunction={ handleChangesEditTransaction }
               />
             </div>
           </div>
@@ -151,7 +167,7 @@ class modalAddTrans extends Component {
             <div className="col m6 No-margin No-padding Margin-b-5">
               <div className="Modal-text-blue">Additional Services</div>
             </div>
-            <div className="col m6 No-margin No-padding Margin-b-10" style={{ paddingRight: '0.625em' }}>
+            <div className="col m6 No-margin No-padding  Margin-b-10" style={{ paddingRight: '0.625em' }}>
               {
                 primaryServices && primaryServices.map((service, index) => {
                   return (
@@ -180,7 +196,7 @@ class modalAddTrans extends Component {
                 })
               }
             </div>
-            <div className="col m6 No-margin No-padding Margin-b-10" style={{ paddingRight: '0.625em' }}>
+            <div className="col m6 No-padding No-margin Margin-b-10" style={{ paddingRight: '0.625em' }}>
               {
                 secondaryServices && secondaryServices.map((service, index) => {
                   return (
@@ -236,8 +252,8 @@ class modalAddTrans extends Component {
                 <Button 
                   text="Save"
                   type="Btn-white-blue"
-                  clickFunction={ validateAndAddNewTransaction }
-                  data={{ name: addName, phone: addPhone, email: addEmail, selectedServices, branch, staff: barber, date: selectedDate, shop, user }}
+                  clickFunction={ validateAndEditTransaction }
+                  data={{ name: editName, phone: editPhone, email: editEmail, selectedServices, transaction, user }}
                 />
               }
             </div>
@@ -255,12 +271,12 @@ const mapStateToProps = state => {
     shop: state.shop.shop,
     branch: state.branch.branch,
     selectedDate: state.appointment.selectedDate,
-    addName: state.transaction.addName,
-    addNameError: state.transaction.addNameError,
-    addPhone: state.transaction.addPhone,
-    addPhoneError: state.transaction.addPhoneError,
-    addEmail: state.transaction.addEmail,
-    addEmailError: state.transaction.addEmailError,
+    editName: state.transaction.editName,
+    editNameError: state.transaction.editNameError,
+    editPhone: state.transaction.editPhone,
+    editPhoneError: state.transaction.editPhoneError,
+    editEmail: state.transaction.editEmail,
+    editEmailError: state.transaction.editEmailError,
     services: state.service.services,
     selectedPrimaryService: state.transaction.selectedPrimaryService,
     selectedSecondaryServices: state.transaction.selectedSecondaryServices,
@@ -271,14 +287,15 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  handleChangesNewTransaction,
+  handleChangesEditTransaction,
   handleMultipleCheckboxStatus,
   handleMultipleCheckbox,
   handleRadio,
-  validateAndAddNewTransaction,
-  clearAddTransaction,
+  validateAndEditTransaction,
+  clearEditTransaction,
+  setInitialTransaction,
 }, dispatch)
 
 
-export default connect(mapStateToProps, mapDispatchToProps) (modalAddTrans);
+export default connect(mapStateToProps, mapDispatchToProps) (modalEditTrans);
 
