@@ -518,7 +518,7 @@ export const validateAndAddNewTransaction = (data) => {
       }
     }
 
-    dispatch(setAddTransactionErros(transactionErrors))
+    dispatch(setTransactionErrors(transactionErrors))
 
     if (name.length > 0 && phone.length >= 8 && email.length > 0 && validateEmail(email) && selectedServices.length > 0 && isAppExists.id && Number(isAppExists.currentTransaction) < Number(isAppExists.maxQueue)) {
       data['appointment'] = isAppExists
@@ -528,7 +528,7 @@ export const validateAndAddNewTransaction = (data) => {
   }
 }
 
-export const setAddTransactionErros = (data) => {
+export const setTransactionErrors = (data) => {
   return {
     type: 'SET_TRANSACTION_ERRORS',
     payload: data
@@ -578,7 +578,7 @@ export const createNewTransaction = (data) => {
     transactionRef.add(newTransaction)
     .then(ref => {
       newTransaction['id'] = ref.id
-      dispatch(setAddTransactionErros([]))
+      dispatch(setTransactionErrors([]))
       dispatch(setAddNameError(false))
       dispatch(setAddPhoneError(false))
       dispatch(setAddEmailError(false))
@@ -606,7 +606,7 @@ export const setTransactionLoadingStatus = (data) => {
 export const clearAddTransaction = () => {
   return (dispatch, getState, { getFirebase, getFirestore }) => {
     let errors = []
-    dispatch(setAddTransactionErros(errors))
+    dispatch(setTransactionErrors(errors))
     dispatch(setAddNameError(false))
     dispatch(setAddPhoneError(false))
     dispatch(setAddEmailError(false))
@@ -765,4 +765,181 @@ export const exportToExcel = (data) => {
 
     saveAs(new Blob([BinaryToOctet(workbook_out)],{ type:"application/octet-stream" }), `TR_${shop.id}_${branch.name}_${startDate}_${endDate}.xlsx`);
   }
+}
+
+// To set initial edit transaction 
+export const setInitialTransaction = (name, phone, email) => {
+  return async (dispatch, getState, { getFirebase, getFirestore }) => {
+    dispatch(setEditName(name))
+    dispatch(setEditPhone(phone))
+    dispatch(setEditEmail(email))
+  }
+}
+
+// To handle changes in editing transaction 
+export const handleChangesEditTransaction = (e) => {
+  return async (dispatch, getState, { getFirebase, getFirestore }) => {
+    let target = e.target
+    let inputId = target.id
+    let value = target.value
+
+    if (inputId === 'name') {
+      dispatch(setEditName(value))
+    } else if (inputId === 'phone') {
+      dispatch(setEditPhone(value))
+    } else if (inputId === 'email') {
+      dispatch(setEditEmail(value))
+    }
+  }
+}
+
+const setEditName = (data) => {
+  return {
+    type: 'SET_EDIT_TRANSACTION_NAME_INPUT',
+    payload: data
+  }
+}
+
+const setEditNameError = (data) => {
+  return {
+    type: 'SET_EDIT_TRANSACTION_NAME_INPUT_ERROR',
+    payload: data
+  }
+}
+
+const setEditPhone = (data) => {
+  return {
+    type: 'SET_EDIT_TRANSACTION_PHONE_INPUT',
+    payload: data
+  }
+}
+
+const setEditPhoneError = (data) => {
+  return {
+    type: 'SET_EDIT_TRANSACTION_PHONE_INPUT_ERROR',
+    payload: data
+  }
+}
+
+const setEditEmail = (data) => {
+  return {
+    type: 'SET_EDIT_TRANSACTION_EMAIL_INPUT',
+    payload: data
+  }
+}
+
+const setEditEmailError = (data) => {
+  return {
+    type: 'SET_EDIT_TRANSACTION_EMAIL_INPUT_ERROR',
+    payload: data
+  }
+}
+
+// To validate input in editing new transaction 
+export const validateAndEditTransaction = (data) => {
+  return async (dispatch, getState, { getFirebase, getFirestore }) => {
+    let { name, phone, email, selectedServices } = data
+
+    // Input is ERROR
+    if (name.length <= 0) {
+      dispatch(setEditNameError(emptyError))
+    } 
+
+    if (phone.length <= 0) {
+      dispatch(setEditPhoneError(emptyError))
+    } 
+
+    if (phone.length > 0 && phone.length < 8) {
+      dispatch(setEditPhoneError(phoneMinError))
+    }
+
+    if (email.length <= 0) {
+      dispatch(setEditEmailError(emptyError))
+    } 
+
+    if (email.length > 0 && validateEmail(email) === false) {
+      dispatch(setEditEmailError(emailInvalidError))
+    }
+
+    let transactionErrors = []
+    if (selectedServices.length <= 0) {
+      transactionErrors.push(noSelectedServicesError)
+    }
+    dispatch(setTransactionErrors(transactionErrors))
+
+    // Input is OK
+    if (name.length > 0) {
+      dispatch(setEditNameError(false))
+    } 
+
+    if (phone.length >= 8) {
+      dispatch(setEditPhoneError(false))
+    } 
+
+    if (email.length > 0 && validateEmail(email)) {
+      dispatch(setEditEmailError(false))
+    }
+
+    if (selectedServices.length > 0) {
+      transactionErrors = []
+      dispatch(setTransactionErrors(transactionErrors))
+    }
+
+    if (name.length > 0 && phone.length >= 8 && email.length > 0 && validateEmail(email) && selectedServices.length > 0) {
+      dispatch(setTransactionLoadingStatus(true))
+      dispatch(editNewTransaction(data))
+    }
+  }
+}
+
+export const editNewTransaction = (data) => {
+  return async (dispatch, getState, { getFirebase, getFirestore }) => {
+    let { name, phone, email, selectedServices, transaction, user } = data
+    let firestore = getFirestore()
+    let transactionRef = firestore.collection('transaction').doc(transaction.id)
+    let lowercasedName = name.toLowerCase()
+
+    let updatedDate = new Date(Date.now())
+    let updatedBy = user
+
+    let revisedTransaction = {
+      name: lowercasedName,
+      phone,
+      email,
+      service: selectedServices,
+      updatedDate,
+      updatedBy,
+    }
+
+    transactionRef.update(revisedTransaction)
+    .then(ref => {
+      dispatch(setTransactionErrors([]))
+      dispatch(setEditNameError(false))
+      dispatch(setEditPhoneError(false))
+      dispatch(setEditEmailError(false))
+      dispatch(setSelectedPrimaryService(""))
+      dispatch(setSelectedSecondaryServices([]))
+      dispatch(setTransactionLoadingStatus(false))
+      swal("Transaction Updated", "", "success")
+    })
+    .catch(err => {
+      console.log('ERROR: edit transaction', err)
+    })
+  }
+}
+
+// To clear edit transaction input error when click modal close
+export const clearEditTransaction = () => {
+  return (dispatch, getState, { getFirebase, getFirestore }) => {
+    let errors = []
+    dispatch(setTransactionErrors(errors))
+    dispatch(setEditNameError(false))
+    dispatch(setEditPhoneError(false))
+    dispatch(setEditEmailError(false))
+    dispatch(setEditName(""))
+    dispatch(setEditPhone(""))
+    dispatch(setEditEmail(""))
+    dispatch(setSelectedPrimaryService(""))
+    dispatch(setSelectedSecondaryServices([]))
+  } 
 }

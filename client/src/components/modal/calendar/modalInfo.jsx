@@ -12,6 +12,7 @@ import StatusBox from '../../statusBox/statusBox';
 import SelectInput from '../../form/inputSelect';
 import MiniStatusBox from '../../statusBox/miniStatusBox';
 import MiniStatusBoxDisabled from '../../statusBox/miniStatusBoxDisabled';
+import ModalEditTransaction from '../../modal/calendar/modalEditTrans';
 import { formatMoney, getTotalTransaction } from '../../../helpers/currency';
 import { 
   handleUpdateStatus,
@@ -37,7 +38,7 @@ class modalInfo extends Component {
       showPaymentMethodStatus,
       updateLoadingStatus,
       dashboardData,
-      authUser
+      authUser,
     } = this.props
     let appointment = transaction.appointment
     let user = {
@@ -285,11 +286,9 @@ class modalInfo extends Component {
                 {/* EDIT BUTTON */}
                 {
                   transaction.status === 'booking confirmed' || transaction.status === 'on progress' || (transaction.status === 'canceled' && Number(appointment.currentQueue) < Number(transaction.queueNo)) ?
-                  <Button 
-                    text="Edit"
-                    type="Btn-white-blue No-margin"
-                    clickFunction=""
-                    data=""
+                  <ModalEditTransaction 
+                    barber={ transaction.staff }
+                    transaction={ transaction }
                   />
                   :
                   <div></div>
@@ -444,7 +443,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => bindActionCreators({
   handleUpdateStatus,
   handleMultipleSelectOption,
-  setShowPaymentMethodStatus
+  setShowPaymentMethodStatus,
 }, dispatch)
 
 

@@ -23,6 +23,12 @@ let initialState = {
   filteredTransactions: [],
   salesTransactions: [],
   reportHeaders: ['Transaction ID', 'Appointment Date', 'Provider Name', 'Service Name', 'Service Price', 'Customer Name', 'Customer Phone', 'Transaction Status', 'Payment Method'],
+  editName: '',
+  editNameError: false,
+  editPhone: '',
+  editPhoneError: false,
+  editEmail: '',
+  editEmailError: false,
 }
 
 const transactionDataList = (state = { ...initialState }, action) => {
@@ -128,6 +134,36 @@ const transactionDataList = (state = { ...initialState }, action) => {
       return ({
         ...state,
         salesTransactions: action.payload,
+      })
+    case 'SET_EDIT_TRANSACTION_NAME_INPUT':
+      return ({
+        ...state,
+        editName: action.payload,
+      })
+    case 'SET_EDIT_TRANSACTION_NAME_INPUT_ERROR':
+      return ({
+        ...state,
+        editNameError: action.payload,
+      })
+    case 'SET_EDIT_TRANSACTION_EMAIL_INPUT':
+      return ({
+        ...state,
+        editEmail: action.payload,
+      })
+    case 'SET_EDIT_TRANSACTION_EMAIL_INPUT_ERROR':
+      return ({
+        ...state,
+        editEmailError: action.payload,
+      })
+    case 'SET_EDIT_TRANSACTION_PHONE_INPUT':
+      return ({
+        ...state,
+        editPhone: action.payload,
+      })
+    case 'SET_EDIT_TRANSACTION_PHONE_INPUT_ERROR':
+      return ({
+        ...state,
+        editPhoneError: action.payload,
       })
     default:
       return state;
