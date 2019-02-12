@@ -20,11 +20,12 @@ class serviceProviders extends Component {
   componentDidUpdate() {
     // There is CSS mixed up when dispatching active tab resulting in first tab always active unless double click on ther tabs
     // As manipulation, we remove the active class from first tab if the active tab is not first tab
+    // Achors [1] is detail tabs while anchors [0] is sign out button
     let anchors = document.getElementsByTagName('a')
     for (let i = 0; i < anchors.length; i++) {
       let innerHtml = anchors[i].innerHTML
       if (innerHtml === this.props.activeTab && innerHtml !== 'Details') {
-        anchors[0].classList.remove('active')
+        anchors[1].classList.remove('active')
         anchors[i].classList.add('active')
       } else if (innerHtml === this.props.activeTab && innerHtml === 'Details') {
         anchors[i].classList.add('active')

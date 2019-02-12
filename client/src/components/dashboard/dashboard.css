@@ -131,4 +131,7 @@
   .Legends-box {
     width: 14% !important;
   }  
+  .Menu-text, .Sub-menu-text, .Legends-text {
+    font-size: 0.9em;
+  }
 }

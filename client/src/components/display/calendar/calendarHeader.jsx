@@ -21,18 +21,20 @@ class calendarHeader extends Component {
     return (
       <div className="row No-margin animated fadeIn faster">
         <div className="Calendar-header-box Container-nowrap-center-cross">
-          <div className="col m3 No-margin No-padding">
+          <div className="col m3 l3 No-margin No-padding">
             <div className="Calendar-header-text">CALENDAR</div>
           </div>
           {/* <div className="col m4 No-margin No-padding Container-nowrap-center">
           </div> */}
-          <div 
-            className="col m2 No-margin No-padding Height-100cent Container-nowrap-end" 
-            onClick={ () => this.props.setAppointmentDateIndex(user.branchId,'previous', this.props.selectedDate) }
-          >
-            <ArrowLeftSvg height="2.5rem" width="2.5rem" color="#5499c3" />
+          <div className="col m2 l3 No-margin No-padding Height-100cent Container-nowrap-end">
+            <div
+              className="col m2 No-margin No-padding Height-100cent Container-nowrap-end" 
+              onClick={ () => this.props.setAppointmentDateIndex(user.branchId,'previous', this.props.selectedDate) }
+            >
+              <ArrowLeftSvg height="2.5rem" width="2.5rem" color="#5499c3" />
+            </div>
           </div>
-          <div className="col m2 No-margin No-padding Height-100cent Container-wrap-center">
+          <div className="col m2 l1 No-margin No-padding Height-100cent Container-wrap-center">
             <div className="Width-100cent Container-nowrap-center">
               <CalendarSvg height="1rem" width="1rem" color="#5499c3" />
             </div>
@@ -48,13 +50,15 @@ class calendarHeader extends Component {
               />
             </div>
           </div>
-          <div 
-            className="col m2 No-margin No-padding Height-100cent Container-nowrap-start" 
-            onClick={ () => this.props.setAppointmentDateIndex(user.branchId,'next', this.props.selectedDate) }
-          >
-            <ArrowRightSvg height="2.5rem" width="2.5rem" color="#5499c3" />
+          <div className="col m2 l3 No-margin No-padding Height-100cent Container-nowrap-start">
+            <div 
+              className="col m2 No-margin No-padding Height-100cent Container-nowrap-start"
+              onClick={ () => this.props.setAppointmentDateIndex(user.branchId,'next', this.props.selectedDate) }
+            >
+              <ArrowRightSvg height="2.5rem" width="2.5rem" color="#5499c3" />
+            </div>
           </div>
-          <div className="col m3 No-margin No-padding Container-nowrap-end">
+          <div className="col m3 l3 No-margin No-padding Container-nowrap-end">
             <div className="Show-today-box" onClick={ () => this.props.setTodayDateIndex(user.branchId) }>
               <div className="Show-today-text">Show Today</div>
             </div>
