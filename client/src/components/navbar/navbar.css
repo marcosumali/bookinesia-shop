@@ -1,20 +1,25 @@
 .Nav-box {
-  background-color: #5499c3;
+  background-color: #ffffff;
   margin-bottom: 1em;
+  box-shadow: none;
 }
 
-.Nav-outer-box {
-  box-shadow: 0 0rem 1rem rgba(0, 0, 0, 0.075);
+/* .Nav-outer-box { */
+  /* box-shadow: 0 0rem 1rem rgba(0, 0, 0, 0.075); */
+/* } */
+
+nav a {
+  color: #666666;
 }
 
 a.brand-logo {
   font-family: 'Montserrat', sans-serif;
   font-size: 1.75em;
-  font-weight: normal;
+  font-weight: bold;
   font-style: normal;
   font-stretch: normal;
   letter-spacing: normal;
-  color: #ffffff;
+  color: #5499c3;
 }
 
 nav ul a {
@@ -24,7 +29,7 @@ nav ul a {
   font-style: normal;
   font-stretch: normal;
   letter-spacing: normal;
-  color: #ffffff;
+  color: #F68606;
 }
 
 .right {
