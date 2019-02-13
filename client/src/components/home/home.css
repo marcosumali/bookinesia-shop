@@ -164,6 +164,21 @@
   line-height: 200%;
 }
 
+.Beta-text {
+  padding: 0.3125em;
+  background-color: #F68606;
+  color: #ffffff !important;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1em;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  letter-spacing: normal;
+  color: #666666;
+  border-radius: 0.3125em;
+  margin-left: 1em;
+}
+
 /* For Mobile CSS */
 @media only screen and (max-width: 767px) {
   .Feature-box {

@@ -253,6 +253,9 @@ export const sendEmailAfterSuccess = (shop, branch, status, appointment, transac
       if (sendEmailResult.status === 200) {
         dispatch(setUpdateLoadingStatus(false))
         swal("Information Updated & Notification Sent", "", "success")
+      } else {
+        dispatch(setUpdateLoadingStatus(false))
+        swal("Information Updated & Notification Not Sent", "Please contact our support team", "success")
       }
 
     } else if (status === 'on progress') {
@@ -333,6 +336,9 @@ export const sendEmailAfterSuccess = (shop, branch, status, appointment, transac
       if (sendEmailResult.status === 200) {
         dispatch(setUpdateLoadingStatus(false))
         swal("Information Updated & Notification Sent", "", "success")
+      } else {
+        dispatch(setUpdateLoadingStatus(false))
+        swal("Information Updated & Notification Not Sent", "Please contact our support team", "success")
       }
 
     } else if (status === 'booking confirmed') {
@@ -354,6 +360,9 @@ export const sendEmailAfterSuccess = (shop, branch, status, appointment, transac
       if (sendEmailResult.status === 200) {
         dispatch(setTransactionLoadingStatus(false))
         swal("Transaction Added & Notification Sent", "", "success")
+      } else {
+        dispatch(setUpdateLoadingStatus(false))
+        swal("Information Updated & Notification Not Sent", "Please contact our support team", "success")
       }
     }
   }
