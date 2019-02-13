@@ -192,7 +192,7 @@ export const reconstructCalender = (dashboardReady, staffs, appointments, transa
 }
 
 // To update transaction status from shop
-export const updateTransactionStatus = (shop, branch, status, appointment, transaction, user, paymentMethod, nextTransaction, afterNextTransaction) => {
+export const updateTransactionStatus = (shop, branch, status, appointment, transaction, user, paymentMethod, nextTransaction, afterNextTransaction, paymentInformation) => {
   return async (dispatch, getState, { getFirebase, getFirestore }) => {
     let firestore = getFirestore()
     let nowDate = new Date(Date.now())
@@ -210,7 +210,11 @@ export const updateTransactionStatus = (shop, branch, status, appointment, trans
       dataToUpdate['startDate'] = nowDate
     } else if (status === 'finished') {
       dataToUpdate['endDate'] = nowDate
-      dataToUpdate['paymentMethod'] = paymentMethod
+      dataToUpdate['paymentMethod'] = paymentMethod.toLowerCase()
+      if (paymentMethod.toLowerCase() === 'cash') {
+        paymentInformation = 'cash'
+      }
+      dataToUpdate['paymentInformation'] = paymentInformation.toLowerCase()
     }
 
     transactionRef.update(dataToUpdate)
@@ -248,7 +252,7 @@ export const sendEmailAfterSuccess = (shop, branch, status, appointment, transac
       // console.log('email', sendEmailResult)
       if (sendEmailResult.status === 200) {
         dispatch(setUpdateLoadingStatus(false))
-        swal("Information Updated & Notification Sended", "", "success")
+        swal("Information Updated & Notification Sent", "", "success")
       }
 
     } else if (status === 'on progress') {
@@ -307,7 +311,7 @@ export const sendEmailAfterSuccess = (shop, branch, status, appointment, transac
 
       if (score <= 2) {
         dispatch(setUpdateLoadingStatus(false))
-        swal("Information Updated & Notification Sended", "", "success")
+        swal("Information Updated & Notification Sent", "", "success")
       }
 
     } else if (status === 'finished') {
@@ -328,7 +332,7 @@ export const sendEmailAfterSuccess = (shop, branch, status, appointment, transac
       let sendEmailResult = await axios.post('https://us-central1-bookinesia-com.cloudfunctions.net/sendEmailTransactionReceipt', emailData)
       if (sendEmailResult.status === 200) {
         dispatch(setUpdateLoadingStatus(false))
-        swal("Information Updated & Notification Sended", "", "success")
+        swal("Information Updated & Notification Sent", "", "success")
       }
 
     } else if (status === 'booking confirmed') {
@@ -349,7 +353,7 @@ export const sendEmailAfterSuccess = (shop, branch, status, appointment, transac
       let sendEmailResult = await axios.post('https://us-central1-bookinesia-com.cloudfunctions.net/sendEmailBookTransaction', emailData)
       if (sendEmailResult.status === 200) {
         dispatch(setTransactionLoadingStatus(false))
-        swal("Transaction Added & Notification Sended", "", "success")
+        swal("Transaction Added & Notification Sent", "", "success")
       }
     }
   }
@@ -553,6 +557,7 @@ export const createNewTransaction = (data) => {
     let createdBy = user
     let updatedBy = user
     let paymentMethod = ''
+    let paymentInformation = ''
 
     let newTransaction = {
       shopId,
@@ -573,6 +578,7 @@ export const createNewTransaction = (data) => {
       createdBy,
       updatedBy,
       paymentMethod,
+      paymentInformation,
     }
 
     transactionRef.add(newTransaction)
@@ -789,6 +795,8 @@ export const handleChangesEditTransaction = (e) => {
       dispatch(setEditPhone(value))
     } else if (inputId === 'email') {
       dispatch(setEditEmail(value))
+    } else if (inputId === 'paymentInfo') {
+      dispatch(setPaymentInfo(value))
     }
   }
 }
@@ -831,6 +839,13 @@ const setEditEmail = (data) => {
 const setEditEmailError = (data) => {
   return {
     type: 'SET_EDIT_TRANSACTION_EMAIL_INPUT_ERROR',
+    payload: data
+  }
+}
+
+const setPaymentInfo = (data) => {
+  return {
+    type: 'SET_PAYMENT_INFORMATION',
     payload: data
   }
 }

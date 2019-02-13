@@ -213,6 +213,9 @@ class reportsTransaction extends Component {
                               <td className="Padding-5">
                                 <div className="Table-text">{ filteredTransaction.paymentMethod }</div>
                               </td>
+                              <td className="Padding-5">
+                                <div className="Table-text">{ filteredTransaction.paymentInformation }</div>
+                              </td>
                             </tr>
                           )
                         })  

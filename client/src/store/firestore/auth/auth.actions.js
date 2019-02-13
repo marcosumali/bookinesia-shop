@@ -27,12 +27,12 @@ export const authSignIn = (data) => {
   return (dispatch, getState, { getFirebase, getFirestore }) => {
     let { email, password, window, cookies } = data
     let firebase = getFirebase()
+    dispatch(setAuthLoadingStatus(true))
 
     firebase.auth().signInWithEmailAndPassword(email, password)
     .then((response) => {
       let uid = response.user.uid
       let email = response.user.email
-      dispatch(setAuthLoadingStatus(true))
       dispatch(afterLoginValidation(uid, email, window, cookies))
     })
     .catch(err => {

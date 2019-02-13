@@ -6,6 +6,7 @@ let initialState = {
   dashboardsExists: true,
   dashboardsLoading: true,
   paymentMethod: 'Cash',
+  paymentInformation: '',
   showPaymentMethodStatus: false,
   addName: '',
   addNameError: false,
@@ -22,7 +23,7 @@ let initialState = {
   filterErrors: [],
   filteredTransactions: [],
   salesTransactions: [],
-  reportHeaders: ['Transaction ID', 'Appointment Date', 'Provider Name', 'Service Name', 'Service Price', 'Customer Name', 'Customer Phone', 'Transaction Status', 'Payment Method'],
+  reportHeaders: ['Transaction ID', 'Appointment Date', 'Provider Name', 'Service Name', 'Service Price', 'Customer Name', 'Customer Phone', 'Transaction Status', 'Payment Method', 'Payment Information'],
   editName: '',
   editNameError: false,
   editPhone: '',
@@ -164,6 +165,11 @@ const transactionDataList = (state = { ...initialState }, action) => {
       return ({
         ...state,
         editPhoneError: action.payload,
+      })
+    case 'SET_PAYMENT_INFORMATION':
+      return ({
+        ...state,
+        paymentInformation: action.payload,
       })
     default:
       return state;

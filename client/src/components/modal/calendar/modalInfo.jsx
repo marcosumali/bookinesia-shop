@@ -10,6 +10,7 @@ import LoadingButton from '../../button/buttonLoading';
 import DisabledButton from '../../button/buttonDisabled';
 import StatusBox from '../../statusBox/statusBox';
 import SelectInput from '../../form/inputSelect';
+import TextInput from '../../form/inputText';
 import MiniStatusBox from '../../statusBox/miniStatusBox';
 import MiniStatusBoxDisabled from '../../statusBox/miniStatusBoxDisabled';
 import ModalEditTransaction from '../../modal/calendar/modalEditTrans';
@@ -20,6 +21,7 @@ import {
 } from '../../../store/dashboard/dashboard.actions';
 import {
   setShowPaymentMethodStatus,
+  handleChangesEditTransaction,
 } from '../../../store/firestore/transaction/transaction.actions';
 
 class modalInfo extends Component {
@@ -39,6 +41,8 @@ class modalInfo extends Component {
       updateLoadingStatus,
       dashboardData,
       authUser,
+      handleChangesEditTransaction,
+      paymentInformation,
     } = this.props
     let appointment = transaction.appointment
     let user = {
@@ -69,7 +73,7 @@ class modalInfo extends Component {
             <div className="col m10 No-margin No-padding">
               <div>Booking Information</div>
             </div>
-            <div className="col m2 No-margin No-padding Container-nowrap-end modal-close">
+            <div className="col m2 No-margin No-padding Container-nowrap-end modal-close" onClick={ () => setShowPaymentMethodStatus(false) }>
               <CloseSvg width="1.25em" height="1.25em" color="#ffffff" />
             </div> 
           </div> 
@@ -259,7 +263,7 @@ class modalInfo extends Component {
             
             {
               showPaymentMethodStatus && transaction.status === 'on progress' ?
-              <div className="col m12" style={{ marginBottom: '1em', marginTop: '1.5em' }} >
+              <div className="col m12 No-padding" style={{ marginBottom: '1em', marginTop: '1.5em' }} >
                 <SelectInput 
                   inputId="paymentMethod"
                   className=""
@@ -272,6 +276,20 @@ class modalInfo extends Component {
                   inputLabel="Payment Method"
                   inputValue={ paymentMethod }
                   optionData={ methods }
+                />
+              </div>
+              :
+              <div></div>
+            }
+            {
+              showPaymentMethodStatus && transaction.status === 'on progress' && paymentMethod !== 'Cash' ?
+              <div className="col m12 No-padding" style={{ marginBottom: '1em' }} >
+                <TextInput 
+                  inputId="paymentInfo"
+                  inputLabel="Payment Information"
+                  inputError=""
+                  inputValue={ paymentInformation }
+                  handleChangesFunction={ handleChangesEditTransaction }
                 />
               </div>
               :
@@ -353,7 +371,7 @@ class modalInfo extends Component {
                         text="Finish"
                         type="Btn-white-green"
                         clickFunction={ handleUpdateStatus }
-                        data={{ shop, branch, status: 'finished', appointment, transaction, user, paymentMethod: 'cash', dashboardData: null, barbers: null }}
+                        data={{ shop, branch, status: 'finished', appointment, transaction, user, paymentMethod, dashboardData: null, barbers: null, paymentInformation }}
                       />
                       :
                       showPaymentMethodStatus === false && updateLoadingStatus === false ?
@@ -434,6 +452,7 @@ const mapStateToProps = state => {
     dashboards: state.transaction.dashboards,
     methods: state.nav.methods,
     paymentMethod: state.transaction.paymentMethod,
+    paymentInformation: state.transaction.paymentInformation,
     showPaymentMethodStatus: state.transaction.showPaymentMethodStatus,
     updateLoadingStatus: state.nav.updateLoadingStatus,
     authUser: state.auth.user,
@@ -444,6 +463,7 @@ const mapDispatchToProps = dispatch => bindActionCreators({
   handleUpdateStatus,
   handleMultipleSelectOption,
   setShowPaymentMethodStatus,
+  handleChangesEditTransaction,
 }, dispatch)
 
 
