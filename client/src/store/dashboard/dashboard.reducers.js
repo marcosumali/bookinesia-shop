@@ -11,7 +11,7 @@ let initialState = {
   file: {},
   fileError: false,
   loadingStatus: true,
-  methods: [ 'Cash' ],
+  methods: [ 'Cash', 'Debit Card', 'Credit Card', 'GO-PAY', 'OVO' ],
   updateLoadingStatus: false,
   hasEditStatusFile: false,
 }

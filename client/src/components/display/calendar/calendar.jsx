@@ -108,6 +108,8 @@ const mapStateToProps = state => {
     addName: state.transaction.addName,
     addPhone: state.transaction.addPhone,
     addEmail: state.transaction.addEmail,
+    paymentMethod: state.transaction.paymentMethod,
+    paymentInformation: state.transaction.paymentInformation,
   }
 }
 
