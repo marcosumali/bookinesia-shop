@@ -34,7 +34,7 @@ class manageBranch extends Component {
       hasEditStatusFile,
       validateAndUpdateBranch,
     } = this.props
-    // console.log('manageBranch', this.props)
+
     return (
       <div>
         <div className="col m12 No-margin Manage-content-header-box" style={{ paddingBottom: '0.625em' }}>

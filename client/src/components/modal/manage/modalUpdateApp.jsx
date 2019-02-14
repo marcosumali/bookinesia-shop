@@ -55,7 +55,7 @@ class modalUpdateApp extends Component {
       clearUpdateAppointment,
       user,
     } = this.props
-    // console.log('modalUpdteApp', this.props)
+
     const options = {
       dismissible: false,
       ready: function() {

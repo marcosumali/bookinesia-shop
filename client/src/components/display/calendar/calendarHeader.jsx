@@ -17,7 +17,7 @@ class calendarHeader extends Component {
       allBarbers,
       user
     } = this.props
-    // console.log('calendarHeader', this.props)
+
     return (
       <div className="row No-margin animated fadeIn faster">
         <div className="Calendar-header-box Container-nowrap-center-cross">

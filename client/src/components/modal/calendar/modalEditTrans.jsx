@@ -75,7 +75,7 @@ class modalEditTrans extends Component {
       type: authUser.job,
       id: authUser.id
     }
-    // console.log('modalEditTrans', this.props)
+
     const options = {
       dismissible: false,
       ready: function() {

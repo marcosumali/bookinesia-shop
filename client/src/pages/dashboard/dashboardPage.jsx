@@ -28,7 +28,6 @@ class dashboardPage extends Component {
       isAuthenticated
     } = this.props
 
-    // console.log('dashboardPage', this.props)
     return (
       <div className="">
         {

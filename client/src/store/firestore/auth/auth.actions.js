@@ -36,6 +36,7 @@ export const authSignIn = (data) => {
       dispatch(afterLoginValidation(uid, email, window, cookies))
     })
     .catch(err => {
+      dispatch(setAuthLoadingStatus(false))
       if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password' || err.code === 'auth/invalid-email') {
         dispatch(setAuthLoginError(loginError))
       } else if (err.code === 'auth/user-disabled') {

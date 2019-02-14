@@ -11,7 +11,7 @@ class dashboardMenu extends Component {
     let {
       isOwner,
     } = this.props
-    // console.log('from dashboardMenu', this.props)
+
     return (
       <div className="row No-margin Dashboard-menu-box Container-wrap">
         <div className="col m12 No-padding No-margin Menu-box Margin-t-40">

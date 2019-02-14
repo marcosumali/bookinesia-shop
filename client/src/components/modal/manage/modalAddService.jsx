@@ -35,7 +35,7 @@ class modalAddService extends Component {
       barbers,
       user,
     } = this.props
-    // console.log('modalAddService', this.props)
+
     return (
       <Modal
         header={ 

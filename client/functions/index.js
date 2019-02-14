@@ -13,8 +13,6 @@ const { returnWhatDay, returnWhatMonth } = require('./helpers/date');
 const AUTH_USERNAME = process.env.SENDGRID_USERNAME
 const AUTH_PASS = process.env.SENDGRID_PASS
 const AUTO_EMAIL = process.env.EMAIL_AUTOMATED
-const REMINDER_EMAIL = process.env.EMAIL_REMINDER
-const RECEIPTS_EMAIL = process.env.EMAIL_RECEIPTS
 const SHOP_SKIP_EMAIL = fs.readFileSync(__dirname + '/nodemailer/templates/shop.skip.transaction.html', 'utf-8')
 const SHOP_QUEUE_REMINDER_EMAIL = fs.readFileSync(__dirname + '/nodemailer/templates/shop.queue.reminder.html', 'utf-8')
 const SHOP_FINISH_TRANSACTION = fs.readFileSync(__dirname + '/nodemailer/templates/shop.finish.transaction.html', 'utf-8')
@@ -61,7 +59,7 @@ exports.sendEmailShopSkipTransaction = functions.https.onRequest((req, res) => {
   let mailOptions = {
     from: `"Bookinesia" ${AUTO_EMAIL}`,
     to: customerEmail,
-    subject: `Notification: Your queue number has been skipped !`, 
+    subject: `Bookinesia Notification: Your queue number has been skipped !`, 
     html: `${templateWithData}`
   }
 
@@ -151,9 +149,9 @@ exports.sendEmailQueueReminder = functions.https.onRequest((req, res) => {
 
   // setup email data with unicode symbols
   let mailOptions = {
-    from: `"Bookinesia" ${REMINDER_EMAIL}`,
+    from: `"Bookinesia" ${AUTO_EMAIL}`,
     to: customerEmail,
-    subject: `Reminder: Your ${category} appointment on ${new Date(date).toDateString()} at ${shopNameCapitalize}, ${branchNameCapitalize}`, 
+    subject: `Bookinesia Reminder: Your ${category} appointment on ${new Date(date).toDateString()} at ${shopNameCapitalize}, ${branchNameCapitalize}`, 
     html: `${templateWithData}`
   }
 
@@ -256,9 +254,9 @@ exports.sendEmailTransactionReceipt = functions.https.onRequest((req, res) => {
 
   // setup email data with unicode symbols
   let mailOptions = {
-    from: `"Bookinesia" ${RECEIPTS_EMAIL}`,
+    from: `"Bookinesia" ${AUTO_EMAIL}`,
     to: customerEmail,
-    subject: `Your transaction receipt at ${shopNameCapitalize}, ${branchNameCapitalize} on ${new Date(date).toDateString()}`, 
+    subject: `Bookinesia transaction receipt at ${shopNameCapitalize}, ${branchNameCapitalize} on ${new Date(date).toDateString()}`, 
     html: `${templateWithData}`
   }
 
@@ -343,7 +341,7 @@ exports.sendEmailBookTransaction = functions.https.onRequest((req, res) => {
   let mailOptions = {
     from: `"Bookinesia" ${AUTO_EMAIL}`,
     to: customerEmail,
-    subject: `Your booking receipt for an appointment on ${new Date(date).toDateString()} at ${shopNameCapitalize}, ${branchNameCapitalize}`, 
+    subject: `Bookinesia queue receipt for an appointment on ${new Date(date).toDateString()} at ${shopNameCapitalize}, ${branchNameCapitalize}`, 
     html: `${templateWithData}`
   };
 
