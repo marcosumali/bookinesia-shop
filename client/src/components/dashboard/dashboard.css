@@ -129,7 +129,7 @@
 /* For Laptop CSS */
 @media only screen and (min-width: 1440px) {
   .Legends-box {
-    width: 14% !important;
+    width: 13.75% !important;
   }  
   .Menu-text, .Sub-menu-text, .Legends-text {
     font-size: 0.9em;

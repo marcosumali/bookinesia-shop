@@ -85,8 +85,8 @@
 /* For Laptop CSS */
 @media only screen and (min-width: 1440px) {  
   .Head-box {
-    margin-top: 15em !important;
-    margin-bottom: 15em !important;
+    margin-top: 8em !important;
+    margin-bottom: 10em !important;
   }
 
   .Head-text-box {
@@ -96,7 +96,7 @@
   }
 
   .Image-box {
-    padding-left: 15em !important;
+    padding-left: 0em !important;
   }
 
   .Image-home {
@@ -105,15 +105,15 @@
   }
 
   .Head-text {
-    font-size: 2em;
+    font-size: 1.5em;
   }
 
   .Head-desc-text {
-    font-size: 4em;
+    font-size: 3em;
   }
 
   .Head-input-text {
-    font-size: 1.5em;
+    font-size: 1.25em;
   }
 }
 
@@ -235,11 +235,11 @@
   }
 
   .Feature-header-text{
-    font-size: 3em;
+    font-size: 2.5em;
   }
 
   .Feature-text {
-    font-size: 1.5em;
+    font-size: 1.25em;
   }
 }
 

@@ -23,7 +23,7 @@ export default class contacts extends Component {
                 <div className="Contacts-text">Email</div>
               </div>
               <div className="col s8 m8">
-                <div className="Contacts-text">customercare@bookinesia.com</div>
+                <div className="Contacts-text"><a style={{ color: '#5499c3', textDecoration: 'underline' }} href="mailto:shopsupport@bookinesia.com">shopsupport@bookinesia.com</a></div>
               </div>
             </div>
             <div className="col s12 m12 No-padding">
