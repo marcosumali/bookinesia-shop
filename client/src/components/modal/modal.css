@@ -1,0 +1,186 @@
+/* MODAL CSS */
+.modal .modal-content {
+  padding: 0px;
+}
+
+h4 {
+  background-color: #5499c3;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.25em;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.2;
+  letter-spacing: normal;
+  color: #ffffff;
+  padding: 10px;
+  margin-bottom: 0px;
+}
+
+.modal-footer {
+  display: none;
+  height: 0px !important;
+}
+
+.Modal-body-box {
+  padding: 10px !important;
+  border-bottom: 1px solid #EAEAEA !important;
+}
+
+.Transaction-box {
+  margin-top: 3px !important;
+  margin-bottom: 3px !important;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+
+.Text-blue {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.9em;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.2;
+  letter-spacing: normal;
+  text-transform: capitalize;
+  color: #5499c3;
+}
+
+.Text-blue-bold {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.9em;
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.2;
+  letter-spacing: normal;
+  text-transform: capitalize;
+  color: #5499c3;
+}
+
+.Text-grey {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.9em;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.2;
+  letter-spacing: normal;
+  text-transform: capitalize;
+  color: #666666;
+}
+
+.Text-grey-bold {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.9em;
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.2;
+  letter-spacing: normal;
+  text-transform: capitalize;
+  color: #666666;
+}
+
+.Modal-info-text {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.85em;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.2;
+  letter-spacing: normal;
+  text-align: justify;
+  color: #f68606;
+}
+
+.Update-barber-box {
+  padding: 5px 5px 10px 5px !important;
+  border-bottom: 1px solid #EAEAEA;
+}
+
+.Modal-text-blue {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.9em !important;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.2;
+  letter-spacing: normal;
+  color: #5499c3;
+  text-transform: capitalize;
+}
+
+.Modal-text-gray {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.9em !important;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.2;
+  letter-spacing: normal;
+  color: #666666;
+  text-transform: capitalize;
+}
+
+.Modal-text-orange {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.9em !important;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.2;
+  letter-spacing: normal;
+  color: #f68606;
+  text-transform: capitalize;
+}
+
+.Customer-text-highlighted {
+  width: 100%;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.8em;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.2;
+  letter-spacing: normal;
+  margin-bottom: 2px;
+  padding: 0.15625em;
+  border-radius: 0.15625em;
+  background-color: #5499c3;
+  color: #ffffff;
+}
+
+tr > td > div > div {
+  width: 100%;
+}
+
+.Change-button {
+  margin-top: 1em;
+  background-color: #5499c3;
+  width: 100%;
+  border-radius: 0.3125em;
+  padding: 0.625em;
+}
+
+.Change-text {
+  color: #ffffff;
+  text-align: center;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.9em;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.2;
+  letter-spacing: normal;
+}
+
+.Password-form-box {
+  padding: 1em !important;
+  border-bottom: 1px solid #EAEAEA;
+}
+
+.Password-button-form-box {
+  padding: 1em !important;
+}

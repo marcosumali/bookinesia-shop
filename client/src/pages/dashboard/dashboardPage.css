@@ -1,0 +1,28 @@
+.Dashboard-header-box {
+  height: 7.5vh;
+  width: 100vw;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  /* border-bottom: 1px solid #EAEAEA; */
+}
+
+.Dashboard-body-box {
+  height: 92.5vh;
+  width: 100vw;
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.Dashboard-menu-box {
+  /* height: 100%; */
+  width: 15vw;
+  background-color: #5499c3;
+  /* border-right: 1px solid #EAEAEA; */
+}
+
+.Dashboard-display-box {
+  height: 100%;
+  width: 85vw;
+  /* border: 1px solid green; */
+}

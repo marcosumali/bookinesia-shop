@@ -1,0 +1,52 @@
+.swal-button,
+.swal-button--confirm {
+  background-color: #5499c3 !important;
+}
+
+.swal-button {
+  padding: 5px;
+  min-width: 4em;
+}
+
+.swal-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 23px !important;
+  padding-top: 0px !important;
+  margin: 0px !important;
+  margin-bottom: 0.25em !important;
+  font-weight: normal;
+}
+
+.swal-icon--success__ring,
+.swal-icon--success__line {
+  border-color: #27B50A;
+}
+
+.swal-icon--success__line--long,
+.swal-icon--success__line--tip {
+  background-color: #27B50A !important;
+}
+
+.swal-footer {
+  margin: 0px !important;
+}
+
+.swal-button--cancel {
+  background-color: #EAEAEA !important;
+  color: black;
+}
+
+.swal-icon--warning__body,
+.swal-icon--warning__dot {
+  background-color: #ffffff !important;
+}
+
+.swal-icon--warning {
+  background-color: #F68606 !important;
+  border-color: #F68606 !important;
+}
+
+.swal-text {
+  margin-bottom: 0.25em !important;
+  text-align: center;
+}

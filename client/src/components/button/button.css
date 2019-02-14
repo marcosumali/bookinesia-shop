@@ -1,0 +1,106 @@
+/* BUTTON CSS */
+.Btn-gray {
+  padding: 3px;
+  color: #666666;
+  border-radius: 6px;
+  border: 1px solid #666666;
+  min-width: 4em;
+  text-align: center;
+  font-size: 0.9em;
+  margin-left: 2vw;
+}
+
+.Btn-disabled {
+  padding: 3px;
+  color: #9F9F9F;
+  border-radius: 6px;
+  background-color: #DFDFDF;
+  min-width: 4em;
+  text-align: center;
+  font-size: 0.9em;
+  margin-left: 2vw;
+}
+
+.Btn-blue {
+  padding: 3px;
+  color: #5499c3;
+  border-radius: 6px;
+  border: 1px solid #5499c3;
+  min-width: 4em;
+  text-align: center;
+  font-size: 0.9em;
+  margin-left: 2vw;
+}
+
+.Btn-white-blue {
+  padding: 3px;
+  color: #ffffff;
+  background-color: #5499c3;
+  border-radius: 6px;
+  border: 1px solid #5499c3;
+  min-width: 4em;
+  text-align: center;
+  font-size: 0.9em;
+  margin-left: 2vw;
+}
+
+.Btn-white-orange {
+  padding: 3px;
+  color: #ffffff;
+  background-color: #f68606;
+  border-radius: 6px;
+  border: 1px solid #f68606;
+  min-width: 4em;
+  text-align: center;
+  font-size: 0.9em;
+  margin-left: 2vw;
+}
+
+.Btn-white-green {
+  padding: 3px;
+  color: #ffffff;
+  background-color: #27B50A;
+  border-radius: 6px;
+  border: 1px solid #27B50A;
+  min-width: 4em;
+  text-align: center;
+  font-size: 0.9em;
+  margin-left: 2vw;
+}
+
+.Btn-disabled-large {
+  padding: 0.3125em;
+  color: #9F9F9F;
+  border-radius: 6px;
+  background-color: #DFDFDF;
+  min-width: 8em;
+  text-align: center;
+  font-size: 0.9em;
+  margin-left: 2vw;
+}
+
+.Btn-excel {
+  padding: 0.3125em;
+  color: #ffffff;
+  background-color: #008000;
+  border-radius: 6px;
+  border: 1px solid #008000;
+  min-width: 8em;
+  text-align: center;
+  font-size: 0.9em;
+  margin-left: 2vw;
+}
+
+
+.Btn-large-white-blue {
+  padding: 0.25em;
+  color: #ffffff;
+  background-color: #5499c3;
+  border-radius: 0.5em;
+  border: 1px solid #5499c3;
+  min-width: 14em;
+  max-height: 2em;
+  text-align: center;
+  font-size: 1.25em;
+  margin-right: 0.75em;
+}

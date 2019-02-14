@@ -1,0 +1,43 @@
+.Nav-box {
+  background-color: #ffffff;
+  margin-bottom: 1em;
+  box-shadow: none;
+}
+
+/* .Nav-outer-box { */
+  /* box-shadow: 0 0rem 1rem rgba(0, 0, 0, 0.075); */
+/* } */
+
+nav a {
+  color: #666666;
+}
+
+a.brand-logo {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.75em;
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  letter-spacing: normal;
+  color: #5499c3;
+}
+
+nav ul a {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1em;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  letter-spacing: normal;
+  color: #F68606;
+}
+
+.right {
+  margin-right: 2em;
+}
+
+@media only screen and (min-width: 1024px) {
+  a.brand-logo {
+    margin-left: 1em;
+  }
+}

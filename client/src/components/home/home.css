@@ -1,0 +1,352 @@
+
+/* ----------------------------- HOME HEADER CSS ----------------------------- */
+.Head-box {
+  margin-top: 8em !important;
+  margin-bottom: 8em !important;
+}
+
+.Image-box {
+  margin-left: 5em !important;
+}
+
+.Image-home {
+  width: 27.5em;
+  height: 20em;
+}
+
+.Head-text-box {
+  height: 20em;
+  margin-right: 4em !important;
+}
+
+.Head-header-text-box {
+  margin-bottom: 0.5em;
+}
+
+.Head-text {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1em;
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  letter-spacing: normal;
+  color: #F68606;
+  text-transform: capitalize;
+  line-height: 200%;
+}
+
+.Header-desc-text-box {
+  margin-bottom: 2em;
+}
+
+.Head-desc-text {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2em;
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  letter-spacing: normal;
+  color: #5499c3;
+}
+
+.Head-input-text {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1em;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  letter-spacing: normal;
+  color: #666666;
+  line-height: 200%;
+  text-align: justify;
+}
+
+/* For Mobile CSS */
+@media only screen and (max-width: 767px) {
+  .Head-box {
+    margin-top: 2em !important;
+  }
+
+  .Image-box {
+    margin-left: 0em !important;
+  }
+  
+  .Image-home {
+    width: 22.5em;
+    height: 15em;
+  }
+  
+  .Head-text-box {
+    margin-right: 0em !important; 
+  }
+  
+}
+
+/* For Laptop CSS */
+@media only screen and (min-width: 1440px) {  
+  .Head-box {
+    margin-top: 8em !important;
+    margin-bottom: 10em !important;
+  }
+
+  .Head-text-box {
+    height: 30em;
+    margin-left: 1em !important;
+    margin-right: 5em !important;
+  }
+
+  .Image-box {
+    padding-left: 0em !important;
+  }
+
+  .Image-home {
+    width: 45em;
+    height: 30em;
+  }
+
+  .Head-text {
+    font-size: 1.5em;
+  }
+
+  .Head-desc-text {
+    font-size: 3em;
+  }
+
+  .Head-input-text {
+    font-size: 1.25em;
+  }
+}
+
+/* ----------------------------- HOME FEATURE CSS ----------------------------- */
+.Feature-box {
+  padding: 2em !important;
+  background-color: #FAFAFA;
+  /* border: 1px solid black; */
+}
+
+.Feature-upper-box {
+  padding-top: 10em !important;
+}
+
+.Feature-bottom-box {
+  padding-bottom: 10em !important;
+}
+
+.Feature-header-box {
+  padding-top: 2em !important;
+  padding-bottom: 2em !important;
+}
+
+.Feature-header-text{
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2em;
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  letter-spacing: normal;
+  color: #5499c3;
+  text-transform: capitalize;
+}
+
+.Feature-text-box {
+  padding-bottom: 2em !important;
+}
+
+.Feature-text {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1em;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  letter-spacing: normal;
+  color: #666666;
+  text-align: justify;
+  line-height: 200%;
+}
+
+.Beta-text {
+  padding: 0.3125em;
+  background-color: #F68606;
+  color: #ffffff !important;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1em;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  letter-spacing: normal;
+  color: #666666;
+  border-radius: 0.3125em;
+  margin-left: 1em;
+}
+
+/* For Mobile CSS */
+@media only screen and (max-width: 767px) {
+  .Feature-box {
+    padding: 1em !important;
+  }
+  
+  .Feature-upper-box {
+    padding-top: 7.5em !important;
+  }
+
+  .Feature-bottom-box {
+    padding-bottom: 7.5em !important;
+  }
+
+  .Feature-header-text{
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.5em;
+    font-weight: bold;
+    font-style: normal;
+    font-stretch: normal;
+    letter-spacing: normal;
+    color: #5499c3;
+    text-transform: capitalize;
+    text-align: center;
+  }
+
+  .Feature-text {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1em;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    letter-spacing: normal;
+    color: #666666;
+    text-align: justify;
+    line-height: 200%;
+  }
+}
+
+/* For Laptop CSS */
+@media only screen and (min-width: 1440px) {
+  .Feature-box {
+    padding: 4em !important;
+    padding-left: 20em !important;
+    padding-right: 20em !important;
+  }
+
+  .Feature-upper-box {
+    padding-top: 10em !important;
+  }
+  
+  .Feature-bottom-box {
+    padding-bottom: 10em !important;
+  }
+
+  .Feature-header-text{
+    font-size: 2.5em;
+  }
+
+  .Feature-text {
+    font-size: 1.25em;
+  }
+}
+
+/* ----------------------------- CONTACT US CSS ----------------------------- */
+.Contacts-box {
+  background-color: #354467;
+  color: #ffffff;
+  padding-top: 2em !important;
+  padding-bottom: 6em !important;
+}
+
+.Contacts-header-box {
+  padding-top: 2em !important;
+  padding-bottom: 1em !important;
+}
+
+.Contacts-header-text{
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2em;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  letter-spacing: normal;
+  text-transform: capitalize;
+}
+
+.Contacts-header-desc-box {
+  padding-bottom: 2em !important;
+}
+
+.Contacts-header-desc-text{
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.25em;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  letter-spacing: normal;
+  text-align: center;
+}
+
+.Contacts-info-box {
+  background-color: #ffffff;
+  border-radius: 2.5px;
+  padding: 2em !important;
+  color: #666666;
+}
+
+.Contacts-info-header-text {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.5em;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  letter-spacing: normal;
+  margin-bottom: 0.25em;
+}
+
+.Contacts-info-desc-text {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.75em;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  letter-spacing: normal;
+  margin-bottom: 1em;
+  text-align: justify;
+  color: gray;
+  line-height: 200%;
+}
+
+.Contacts-text {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.75em;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  letter-spacing: normal;
+  margin-bottom: 1em;
+  text-align: justify;
+  color: #000000;
+  line-height: 200%;
+}
+
+/* For Laptop CSS */
+@media only screen and (min-width: 1440px) {
+  .Contacts-box {
+    padding-top: 7.5em !important;
+    padding-bottom: 10em !important;
+  }
+
+  .Contacts-header-text{
+    font-size: 3em;
+  }
+    
+  .Contacts-header-desc-text{
+    font-size: 1.75em;
+  }
+
+  .Contacts-info-header-text {
+    font-size: 2.5em;
+  }
+  
+  .Contacts-info-desc-text {
+    font-size: 1.25em;
+  }
+  
+  .Contacts-text {
+    font-size: 1.25em;
+  }
+}

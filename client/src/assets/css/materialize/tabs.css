@@ -1,0 +1,53 @@
+/* TABS MATERIALIZE CSS */
+.row {
+  margin-bottom: 0.25em;
+}
+
+/* .row .col {
+  padding: 0px;
+} */
+
+.z-depth-1 {
+  box-shadow: none;
+}
+
+.tabs {
+  height: 7vh;
+  margin: 0px;
+}
+
+.tabs .tab {
+  height: inherit;
+  line-height: inherit;
+}
+
+.tabs .tab a {
+  color:#c1c8cd;
+  text-transform: capitalize;
+  text-align: left;
+  padding: 3vh 5px 5px 0.625em;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.9em;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.2;
+  letter-spacing: normal;
+} /*Color to the text*/
+
+.tabs .tab a:hover {
+  background-color:#ffffff;
+  color:#5499c3;
+} /*Text color on hover*/
+
+.tabs .tab a.active {
+  background-color:#ffffff;
+  color: #5499c3;
+} /*Background and text color when a tab is active*/
+
+.tabs .indicator {
+  background-color: #5499c3;
+  max-width: 22.5%;
+  margin-left: 0.6em;
+  margin-right: 0.6em;
+} /*Color of underline*/

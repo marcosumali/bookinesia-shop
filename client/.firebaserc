@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "bookinesia-com"
+  },
+  "targets": {
+    "bookinesia-com": {
+      "hosting": {
+        "shop": [
+          "bookinesia-shop"
+        ]
+      }
+    }
+  }
+}
