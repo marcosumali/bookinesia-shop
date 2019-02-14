@@ -9,7 +9,7 @@ export default class homeHeader extends Component {
           width > 767 ?
           <div className="row No-margin Head-box Container-nowrap-center-cross">
             <div className="col s12 m4 l6 Image-box">
-              <img className="Image-home" src={ process.env.PUBLIC_URL + '/assets/img/shop_home_min.png' } alt="home" />
+              <img className="Image-home" src={ process.env.PUBLIC_URL + '/assets/img/shop_home_min2.png' } alt="home" />
             </div>
             <div className="col s12 m6 l6 Head-text-box">
               <div className="col s12 m12 Head-header-text-box">
@@ -37,7 +37,7 @@ export default class homeHeader extends Component {
               </div>
             </div>
             <div className="col s12 m4 l6 Image-box Container-wrap-center">
-              <img className="Image-home" src={ process.env.PUBLIC_URL + '/assets/img/shop_home_min.png' } alt="home" />
+              <img className="Image-home" src={ process.env.PUBLIC_URL + '/assets/img/shop_home_min2.png' } alt="home" />
             </div>
           </div>
         }

@@ -6,8 +6,8 @@ export default class notFound extends Component {
   render() {
     return (
       <div id="message">
-        <div className="Container-center animated bounceIn">
-          <img src={ process.env.PUBLIC_URL + '/assets/img/customer_service_150.png' } alt="customer_service" />
+        <div className="Container-wrap-center animated bounceIn">
+          <img src={ process.env.PUBLIC_URL + '/assets/img/customer_service_150-min2.png' } alt="customer_service" />
         </div>
         <h2>404</h2>
         <h1>Page Not Found</h1>
