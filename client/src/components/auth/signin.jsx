@@ -23,7 +23,7 @@ class login extends Component {
       cookies, 
       window,
     } = this.props
-    // console.log('auth', this.props)
+
     return (
       <div className="row No-margin">
         <div className="col m12 Container-wrap-center Login-box">

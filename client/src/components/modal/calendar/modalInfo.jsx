@@ -65,7 +65,6 @@ class modalInfo extends Component {
       buttonDisableStatus = false
     }
 
-    // console.log('modalInfo', this.props)
     return (
       <Modal
         header={ 

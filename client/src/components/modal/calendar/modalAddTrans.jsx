@@ -73,7 +73,6 @@ class modalAddTrans extends Component {
       type: authUser.job,
       id: authUser.id
     }
-    // console.log('modalAddTrans', this.props)
   
     return (
       <Modal

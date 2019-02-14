@@ -31,7 +31,7 @@ class manageBarberDetails extends Component {
       loadingStatus,
       user,
     } = this.props
-    // console.log('manageBarberDetails', this.props)
+
     return (
       <div className="col m12 No-padding Container-wrap-center-cross Margin-b-10">
         <div className="col m12 No-padding Container-nowrap-center-cross Margin-b-16">

@@ -25,7 +25,7 @@ class modalAddProvider extends Component {
       loadingStatus,
       user,
     } = this.props
-    // console.log('modalAddBarber', this.props)
+
     return (
       <Modal
         header={ 

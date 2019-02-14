@@ -37,7 +37,6 @@ class manageService extends Component {
       loadingStatus,
     } = this.props
 
-    // console.log('manageService', this.props)
     return (
       <div className="col m12 No-margin No-padding">
         <div className="col m12 No-margin No-padding Margin-b-24">

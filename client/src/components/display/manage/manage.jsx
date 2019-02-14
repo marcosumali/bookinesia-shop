@@ -40,7 +40,7 @@ class serviceProviders extends Component {
       selectedService,
       isOwner,
     } = this.props
-    // console.log('manage', this.props)
+
     return (
       <div className="col m12 No-margin No-padding Height-100cent">
         <div className="col m4 No-margin No-padding Height-100cent Manage-menu-box">

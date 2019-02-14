@@ -27,7 +27,6 @@ class modalChangePass extends Component {
       clearAuthChangePassword
     } = this.props
 
-    // console.log('modalChangePass', this.props)
     return (
       <Modal
         header={ 

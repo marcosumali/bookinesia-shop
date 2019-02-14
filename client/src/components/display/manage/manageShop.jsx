@@ -26,7 +26,7 @@ class manageShop extends Component {
       validateAndUpdateShop,
       file,
     } = this.props
-    // console.log('manageShop', this.props)
+
     return (
       <div>
         <div className="col m12 No-margin Manage-content-header-box" style={{ paddingBottom: '0.625em' }}>

@@ -28,7 +28,6 @@ class reportsTransaction extends Component {
       user,
       salesTransactions,
     } = this.props
-    // console.log('reportTransaction', this.props)
 
     return (
       <div className="row No-margin Report-box">

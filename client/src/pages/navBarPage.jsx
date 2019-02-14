@@ -23,7 +23,6 @@ class navBarPage extends Component {
     let {
       authenticationStatus
     } = this.props
-    // console.log('navbarPage', this.props)
 
     return (
       <div>

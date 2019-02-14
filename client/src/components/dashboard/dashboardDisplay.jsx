@@ -12,7 +12,6 @@ import Loading from '../display/loading/loading';
 
 class dashboardDisplay extends Component {  
   render() {
-    // console.log('dashboardDisplay', this.props)
     return (
       <div className="Height-100cent">
         {

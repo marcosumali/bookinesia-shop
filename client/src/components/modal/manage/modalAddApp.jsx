@@ -46,7 +46,7 @@ class modalUpdateApp extends Component {
       clearAddAppointment,
       user
     } = this.props
-    // console.log('modalAddApp', this.props)
+
     const options = {
       ready: function() {
         document.getElementById('addDate').value = ""

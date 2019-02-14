@@ -20,7 +20,6 @@ class dashboardHeader extends Component {
       onlineStatus,
       setOnlineStatus
     } = this.props
-    // console.log('dashboardHeader', this.props)
 
     if (window.navigator.onLine) {
       onlineStatus = 'online'

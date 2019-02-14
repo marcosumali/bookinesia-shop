@@ -50,7 +50,6 @@ class manageMenu extends Component {
       data = services
     }
 
-    // console.log('manageMenu', this.props)
     return (
       <div>
         <div className="col m12 No-margin No-padding Manage-headers">

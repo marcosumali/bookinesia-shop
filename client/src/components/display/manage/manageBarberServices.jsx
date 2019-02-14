@@ -11,7 +11,6 @@ import LoadingButton from '../../button/buttonLoading';
 
 class manageBarberServices extends Component {
   render() {
-    // console.log('manageBarberServices', this.props)
     let { 
       services, 
       handleMultipleCheckboxStatus, 

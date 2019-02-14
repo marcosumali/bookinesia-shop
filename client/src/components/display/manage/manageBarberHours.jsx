@@ -31,7 +31,7 @@ class manageBarberHours extends Component {
       updateStaffSchedulesData,
       loadingStatus,
     } = this.props
-    // console.log('manageBarberHours', this.props)
+
     return (
       <form className="col m12 Container-wrap-center-cross Margin-b-10">
         <div className="col m12 No-margin No-padding Container-wrap-center-cross Margin-b-10">
