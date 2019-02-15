@@ -10,9 +10,14 @@
 }
 
 .Image-home {
+  width: 100%;
+  height: 100%;
+}
+
+/* .Image-home {
   width: 27.5em;
   height: 20em;
-}
+} */
 
 .Head-text-box {
   height: 20em;
@@ -71,10 +76,10 @@
     margin-left: 0em !important;
   }
   
-  .Image-home {
+  /* .Image-home {
     width: 22.5em;
     height: 15em;
-  }
+  } */
   
   .Head-text-box {
     margin-right: 0em !important; 
@@ -99,10 +104,10 @@
     padding-left: 0em !important;
   }
 
-  .Image-home {
+  /* .Image-home {
     width: 45em;
     height: 30em;
-  }
+  } */
 
   .Head-text {
     font-size: 1.5em;
