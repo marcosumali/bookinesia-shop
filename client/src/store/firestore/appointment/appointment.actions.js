@@ -1,6 +1,6 @@
 import swal from 'sweetalert';
 import { getTransactions, getTransactionsCalendar, setDashboardSuccess, updateTransactionStatus, sendEmailAfterSuccess } from '../transaction/transaction.actions';
-import { getAllStaffsAndCalendar } from '../staff/staff.actions';
+import { getAllStaffsAndCalendar, setAllBarbersSuccess } from '../staff/staff.actions';
 import { setDashboardLoadingStatus, setUpdateLoadingStatus } from '../../dashboard/dashboard.actions';
 
 const filterEmptyError = 'To filter preferred appointments for selected provider, start and end dates must be filled.'
@@ -261,6 +261,28 @@ export const getAppointmentsAndCalendar = (branchId, date, staffs) => {
 
         dispatch(getTransactionsCalendar(branchId, emptyDashboard, staffs, appointments))
 
+        // Process setting up appointment status on each barber
+        let staffsWithAppointmentStatus = []
+        staffs && staffs.map(staff => {
+          let staffIndex = appointments.findIndex(appointment => appointment.staffId === staff.id)
+          if (staffIndex < 0) {
+            let staffWithStatus = {
+              ...staff,
+              appStatus: false
+            }
+            staffsWithAppointmentStatus.push(staffWithStatus)
+          } else {
+            let staffWithStatus = {
+              ...staff,
+              appStatus: true
+            }
+            staffsWithAppointmentStatus.push(staffWithStatus)
+          }
+          return ''
+        })
+
+        dispatch(setAllBarbersSuccess(staffsWithAppointmentStatus))
+
       } else {
 
         // No appointment found in the database
@@ -295,6 +317,19 @@ export const getAppointmentsAndCalendar = (branchId, date, staffs) => {
         dispatch(setDashboardLoadingStatus(false))
         dispatch(setDashboardSuccess(emptyDashboard))
         dispatch(setSelectedDateSuccess(date))
+
+        // Process setting up appointment status on each barber
+        let staffsWithAppointmentStatus = []
+        staffs && staffs.map(staff => {
+          let staffWithStatus = {
+            ...staff,
+            appStatus: false
+          }
+          staffsWithAppointmentStatus.push(staffWithStatus)
+          return ''
+        })
+
+        dispatch(setAllBarbersSuccess(staffsWithAppointmentStatus))
       }
     })
   }

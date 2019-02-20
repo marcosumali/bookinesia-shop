@@ -1,13 +1,12 @@
 import swal from 'sweetalert';
-import {
-  afterLoginValidation,
-} from '../management/management.actions';
+import { afterLoginValidation } from '../management/management.actions';
 import { getAllStaffsAndCalendar } from '../staff/staff.actions';
 import { getAllServices } from '../service/service.actions';
 import { getStaffServices } from '../staffService/staffService.actions';
 import { getStaffSchedules } from '../staffSchedule/staffSchedule.actions';
 import { getShop } from '../shop/shop.actions';
 import { getBranch } from '../branch/branch.actions';
+import { getBranchSchedules } from '../branchSchedule/branchSchedule.actions';
 import {
   getCookies,
   verifyCookies,
@@ -120,6 +119,7 @@ export const handleCookies = (purpose, cookies) => {
         dispatch(getAllServices(branchId))
         dispatch(getStaffServices(branchId))
         dispatch(getStaffSchedules(branchId))
+        dispatch(getBranchSchedules(branchId))
       }
     } else {
       dispatch(setAuthenticationStatus(false))

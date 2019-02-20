@@ -107,6 +107,12 @@
   border-top: 1px solid #EAEAEA;
 }
 
+.Manage-branch-content-box {
+  margin-top: 0.75em !important;
+  padding-top: 1em !important;
+  border-top: 1px solid #EAEAEA;  
+}
+
 .Manage-content-header-text {
   font-family: 'Montserrat', sans-serif;  font-size: 1.25em;
   font-weight: normal;

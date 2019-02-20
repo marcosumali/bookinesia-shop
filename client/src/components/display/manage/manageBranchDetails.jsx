@@ -12,7 +12,7 @@ import Button from '../../button/button';
 import DisabledButton from '../../button/buttonDisabled';
 import LoadingButton from '../../button/buttonLoading';
 
-class manageBranch extends Component {
+class manageBranchDetails extends Component {
   render() {
     let {
       branch,
@@ -37,11 +37,6 @@ class manageBranch extends Component {
 
     return (
       <div>
-        <div className="col m12 No-margin Manage-content-header-box" style={{ paddingBottom: '0.625em' }}>
-          <div className="col m12 No-margin No-padding">
-            <div className="Manage-content-header-text">Branch</div>
-          </div>
-        </div>
         <div className="col m12 No-margin" >
           <div className="col m12 No-margin No-padding Container-nowrap-center-cross">
             <div className="col m12 No-margin No-padding Container-nowrap-center">
@@ -186,5 +181,5 @@ const mapDispatchToProps = dispatch => bindActionCreators({
 }, dispatch)
 
 
-export default connect(mapStateToProps, mapDispatchToProps) (manageBranch);
+export default connect(mapStateToProps, mapDispatchToProps) (manageBranchDetails);
 

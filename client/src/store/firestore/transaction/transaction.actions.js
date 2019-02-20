@@ -3,7 +3,7 @@ import swal from 'sweetalert';
 import XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 
-import { validateEmail } from '../../../helpers/form';
+import { validateEmail, validatePhone, formatPhone } from '../../../helpers/form';
 import { setDashboardLoadingStatus, setUpdateLoadingStatus } from '../../dashboard/dashboard.actions';
 import { setSelectedDateSuccess, isAppointmentExist, updateAppointmentStatus, incorrectFilterError } from '../appointment/appointment.actions';
 
@@ -13,6 +13,7 @@ const textQueueOneNumberAfter = `Your queuing number is almost up. Please ensure
 export const emptyError = 'This section must be filled.'
 export const phoneMinError = 'Phone number is too short, min. 8 characters.'
 const emailInvalidError = 'Invalid email.'
+export const phoneInvalidError = 'Invalid phone number.'
 const noSelectedServicesError = 'Choose one of the provided services to continue.'
 const noAppointmentError = `Related provider doesn't have an active appointment for selected date.`
 const fullyBookedError = `Number of transactions for selected appointment has reached its maximum queuing number.`
@@ -28,7 +29,7 @@ export const getTransactions = (branchId, dashboardReady, staffs) => {
     let maxDate = dashboardReady[dashboardReady.length-1].originalDate
 
     transactionRef
-    .where('branchId', '==', branchId)
+    .where('branch.id', '==', branchId)
     .where('appointment.date', '>=', minDate)
     .where('appointment.date', '<=', maxDate)
     .onSnapshot(function(querySnapshot) {
@@ -102,7 +103,7 @@ export const getTransactionsCalendar = (branchId, dashboardReady, staffs, appoin
     let transactionRef = firestore.collection('transaction')
     
     transactionRef
-    .where('branchId', '==', branchId)
+    .where('branch.id', '==', branchId)
     .where('appointment.date', '==', date)
     .onSnapshot(function(querySnapshot) {
       if (querySnapshot.empty === false) {
@@ -358,9 +359,27 @@ export const sendEmailAfterSuccess = (shop, branch, status, appointment, transac
       
       let sendEmailResult = await axios.post('https://us-central1-bookinesia-com.cloudfunctions.net/sendEmailBookTransaction', emailData)
       if (sendEmailResult.status === 200) {
+        dispatch(setTransactionErrors([]))
+        dispatch(setAddNameError(false))
+        dispatch(setAddPhoneError(false))
+        dispatch(setAddEmailError(false))
+        dispatch(setAddName(""))
+        dispatch(setAddPhone(""))
+        dispatch(setAddEmail(""))
+        dispatch(setSelectedPrimaryService(""))
+        dispatch(setSelectedSecondaryServices([]))  
         dispatch(setTransactionLoadingStatus(false))
         swal("Transaction Added & Notification Sent", "", "success")
       } else {
+        dispatch(setTransactionErrors([]))
+        dispatch(setAddNameError(false))
+        dispatch(setAddPhoneError(false))
+        dispatch(setAddEmailError(false))
+        dispatch(setAddName(""))
+        dispatch(setAddPhone(""))
+        dispatch(setAddEmail(""))
+        dispatch(setSelectedPrimaryService(""))
+        dispatch(setSelectedSecondaryServices([]))  
         dispatch(setUpdateLoadingStatus(false))
         swal("Information Updated & Notification Not Sent", "Please contact our support team", "success")
       }
@@ -471,8 +490,9 @@ export const validateAndAddNewTransaction = (data) => {
       dispatch(setAddPhoneError(emptyError))
     } 
 
-    if (phone.length > 0 && phone.length < 8) {
-      dispatch(setAddPhoneError(phoneMinError))
+    let phoneResult = validatePhone(phone)
+    if (phone.length > 0 && phoneResult.status === false) {
+      dispatch(setAddPhoneError(phoneInvalidError))
     }
 
     if (email.length <= 0) {
@@ -502,7 +522,7 @@ export const validateAndAddNewTransaction = (data) => {
       dispatch(setAddNameError(false))
     } 
 
-    if (phone.length >= 8) {
+    if (phoneResult.status === true) {
       dispatch(setAddPhoneError(false))
     } 
 
@@ -533,7 +553,7 @@ export const validateAndAddNewTransaction = (data) => {
 
     dispatch(setTransactionErrors(transactionErrors))
 
-    if (name.length > 0 && phone.length >= 8 && email.length > 0 && validateEmail(email) && selectedServices.length > 0 && isAppExists.id && Number(isAppExists.currentTransaction) < Number(isAppExists.maxQueue)) {
+    if (name.length > 0 && phoneResult.status === true && email.length > 0 && validateEmail(email) && selectedServices.length > 0 && isAppExists.id && Number(isAppExists.currentTransaction) < Number(isAppExists.maxQueue)) {
       data['appointment'] = isAppExists
       dispatch(setTransactionLoadingStatus(true))
       dispatch(createNewTransaction(data))
@@ -555,8 +575,6 @@ export const createNewTransaction = (data) => {
     let transactionRef = firestore.collection('transaction')
     let lowercasedName = name.toLowerCase()
 
-    let shopId = shop.id
-    let branchId = branch.id
     let queueNo = String(Number(appointment.currentTransaction) + 1)
     let startDate = ''
     let endDate = ''
@@ -569,14 +587,14 @@ export const createNewTransaction = (data) => {
     let paymentInformation = ''
 
     let newTransaction = {
-      shopId,
-      branchId,
+      shop,
+      branch,
       service: selectedServices,
       staff,
       appointment,
       customerId: '',
       name: lowercasedName,
-      phone,
+      phone: formatPhone(phone, 'NATIONAL'),
       email,
       queueNo,
       startDate,
@@ -593,15 +611,6 @@ export const createNewTransaction = (data) => {
     transactionRef.add(newTransaction)
     .then(ref => {
       newTransaction['id'] = ref.id
-      dispatch(setTransactionErrors([]))
-      dispatch(setAddNameError(false))
-      dispatch(setAddPhoneError(false))
-      dispatch(setAddEmailError(false))
-      dispatch(setAddName(""))
-      dispatch(setAddPhone(""))
-      dispatch(setAddEmail(""))
-      dispatch(setSelectedPrimaryService(""))
-      dispatch(setSelectedSecondaryServices([]))
       dispatch(updateAppointmentStatus(shop, branch, status, appointment, newTransaction, user, null, null, null))
     })
     .catch(err => {
@@ -667,7 +676,7 @@ export const getFilteredTransactions = (startDate, endDate, branchId) => {
     
     if (startDate.length > 0 && endDate.length > 0 && newStartDate <= newEndDate && differenceInDays <= 31) {
       transactionRef
-      .where('branchId', '==', branchId)
+      .where('branch.id', '==', branchId)
       .where('appointment.date', '>=', startDate)
       .where('appointment.date', '<=', endDate)
       .get()
@@ -873,8 +882,9 @@ export const validateAndEditTransaction = (data) => {
       dispatch(setEditPhoneError(emptyError))
     } 
 
-    if (phone.length > 0 && phone.length < 8) {
-      dispatch(setEditPhoneError(phoneMinError))
+    let phoneResult = validatePhone(phone)
+    if (phone.length > 0 && phoneResult.status === false) {
+      dispatch(setEditPhoneError(phoneInvalidError))
     }
 
     if (email.length <= 0) {
@@ -896,7 +906,7 @@ export const validateAndEditTransaction = (data) => {
       dispatch(setEditNameError(false))
     } 
 
-    if (phone.length >= 8) {
+    if (phoneResult.status === true) {
       dispatch(setEditPhoneError(false))
     } 
 
@@ -909,7 +919,7 @@ export const validateAndEditTransaction = (data) => {
       dispatch(setTransactionErrors(transactionErrors))
     }
 
-    if (name.length > 0 && phone.length >= 8 && email.length > 0 && validateEmail(email) && selectedServices.length > 0) {
+    if (name.length > 0 && phoneResult.status === true && email.length > 0 && validateEmail(email) && selectedServices.length > 0) {
       dispatch(setTransactionLoadingStatus(true))
       dispatch(editNewTransaction(data))
     }
@@ -928,7 +938,7 @@ export const editNewTransaction = (data) => {
 
     let revisedTransaction = {
       name: lowercasedName,
-      phone,
+      phone: formatPhone(phone, 'NATIONAL'),
       email,
       service: selectedServices,
       updatedDate,
