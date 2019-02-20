@@ -6,6 +6,7 @@ import authReducer from './firestore/auth/auth.reducers';
 import managementReducer from './firestore/management/management.reducers';
 import appointmentReducer from './firestore/appointment/appointment.reducers';
 import branchReducer from './firestore/branch/branch.reducers';
+import branchScheduleReducer from './firestore/branchSchedule/branchSchedule.reducers';
 import shopReducer from './firestore/shop/shop.reducers';
 import staffReducer from './firestore/staff/staff.reducers';
 import transactionReducer from './firestore/transaction/transaction.reducers';
@@ -20,6 +21,7 @@ const allReducers = combineReducers({
   firebase: firebaseReducer,
   appointment: appointmentReducer,
   branch: branchReducer,
+  schedule: branchScheduleReducer,
   shop: shopReducer,
   staff: staffReducer,
   transaction: transactionReducer,

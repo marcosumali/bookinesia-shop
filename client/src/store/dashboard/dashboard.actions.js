@@ -70,6 +70,11 @@ import {
   setSingleFileInputBranch,
 } from '../firestore/branch/branch.actions';
 
+import {
+  setHasEditStatusBranchSchedule,
+  setBranchSchedulesInput,
+} from '../firestore/branchSchedule/branchSchedule.actions';
+
 export const maxFileSizeError = 'Maximum file size is 1 MB. '
 export const imageFileTypeError = 'Accepted image file are JPG/JPEG, PNG, or GIF. '
 
@@ -266,6 +271,7 @@ const setFilterInput = (data) => {
 export const handleActiveTab = (tabIndex) => {
   return (dispatch, getState, { getFirebase, getFirestore }) => {
     let index = Number(tabIndex) % 10
+
     let activeTab = ''
     if (index === 0) {
       activeTab = 'Details'
@@ -277,6 +283,28 @@ export const handleActiveTab = (tabIndex) => {
       activeTab = 'Appointments'
     }
     dispatch(setActiveTab(activeTab))
+  }
+}
+
+// To handle active tab on manage shop and branch
+export const handleActiveTabShopAndBranch = (tabIndex) => {
+  return (dispatch, getState, { getFirebase, getFirestore }) => {
+    let index = Number(tabIndex) % 10
+
+    let activeTab = ''
+    if (index === 0) {
+      activeTab = 'Details'
+    } else if (index === 1) {
+      activeTab = 'Opening Hours'
+    }
+    dispatch(setActiveTabShopAndBranch(activeTab))
+  }
+}
+
+export const setActiveTabShopAndBranch = (data) => {
+  return {
+    type: 'SET_ACTIVE_TAB_SHOP_BRANCH',
+    payload: data
   }
 }
 
@@ -446,7 +474,7 @@ export const handleCancelation = (data) => {
       swalText = `Service's information will be restored to previous settings.` 
     } else if (functionToBeExecuted === 'setShopInput') {
       swalText = `Shop's information will be restored to previous settings.` 
-    } else if (functionToBeExecuted === 'setBranchInput') {
+    } else if (functionToBeExecuted === 'setBranchInput' || functionToBeExecuted === 'setBranchSchedulesInput') {
       swalText = `Branch's information will be restored to previous settings.` 
     }
 
@@ -497,6 +525,11 @@ export const handleCancelation = (data) => {
           dispatch(setBranchAddressInputError(false))
           dispatch(setSingleFileInputBranchError(false))
           dispatch(setHasEditStatusFileBranch(false))
+        
+        } else if (functionToBeExecuted === 'setBranchSchedulesInput') {
+          dispatch(setBranchSchedulesInput(requiredData))
+          dispatch(setHasEditStatusBranchSchedule(false))
+
         }
       }
     })  
@@ -510,10 +543,10 @@ export const handleMultipleSwitches = (purpose, e, data) => {
     let id = target.id            // represent id of input
     let type = target.type        // type of input e.g. radio or checkbox
     let status = target.checked   // true or false
-
+    
     if (purpose === 'manageBarberHours' && type === 'checkbox') {
-      // Here data represent selected staff services
-      let checkedIndex = data.findIndex(staffService => staffService.id === id)
+      // Here data represent selected staff schedules
+      let checkedIndex = data.findIndex(staffSchedule => staffSchedule.id === id)
       let selectedData = data[checkedIndex]
       let revisedStatus = ''
 
@@ -538,9 +571,38 @@ export const handleMultipleSwitches = (purpose, e, data) => {
         return ''
       })
 
-      // data.splice(checkedIndex, 1, revisedData)
       dispatch(setHasEditStatusStaffSchedule(true))
       dispatch(setSelectedStaffSchedulesInput(result))
+    
+    } else if (purpose === 'manageBranchHours' && type === 'checkbox') {
+      // Here data represent selected branch schedules
+      let checkedIndex = data.findIndex(branchSchedule => branchSchedule.id === id)
+      let selectedData = data[checkedIndex]
+      let revisedStatus = ''
+
+      if (status) {
+        revisedStatus = false
+      } else {
+        revisedStatus = true
+      }
+
+      let revisedData = {
+        ...selectedData,
+        disableStatus: revisedStatus
+      }
+
+      let result = []
+      data && data.map((singleData, index) => {
+        if (index === checkedIndex) {
+          result.push(revisedData)
+        } else (
+          result.push(singleData)
+        )
+        return ''
+      })
+
+      dispatch(setHasEditStatusBranchSchedule(true))
+      dispatch(setBranchSchedulesInput(result))
     }
   }
 }
@@ -554,37 +616,74 @@ export const handleMultipleSelectOption = (e, value, purpose, time, data) => {
     let value = target.value
 
     if (purpose === 'manageBarberHours' && type === 'select-one') {
-      // Here data represent selected staff services
-      let checkedIndex = data.findIndex(staffService => staffService.id === id)
+      // Here data represent selected staff schedules
+      let checkedIndex = data.findIndex(staffSchedule => staffSchedule.id === id)
       let selectedData = data[checkedIndex]
+      let result = [ ...data ]
 
       if (time === 'startHours') {
         let revisedData = {
           ...selectedData,
           startHours: value
         }
-        data.splice(checkedIndex, 1, revisedData)
+        result.splice(checkedIndex, 1, revisedData)
       } else if (time === 'startMinutes') {
         let revisedData = {
           ...selectedData,
           startMinutes: value
         }
-        data.splice(checkedIndex, 1, revisedData)
+        result.splice(checkedIndex, 1, revisedData)
       } else if (time === 'endHours') {
         let revisedData = {
           ...selectedData,
           endHours: value
         }
-        data.splice(checkedIndex, 1, revisedData)
+        result.splice(checkedIndex, 1, revisedData)
       } else if (time === 'endMinutes') {
         let revisedData = {
           ...selectedData,
           endMinutes: value
         }
-        data.splice(checkedIndex, 1, revisedData)
+        result.splice(checkedIndex, 1, revisedData)
       }
+      
       dispatch(setHasEditStatusStaffSchedule(true))
-      dispatch(setSelectedStaffSchedulesInput(data))
+      dispatch(setSelectedStaffSchedulesInput(result))
+
+    } else if (purpose === 'manageBranchHours' && type === 'select-one') {
+      // Here data represent selected branch schedules
+      let checkedIndex = data.findIndex(branchSchedule => branchSchedule.id === id)
+      let selectedData = data[checkedIndex]
+      let result = [ ...data ]
+
+      if (time === 'openHours') {
+        let revisedData = {
+          ...selectedData,
+          openHours: value
+        }
+        result.splice(checkedIndex, 1, revisedData)
+      } else if (time === 'openMinutes') {
+        let revisedData = {
+          ...selectedData,
+          openMinutes: value
+        }
+        result.splice(checkedIndex, 1, revisedData)
+      } else if (time === 'closeHours') {
+        let revisedData = {
+          ...selectedData,
+          closeHours: value
+        }
+        result.splice(checkedIndex, 1, revisedData)
+      } else if (time === 'closeMinutes') {
+        let revisedData = {
+          ...selectedData,
+          closeMinutes: value
+        }
+        result.splice(checkedIndex, 1, revisedData)
+      }
+
+      dispatch(setHasEditStatusBranchSchedule(true))
+      dispatch(setBranchSchedulesInput(result))
 
     } else if (purpose === 'manageService' && type === 'select-one') {
       dispatch(setServiceTypeInput(value))

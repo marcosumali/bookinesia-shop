@@ -50,7 +50,6 @@ export const getAllStaffsAndCalendar = (branchId, date) => {
           branchBarbers.push(data)
         })
 
-        dispatch(setAllBarbersSuccess(branchBarbers))
         dispatch(getAppointmentsAndCalendar(branchId, date, branchBarbers))
 
       } else {

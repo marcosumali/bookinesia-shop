@@ -6,6 +6,7 @@ let initialState = {
   subMenuToShow: '',
   filterInput: '',
   activeTab: '',
+  activeTabShopAndBranch: 'Details',
   hours: ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23'],
   minutes: ['00', '10', '20', '30', '40', '50'],
   file: {},
@@ -52,6 +53,11 @@ const dashbordDataList = (state = { ...initialState }, action) => {
       return ({
         ...state,
         activeTab: action.payload,
+      })
+    case 'SET_ACTIVE_TAB_SHOP_BRANCH':
+      return ({
+        ...state,
+        activeTabShopAndBranch: action.payload,
       })
     case 'SET_SINGLE_FILE_INPUT':
       return ({
