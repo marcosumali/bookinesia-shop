@@ -1,11 +1,11 @@
-import { setActiveTab, maxFileSizeError, setHasEditStatusFile, imageFileTypeError } from '../../dashboard/dashboard.actions';
+import { setActiveTab, maxFileSizeError, setHasEditStatusFile, imageFileTypeError, setSingleFileInput } from '../../dashboard/dashboard.actions';
 import { getAppointmentsAndCalendar } from '../../firestore/appointment/appointment.actions';
 import { setSelectedStaffServices, setHasEditStatus, addNewStaffServicesData, setStaffServiceInputError } from '../../firestore/staffService/staffService.actions';
 import { setSelectedStaffSchedules, setHasEditStatusStaffSchedule, addNewStaffSchedulesData, setStaffScheduleInputError } from '../../firestore/staffSchedule/staffSchedule.actions';
 import { emptyError } from '../transaction/transaction.actions';
 import swal from 'sweetalert';
 
-export const maxStaffError = 'Maximum number of barbers is 5 person per branch. Contact our care center for futher queries.'
+export const maxStaffError = 'Maximum number of barbers is 5 person per branch. Contact our shop support for futher queries.'
 
 // Get barbers data based on provided branchId with disableStatus is false
 export const getStaffsAndOtherData = (allBarbers) => {
@@ -271,6 +271,7 @@ export const updateBarberData = (file, selectedBarber, lowercasedName, disableSt
           disableStatus,
         }
       }
+      dispatch(setSingleFileInput({}))
       dispatch(setStaffLoadingStatus(false))
       dispatch(selectedBarberAction(revisedSelectedBarber))
       swal("Information Updated", "", "success")
