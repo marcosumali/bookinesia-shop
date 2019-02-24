@@ -50,7 +50,7 @@ class modalAddService extends Component {
         }
         trigger={
           <div className="Container-wrap-center-cross">
-            <AddBoxSvg width="80%" height="80%" color="#f68606" />
+            <AddBoxSvg width="2em" height="2em" color="#f68606" />
           </div>
         }>
         <div className="row No-margin">

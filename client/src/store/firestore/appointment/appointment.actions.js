@@ -1,7 +1,7 @@
 import swal from 'sweetalert';
 import { getTransactions, getTransactionsCalendar, setDashboardSuccess, updateTransactionStatus, sendEmailAfterSuccess } from '../transaction/transaction.actions';
 import { getAllStaffsAndCalendar, setAllBarbersSuccess } from '../staff/staff.actions';
-import { setDashboardLoadingStatus, setUpdateLoadingStatus } from '../../dashboard/dashboard.actions';
+import { setDashboardLoadingStatus } from '../../dashboard/dashboard.actions';
 
 const filterEmptyError = 'To filter preferred appointments for selected provider, start and end dates must be filled.'
 const maxFilterError = `The preferred appointment's date that can be chosen is up to 7 days.`
@@ -884,26 +884,27 @@ export const updateAppointmentStatus = (shop, branch, status, appointment, trans
     } else if (status === 'skipped' || status === 'on progress') {
       dataToUpdate['currentQueue'] = updatedCurrentQueue
     }
-    
-    appointmentRef.update(dataToUpdate)
-    .then(() => {
-      // success condition: swal or send email
-      if (status === 'skipped') {
-        if (transaction.status !== 'canceled') {
+
+    if (transaction.status !== 'skipped') {
+      appointmentRef.update(dataToUpdate)
+      .then(() => {
+        // success condition: swal or send email
+        if (status === 'skipped') {
           dispatch(updateTransactionStatus(shop, branch, status, appointment, transaction, user, paymentMethod, nextTransaction, afterNextTransaction))
-        } else {
-          dispatch(setUpdateLoadingStatus(false))
-          swal("Information Updated", "", "success")
+        } else if (status === 'on progress') {
+          dispatch(updateTransactionStatus(shop, branch, status, appointment, transaction, user, paymentMethod, nextTransaction, afterNextTransaction))
+        } else if (status === 'booking confirmed') {
+          dispatch(sendEmailAfterSuccess(shop, branch, status, appointment, transaction, nextTransaction, afterNextTransaction))
         }
-      } else if (status === 'on progress') {
+      })
+      .catch(err => {
+        console.log('ERROR: update appointment status', err)
+      })     
+    } else {
+      if (status === 'on progress') {
         dispatch(updateTransactionStatus(shop, branch, status, appointment, transaction, user, paymentMethod, nextTransaction, afterNextTransaction))
-      } else if (status === 'booking confirmed') {
-        dispatch(sendEmailAfterSuccess(shop, branch, status, appointment, transaction, nextTransaction, afterNextTransaction))
       }
-    })
-    .catch(err => {
-      console.log('ERROR: update appointment status', err)
-    })     
+    }
   }
 }
 

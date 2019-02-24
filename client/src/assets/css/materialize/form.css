@@ -163,6 +163,9 @@ input[type="radio"].with-gap:checked+label:after {
 }
 
 /* Modifying Input Select Materialize CSS */
+.select-dropdown{
+  overflow-y: auto !important;
+}
 .input-field.col label {
   left: 0;
 }

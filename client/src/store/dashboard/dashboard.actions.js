@@ -842,7 +842,7 @@ export const handleUpdateStatus = (data) => {
     
     let swalText = ''
     if (status === 'skipped') {
-      swalText = 'Related transaction will be updated and customer will be notified if the transaction is not canceled by them.'
+      swalText = 'Related transaction will be skipped and customer will be notified.'
     } else if (status === 'on progress') {
       swalText = 'Related transaction will be started.'
     } else if (status === 'finished') {
@@ -861,11 +861,7 @@ export const handleUpdateStatus = (data) => {
 
         dispatch(setUpdateLoadingStatus(true))
 
-        if (status === 'skipped') {
-          
-          dispatch(updateAppointmentStatus(shop, branch, status, appointment, transaction, user, paymentMethod, null, null))
-
-        } else if (status === 'on progress') {
+        if (status === 'on progress' || status === 'skipped') {
 
           let queueNo = transaction.queueNo
           let nextQueueNo = String(Number(queueNo) + 1)
