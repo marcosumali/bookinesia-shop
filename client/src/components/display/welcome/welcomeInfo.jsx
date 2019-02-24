@@ -72,6 +72,9 @@ class welcomeInfo extends Component {
 const mapStateToProps = state => {
   return {
     isOwner: state.auth.isOwner,
+    hours: state.nav.hours,
+    minutes: state.nav.minutes,
+
   }
 }
 

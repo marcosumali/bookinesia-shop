@@ -6,6 +6,7 @@ import { Modal } from 'react-materialize';
 import '../modal.css';
 import CloseSvg from '../../../components/svg/closeSvg';
 import Button from '../../button/button';
+import ModalSendReceipt from '../../modal/calendar/modalSendReceipt';
 import LoadingButton from '../../button/buttonLoading';
 import DisabledButton from '../../button/buttonDisabled';
 import StatusBox from '../../statusBox/statusBox';
@@ -52,16 +53,20 @@ class modalInfo extends Component {
 
     let buttonDisableStatus = true
 
+    // LOGIC
+    // Find data index to get detail of previous transaction
+    // IF previous transaction has been finished or skipped dan button are enabled, otherise to be disabled
     let dataIndex = dashboardData.findIndex(data => data.queueNo === transaction.queueNo)
     if (dataIndex > 0) {
       let selectedTransactions = dashboardData[dataIndex-1]
       let barberIndex = barbers.findIndex(barber => barber.id === transaction.staff.id)
       let transactionBefore = selectedTransactions.transactions[barberIndex]
       
-      if (transactionBefore.status === 'finished' || transactionBefore.status === 'skipped' || (transactionBefore.status === 'canceled' && Number(appointment.currentQueue) >= Number(transactionBefore.queueNo))) {
+      if (transactionBefore.status === 'finished' || transactionBefore.status === 'skipped') {
         buttonDisableStatus = false
       }
     } else {
+      // To set button disable status false if data index <-1
       buttonDisableStatus = false
     }
 
@@ -295,147 +300,169 @@ class modalInfo extends Component {
               <div></div>
             }
           </div>
-          
+
           {
-            buttonDisableStatus === false ?
-            <div className="col m12 No-margin No-padding Modal-body-box">
-              <div className="col m6 No-margin No-padding Container-nowrap-start">
-                {/* EDIT BUTTON */}
-                {
-                  transaction.status === 'booking confirmed' || transaction.status === 'on progress' || (transaction.status === 'canceled' && Number(appointment.currentQueue) < Number(transaction.queueNo)) ?
-                  <ModalEditTransaction 
-                    barber={ transaction.staff }
-                    transaction={ transaction }
-                  />
-                  :
-                  <div></div>
-                }
-                {/* SKIP BUTTON */}
-                {
-                  transaction.status === 'booking confirmed' || (transaction.status === 'canceled' && Number(appointment.currentQueue) < Number(transaction.queueNo)) ?
-                  <div>
+            transaction.status === 'finished' ?
+            <div className="col m12 No-margin No-padding Modal-body-box Container-nowrap-start">
+              {/* SEND RECEIPT BUTTON */}
+              {
+                transaction.status === 'finished' ?
+                <ModalSendReceipt 
+                  transaction={ transaction }
+                />
+                :
+                <div></div>
+              }
+            </div>
+            :
+            <div>
+              {
+                buttonDisableStatus === false ?
+                <div className="col m12 No-margin No-padding Modal-body-box">
+                  <div className="col m6 No-margin No-padding Container-nowrap-start">
+                    {/* EDIT BUTTON */}
                     {
-                      updateLoadingStatus ?
+                      transaction.status === 'booking confirmed' || 
+                      transaction.status === 'on progress' || 
+                      (transaction.status === 'canceled' && Number(appointment.currentQueue) < Number(transaction.queueNo)) || 
+                      transaction.status === 'skipped' ?
+                      <ModalEditTransaction 
+                        barber={ transaction.staff }
+                        transaction={ transaction }
+                      />
+                      :
+                      <div></div>
+                    }
+                    {/* SKIP BUTTON */}
+                    {
+                      transaction.status === 'booking confirmed' || 
+                      (transaction.status === 'canceled' && Number(appointment.currentQueue) < Number(transaction.queueNo)) ?
+                      <div>
+                        {
+                          updateLoadingStatus ?
+                          <LoadingButton 
+                            type="Btn-gray Container-nowrap-center"
+                            color="#666666"
+                          />
+                          :
+                          <Button 
+                            text="Skip"
+                            type="Btn-gray"
+                            clickFunction={ handleUpdateStatus }
+                            data={{ shop, branch, status: 'skipped', appointment, transaction, user, paymentMethod: null, dashboardData: dashboards[0].data, barbers }}
+                          />
+                        }
+                      </div>
+                      :
+                      <div></div>
+                    }
+                    {/* Happens when status has been changed to skipped but still sending email */}
+                    {
+                      transaction.status === 'skipped' && updateLoadingStatus ?
                       <LoadingButton 
                         type="Btn-gray Container-nowrap-center"
                         color="#666666"
                       />
                       :
-                      <Button 
-                        text="Skip"
-                        type="Btn-gray"
-                        clickFunction={ handleUpdateStatus }
-                        data={{ shop, branch, status: 'skipped', appointment, transaction, user, paymentMethod: null, dashboardData: null, barbers: null }}
-                      />
+                      <div></div>
                     }
                   </div>
-                  :
-                  <div></div>
-                }
-                {/* Happens when status has been changed to skipped but still sending email */}
-                {
-                  transaction.status === 'skipped' && updateLoadingStatus ?
-                  <LoadingButton 
-                    type="Btn-gray Container-nowrap-center"
-                    color="#666666"
-                  />
-                  :
-                  <div></div>
-                }
-              </div>
-              <div className="col m6 No-margin No-padding Container-nowrap-end">
-                {/* Happens when status has been changed to finished but still sending email */}
-                {
-                  transaction.status === 'finished' && updateLoadingStatus ?
-                  <LoadingButton 
-                    type="Btn-white-green Container-nowrap-center"
-                    color="#ffffff"
-                  />
-                  :
-                  <div></div>
-                }
-                {/* FINISH BUTTON */}
-                {
-                  transaction.status === 'on progress' ?
-                  <div>
+                  <div className="col m6 No-margin No-padding Container-nowrap-end">
+                    {/* Happens when status has been changed to finished but still sending email */}
                     {
-                      showPaymentMethodStatus && updateLoadingStatus ?
+                      transaction.status === 'finished' && updateLoadingStatus ?
                       <LoadingButton 
                         type="Btn-white-green Container-nowrap-center"
                         color="#ffffff"
                       />
                       :
-                      showPaymentMethodStatus && updateLoadingStatus === false ?
-                      <Button 
-                        text="Finish"
-                        type="Btn-white-green"
-                        clickFunction={ handleUpdateStatus }
-                        data={{ shop, branch, status: 'finished', appointment, transaction, user, paymentMethod, dashboardData: null, barbers: null, paymentInformation }}
-                      />
-                      :
-                      showPaymentMethodStatus === false && updateLoadingStatus === false ?
-                      <Button 
-                        text="Finish"
-                        type="Btn-white-green"
-                        clickFunction={ setShowPaymentMethodStatus }
-                        data={ true }
-                      />
-                      :
-                      // Happens when status has been changed but still sending email
-                      <LoadingButton 
-                        type="Btn-white-orange Container-nowrap-center"
-                        color="#ffffff"
-                      />
+                      <div></div>
                     }
-                  </div>
-                  :
-                  <div></div>
-                }
-                {/* START BUTTON */}
-                {
-                  transaction.status === 'booking confirmed' || (transaction.status === 'canceled' && Number(appointment.currentQueue) < Number(transaction.queueNo)) ?
-                  <div>
+                    {/* FINISH BUTTON */}
                     {
-                      updateLoadingStatus ?
-                      <LoadingButton 
-                        type="Btn-white-orange Container-nowrap-center"
-                        color="#ffffff"
-                      />
+                      transaction.status === 'on progress' ?
+                      <div>
+                        {
+                          showPaymentMethodStatus && updateLoadingStatus ?
+                          <LoadingButton 
+                            type="Btn-white-green Container-nowrap-center"
+                            color="#ffffff"
+                          />
+                          :
+                          showPaymentMethodStatus && updateLoadingStatus === false ?
+                          <Button 
+                            text="Finish"
+                            type="Btn-white-green"
+                            clickFunction={ handleUpdateStatus }
+                            data={{ shop, branch, status: 'finished', appointment, transaction, user, paymentMethod, dashboardData: null, barbers: null, paymentInformation }}
+                          />
+                          :
+                          showPaymentMethodStatus === false && updateLoadingStatus === false ?
+                          <Button 
+                            text="Finish"
+                            type="Btn-white-green"
+                            clickFunction={ setShowPaymentMethodStatus }
+                            data={ true }
+                          />
+                          :
+                          // Happens when status has been changed but still sending email
+                          <LoadingButton 
+                            type="Btn-white-orange Container-nowrap-center"
+                            color="#ffffff"
+                          />
+                        }
+                      </div>
                       :
-                      <Button 
-                        text="Start"
-                        type="Btn-white-orange"
-                        clickFunction={ handleUpdateStatus }
-                        data={{ shop, branch, status: 'on progress', appointment, transaction, user, paymentMethod: null, dashboardData: dashboards[0].data, barbers }}
-                      />
+                      <div></div>
+                    }
+                    {/* START BUTTON */}
+                    {
+                      transaction.status === 'booking confirmed' || 
+                      (transaction.status === 'canceled' && Number(appointment.currentQueue) < Number(transaction.queueNo)) || 
+                      transaction.status === 'skipped' ?
+                      <div>
+                        {
+                          updateLoadingStatus ?
+                          <LoadingButton 
+                            type="Btn-white-orange Container-nowrap-center"
+                            color="#ffffff"
+                          />
+                          :
+                          <Button 
+                            text="Start"
+                            type="Btn-white-orange"
+                            clickFunction={ handleUpdateStatus }
+                            data={{ shop, branch, status: 'on progress', appointment, transaction, user, paymentMethod: null, dashboardData: dashboards[0].data, barbers }}
+                          />
+                        }
+                      </div>
+                      :
+                      <div></div>
                     }
                   </div>
-                  :
-                  <div></div>
-                }
-              </div>
-            </div>
-            :
-            <div className="col m12 No-margin No-padding Modal-body-box">
-              <div className="col m6 No-margin No-padding Container-nowrap-start">
-                <DisabledButton 
-                  text="Edit"
-                  type="Btn-disabled No-margin"
-                />
-                <DisabledButton 
-                  text="Skip"
-                  type="Btn-disabled"
-                />
-              </div>
-              <div className="col m6 No-margin No-padding Container-nowrap-end">
-                <DisabledButton 
-                  text="Start"
-                  type="Btn-disabled"
-                />
-              </div>
+                </div>
+                :
+                <div className="col m12 No-margin No-padding Modal-body-box">
+                  <div className="col m6 No-margin No-padding Container-nowrap-start">
+                    <DisabledButton 
+                      text="Edit"
+                      type="Btn-disabled No-margin"
+                    />
+                    <DisabledButton 
+                      text="Skip"
+                      type="Btn-disabled"
+                    />
+                  </div>
+                  <div className="col m6 No-margin No-padding Container-nowrap-end">
+                    <DisabledButton 
+                      text="Start"
+                      type="Btn-disabled"
+                    />
+                  </div>
+                </div>
+              }             
             </div>
           }
-
         </div>
       </Modal>
     )

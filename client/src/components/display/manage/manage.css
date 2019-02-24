@@ -107,6 +107,12 @@
   border-top: 1px solid #EAEAEA;
 }
 
+.Manage-branch-content-box {
+  margin-top: 0.75em !important;
+  padding-top: 1em !important;
+  border-top: 1px solid #EAEAEA;  
+}
+
 .Manage-content-header-text {
   font-family: 'Montserrat', sans-serif;  font-size: 1.25em;
   font-weight: normal;
@@ -204,4 +210,16 @@
 
 .Error-box {
   line-height: 1;
+}
+
+.Select-headers {
+  font-family: 'Montserrat', sans-serif;  
+  font-size: 0.8em;
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.2;
+  letter-spacing: normal;
+  color: #f68606;
+  margin-bottom: 0.75em;
 }

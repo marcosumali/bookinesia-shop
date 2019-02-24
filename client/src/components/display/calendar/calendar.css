@@ -134,6 +134,22 @@
   color: #666666;
 }
 
+.Appointment-status-circle-on {
+  background-color: #27b50a;
+  border-radius: 50%;
+  height: 1em;
+  width: 1em;
+  margin-right: 0.5em;
+}
+
+.Appointment-status-circle-off {
+  background-color: #EAEAEA;
+  border-radius: 50%;
+  height: 1em;
+  width: 1em;
+  margin-right: 0.5em;
+}
+
 td, th {
   padding: 0px;
 }

@@ -1,7 +1,8 @@
 import swal from 'sweetalert';
 
 import { maxFileSizeError, imageFileTypeError } from '../../dashboard/dashboard.actions';
-import { emptyError, phoneMinError } from '../transaction/transaction.actions';
+import { emptyError, phoneInvalidError } from '../transaction/transaction.actions';
+import { validatePhone, formatPhone } from '../../../helpers/form';
 
 // Get branch data
 export const getBranch = (branchId) => {
@@ -127,8 +128,9 @@ export const validateAndUpdateBranch = (data) => {
       dispatch(setBranchPhoneInputError(emptyError))
     } 
 
-    if (branchPhoneInput.length > 0 && branchPhoneInput.length < 8) {
-      dispatch(setBranchPhoneInputError(phoneMinError))
+    let phoneResult = validatePhone(branchPhoneInput)
+    if (branchPhoneInput.length > 0 && phoneResult.status === false) {
+      dispatch(setBranchPhoneInputError(phoneInvalidError))
     }
 
     if (file.type) {
@@ -152,7 +154,7 @@ export const validateAndUpdateBranch = (data) => {
       dispatch(setBranchAddressInputError(false))
     }
 
-    if (branchPhoneInput.length >= 8) {
+    if (phoneResult.status === true) {
       dispatch(setBranchPhoneInputError(false))
     }
 
@@ -163,7 +165,7 @@ export const validateAndUpdateBranch = (data) => {
     }
 
     if (file.type) { 
-      if (branchNameInput.length > 0 && branchAddressInput.length > 0 && branchPhoneInput.length >= 8 && file.size <= maxFileSize && (file.type === 'image/jpeg' || file.type === 'image/gif' || file.type === 'image/png')) {
+      if (branchNameInput.length > 0 && branchAddressInput.length > 0 && phoneResult.status === true && file.size <= maxFileSize && (file.type === 'image/jpeg' || file.type === 'image/gif' || file.type === 'image/png')) {
         swal({
           title: 'Are you sure?',
           text: `Branch's information will be updated with the new input.`,
@@ -186,7 +188,7 @@ export const validateAndUpdateBranch = (data) => {
                   branchRef.update({
                     name: lowercasedName,
                     address: branchAddressInput,
-                    phone: branchPhoneInput,
+                    phone: formatPhone(branchPhoneInput, 'E.164'),
                     timezone: branchTimezoneInput,
                     storageFileName: file.name,
                     picture: downloadURL
@@ -211,7 +213,7 @@ export const validateAndUpdateBranch = (data) => {
         })
       }
     } else {
-      if (branchNameInput.length > 0 && branchAddressInput.length > 0 && branchPhoneInput.length >= 8) {
+      if (branchNameInput.length > 0 && branchAddressInput.length > 0 && phoneResult.status === true) {
         swal({
           title: 'Are you sure?',
           text: `Branch's information will be updated with the new input.`,
@@ -224,7 +226,7 @@ export const validateAndUpdateBranch = (data) => {
             branchRef.update({
               name: lowercasedName,
               address: branchAddressInput,
-              phone: branchPhoneInput,
+              phone: formatPhone(branchPhoneInput, 'E.164'),
               timezone: branchTimezoneInput,
             })
             .then(() => {

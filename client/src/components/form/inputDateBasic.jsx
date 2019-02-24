@@ -29,6 +29,7 @@ export default class inputDateBasic extends Component {
           id={ inputId }
           className="Input-date"
           type="date"
+          required="required"
           onChange={ handleChangesDateFunction }
           value={ openingStatus ? acceptedDate: "" }
         />

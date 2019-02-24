@@ -30,6 +30,9 @@ let initialState = {
   editPhoneError: false,
   editEmail: '',
   editEmailError: false,
+  sendEmailError: false,
+  sendEmailLoadingStatus: false,
+  sendEmailInput: '',
 }
 
 const transactionDataList = (state = { ...initialState }, action) => {
@@ -170,6 +173,21 @@ const transactionDataList = (state = { ...initialState }, action) => {
       return ({
         ...state,
         paymentInformation: action.payload,
+      })
+    case 'SET_SEND_EMAIL_INPUT_ERROR':
+      return ({
+        ...state,
+        sendEmailError: action.payload,
+      })
+    case 'SET_SEND_EMAIL_LOADING_STATUS':
+      return ({
+        ...state,
+        sendEmailLoadingStatus: action.payload,
+      })
+    case 'SET_SEND_EMAIL_RECEIPT_INPUT':
+      return ({
+        ...state,
+        sendEmailInput: action.payload,
       })
     default:
       return state;

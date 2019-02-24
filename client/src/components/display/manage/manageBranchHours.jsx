@@ -13,119 +13,117 @@ import {
   handleMultipleSelectOption, 
   handleCancelation,
 } from '../../../store/dashboard/dashboard.actions';
-import { updateStaffSchedulesData } from '../../../store/firestore/staffSchedule/staffSchedule.actions';
+import { updateBranchSchedulesData } from '../../../store/firestore/branchSchedule/branchSchedule.actions';
 
-class manageBarberHours extends Component {
+class manageBranchHours extends Component {
   render() {
     let { 
       hours, 
       minutes, 
-      selectedStaffSchedules, 
       handleCheckedStatus, 
-      selectedStaffSchedulesInput, 
       handleMultipleSwitches, 
       handleMultipleSelectOption, 
       hasEditStatus,
       handleCancelation,
-      staffScheduleInputError,
-      updateStaffSchedulesData,
+      updateBranchSchedulesData,
       loadingStatus,
+      branchSchedules,
+      branchSchedulesInput,
     } = this.props
 
     return (
       <form className="col m12 No-padding Container-wrap-center-cross Margin-b-10">
         <div className="col m12 No-margin No-padding Container-wrap-center-cross Margin-b-10">
-          {/* Schedule Headers */}
-          <div className="col m12 No-padding No-margin Container-wrap-center-cross">
-            <div className="col m2 No-padding No-margin Container-nowrap-center-cross">
+          <div className="col m12 No-padding No-margin Container-nowrap-center-cross">
+            <div className="col m3 No-margin Container-nowrap-center-cross">
               <div className="Manage-barber-hours-text-blue Text-capitalize"></div>
             </div>
-            <div className="col m2 No-padding No-margin Container-nowrap-end Margin-r-10">
+            <div className="col m2 No-margin Container-nowrap-start Margin-r-10">
             </div>
-            <div className="col m3 No-margin Container-nowrap-center">
-              <div className="Select-headers">Start</div>
+            <div className="col m3 No-margin Container-nowrap-center" style={{ paddingLeft: '0px' }}>
+              <div className="Select-headers">Open</div>
             </div>
-            <div className="col m1 No-padding No-margin Container-nowrap-center">
+            <div className="col m1  No-padding No-margin Container-nowrap-center">
               <div className="Manage-barber-hours-text-gray"></div>
             </div>
-            <div className="col m3 No-margin Container-nowrap-center">
-              <div className="Select-headers">End</div>
+            <div className="col m3 No-margin Container-nowrap-center" style={{ paddingLeft: '0px' }}>
+              <div className="Select-headers">Closed</div>
             </div>
           </div>
           {
-            selectedStaffSchedulesInput && selectedStaffSchedulesInput.map((selectedStaffSchedule, index) => {
+            branchSchedulesInput && branchSchedulesInput.map((schedule, index) => {
               return(
-                <div className="col m12 No-padding No-margin Container-wrap-center-cross Schedule-box" key={ 'staffSchedule' + index }>
-                  <div className="col m2 No-padding No-margin Container-nowrap-center-cross">
-                    <div className="Manage-barber-hours-text-blue Text-capitalize">{ selectedStaffSchedule.day }</div>
+                <div className="col m12 No-padding No-margin Container-nowrap-center-cross Schedule-box" key={ 'schedule' + index }>
+                  <div className="col m3 No-margin Container-nowrap-center-cross">
+                    <div className="Manage-barber-hours-text-blue Text-capitalize">{ schedule.day }</div>
                   </div>
-                  <div className="col m2 No-padding No-margin Container-nowrap-end Margin-r-10">
+                  <div className="col m2 No-margin Container-nowrap-start Margin-r-10">
                     <SwitchInput 
-                      inputId={ selectedStaffSchedule.id }
+                      inputId={ schedule.id }
                       inputLabel=""
                       showLabel={ false }
                       inputValue={ true }
-                      handleChangesFunction={ (e) => handleMultipleSwitches('manageBarberHours', e, selectedStaffSchedulesInput) }
+                      handleChangesFunction={ (e) => handleMultipleSwitches('manageBranchHours', e, branchSchedulesInput) }
                       handleCheckFunction={ handleCheckedStatus }
-                      checkedStatus={ selectedStaffSchedule.disableStatus }
+                      checkedStatus={ schedule.disableStatus }
                     />
                   </div>
-                  <div className="col m3 No-margin Container-nowrap-center">
+                  <div className="col m3 No-margin Container-nowrap-center" style={{ paddingLeft: '0px' }}>
                     <SelectInput 
-                      inputId={ selectedStaffSchedule.id }
+                      inputId={ schedule.id }
                       className="Margin-r-5"
                       inputSize={ 6 }
                       handleChangesFunction={ handleMultipleSelectOption }
-                      purpose="manageBarberHours"
-                      inputName="startHours"
-                      selectedData={ selectedStaffSchedulesInput }
+                      purpose="manageBranchHours"
+                      inputName="openHours"
+                      selectedData={ branchSchedulesInput }
                       showLabel={ index === 0 ? true : false }
                       inputLabel="Hours"
-                      inputValue={ selectedStaffSchedule.startHours }
+                      inputValue={ schedule.openHours }
                       optionData={ hours }
                     />
                     <SelectInput 
-                      inputId={ selectedStaffSchedule.id }
+                      inputId={ schedule.id }
                       className=""
                       inputSize={ 6 }
                       handleChangesFunction={ handleMultipleSelectOption }
-                      purpose="manageBarberHours"
-                      inputName="startMinutes"
-                      selectedData={ selectedStaffSchedulesInput }
+                      purpose="manageBranchHours"
+                      inputName="openMinutes"
+                      selectedData={ branchSchedulesInput }
                       showLabel={ index === 0 ? true : false }
                       inputLabel="Minutes"
-                      inputValue={ selectedStaffSchedule.startMinutes }
+                      inputValue={ schedule.openMinutes }
                       optionData={ minutes }
                     />
                   </div>
-                  <div className="col m1 No-padding No-margin Container-nowrap-center">
+                  <div className="col m1  No-padding No-margin Container-nowrap-center">
                     <div className="Manage-barber-hours-text-gray">to</div>
                   </div>
-                  <div className="col m3 No-margin Container-nowrap-center">
+                  <div className="col m3 No-margin Container-nowrap-center" style={{ paddingLeft: '0px' }}>
                     <SelectInput 
-                      inputId={ selectedStaffSchedule.id }
+                      inputId={ schedule.id }
                       className="Margin-r-5"
                       inputSize={ 6 }
                       handleChangesFunction={ handleMultipleSelectOption }
-                      purpose="manageBarberHours"
-                      inputName="endHours"
-                      selectedData={ selectedStaffSchedulesInput }
+                      purpose="manageBranchHours"
+                      inputName="closeHours"
+                      selectedData={ branchSchedulesInput }
                       showLabel={ index === 0 ? true : false }
                       inputLabel="Hours"
-                      inputValue={ selectedStaffSchedule.endHours }
+                      inputValue={ schedule.closeHours }
                       optionData={ hours }
                     />
                     <SelectInput 
-                      inputId={ selectedStaffSchedule.id }
+                      inputId={ schedule.id }
                       className=""
                       inputSize={ 6 }
                       handleChangesFunction={ handleMultipleSelectOption }
-                      purpose="manageBarberHours"
-                      inputName="endMinutes"
-                      selectedData={ selectedStaffSchedulesInput }
+                      purpose="manageBranchHours"
+                      inputName="closeMinutes"
+                      selectedData={ branchSchedulesInput }
                       showLabel={ index === 0 ? true : false }
                       inputLabel="Minutes"
-                      inputValue={ selectedStaffSchedule.endMinutes }
+                      inputValue={ schedule.closeMinutes }
                       optionData={ minutes }
                     />
                   </div>
@@ -134,17 +132,14 @@ class manageBarberHours extends Component {
             })
           }
         </div>
-        <div className="col m12 No-margin No-padding Container-nowrap-center Margin-b-10">
-          <div className="Input-info-error">{ staffScheduleInputError }</div>
-        </div>
-        <div className="col m12 No-margin No-padding Container-nowrap-end Margin-b-10">
+        <div className="col m12 No-padding Container-nowrap-end Margin-b-10" style={{ marginRight: '0.625em' }}>
           {
             hasEditStatus && loadingStatus === false ?
             <Button 
               text="Cancel"
               type="Btn-blue"
               clickFunction={ handleCancelation }
-              data={{ functionToBeExecuted: 'setSelectedStaffSchedulesInput', section: 'working hours', requiredData: selectedStaffSchedules }}
+              data={{ functionToBeExecuted: 'setBranchSchedulesInput', section: 'opening hours', requiredData: branchSchedules }}
             />
             :
             <DisabledButton 
@@ -153,12 +148,12 @@ class manageBarberHours extends Component {
             />
           }
           {
-            hasEditStatus && loadingStatus === false ?
+            (hasEditStatus && loadingStatus === false) ?
             <Button 
               text="Save"
               type="Btn-white-blue"
-              clickFunction={ updateStaffSchedulesData }
-              data={{ staffSchedules: selectedStaffSchedules, staffSchedulesInput:  selectedStaffSchedulesInput}}
+              clickFunction={ updateBranchSchedulesData }
+              data={{ branchSchedules, branchSchedulesInput }}
             />
             :
             loadingStatus ?
@@ -183,11 +178,10 @@ const mapStateToProps = state => {
   return {
     hours: state.nav.hours,
     minutes: state.nav.minutes,
-    selectedStaffSchedules: state.staffSchedule.selectedStaffSchedules,
-    selectedStaffSchedulesInput: state.staffSchedule.selectedStaffSchedulesInput,
-    hasEditStatus: state.staffSchedule.hasEditStatus,
-    staffScheduleInputError: state.staffSchedule.staffScheduleInputError,
-    loadingStatus: state.staffSchedule.loadingStatus
+    loadingStatus: state.schedule.loadingStatus,
+    branchSchedules: state.schedule.branchSchedules,
+    branchSchedulesInput: state.schedule.branchSchedulesInput,
+    hasEditStatus: state.schedule.hasEditStatus,
   }
 }
 
@@ -196,8 +190,8 @@ const mapDispatchToProps = dispatch => bindActionCreators({
   handleMultipleSwitches,
   handleMultipleSelectOption,
   handleCancelation,
-  updateStaffSchedulesData
+  updateBranchSchedulesData
 }, dispatch)
 
 
-export default connect(mapStateToProps, mapDispatchToProps) (manageBarberHours);
+export default connect(mapStateToProps, mapDispatchToProps) (manageBranchHours);

@@ -94,6 +94,14 @@ class dashboardMenu extends Component {
             <div className="Legends-header-text">Calendar Legends</div>
           </div>
           <div className="col m12 Legends-status-box No-margin No-padding Container-nowrap-center-cross">
+            <div className="col m1 No-margin No-padding Margin-r-5 Container-wrap-center">
+              <div className="No-margin Appointment-status-circle-off" />
+            </div>
+            <div className="col m11 No-margin No-padding Legends-text-box Container-wrap-center-cross">
+              <div className="Legends-text">Provider App. Off / No Appointment</div>
+            </div>
+          </div>
+          <div className="col m12 Legends-status-box No-margin No-padding Container-nowrap-center-cross">
             <div className="col m1 No-margin No-padding Margin-r-5">
               <MiniStatusBox status="booking confirmed" />
             </div>

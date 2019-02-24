@@ -28,10 +28,10 @@ export default class contacts extends Component {
             </div>
             <div className="col s12 m12 No-padding">
               <div className="col s4 m4">
-                <div className="Contacts-text">Whatsapp</div>
+                <div className="Contacts-text">LINE</div>
               </div>
               <div className="col s8 m8">
-                <div className="Contacts-text">0813 9107 7789</div>
+                <div className="Contacts-text">+62 812 99898 120</div>
               </div>
             </div>
             <div className="col s12 m12 No-padding">

@@ -19,7 +19,7 @@ export default class homeHeader extends Component {
                 <div className="Head-desc-text">Business is easier with Bookinesia.</div>
               </div>
               <div className="col s12 m12 Header-input-text-box">
-                <div className="Head-input-text">A web application that is tailored for service provider businesses' needs to monitor their business in real time and easily connect with their customers.</div>
+                <div className="Head-input-text">A web application that is tailored for on-demand service provider businesses' needs to monitor their business in real time and easily connect with their customers.</div>
               </div>
             </div>            
           </div>
@@ -33,7 +33,7 @@ export default class homeHeader extends Component {
                 <div className="Head-desc-text">Business is easier with Bookinesia.</div>
               </div>
               <div className="col s12 m12 Header-input-text-box">
-                <div className="Head-input-text">A web application that is tailored for service provider businesses' needs to monitor their business with ease and easily connect with their customers.</div>
+                <div className="Head-input-text">A web application that is tailored for on-demand service provider businesses' needs to monitor their business with ease and easily connect with their customers.</div>
               </div>
             </div>
             <div className="col s12 m4 l6 Image-box Container-wrap-center">

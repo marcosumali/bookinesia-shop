@@ -10,7 +10,7 @@ import Loading from '../loading/loading';
 
 class calendar extends Component {
   render() {
-
+    // console.log('---', this.props)
     return (
       <div>
         <div>
@@ -30,15 +30,29 @@ class calendar extends Component {
                           return (
                             <th className="Content-box" key={ 'barber' + index }>
                               <div className="Container-nowrap-spacebetween">
-                                {
-                                  barber.disableStatus ?
-                                  <div className="Staff-text Text-capitalize Disabled">{ barber.name }</div>
-                                  :
-                                  <div className="Staff-text Text-capitalize">{ barber.name }</div>
-                                }
-                                <ModalAddTransaction 
-                                  barber={ barber }
-                                />
+                                <div className="Container-nowrap-center-cross">
+                                  <div>
+                                    {
+                                      barber.appStatus ?
+                                      <div></div>
+                                      :
+                                      <div className="Appointment-status-circle-off"></div>
+                                    }
+                                  </div>
+                                  <div>
+                                    {
+                                      barber.disableStatus ?
+                                      <div className="Staff-text Text-capitalize Disabled">{ barber.name }</div>
+                                      :
+                                      <div className="Staff-text Text-capitalize">{ barber.name }</div>
+                                    }
+                                  </div>
+                                </div>
+                                <div>
+                                  <ModalAddTransaction 
+                                    barber={ barber }
+                                  />
+                                </div>
                               </div>
                             </th>
                           )
