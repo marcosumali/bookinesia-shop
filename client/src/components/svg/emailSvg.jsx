@@ -4,7 +4,7 @@ export default class emailSvg extends Component {
   render() {
     return (
       <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" 
-        width={ this.props.width } height={ this.props.height } viewBox="0 0 24 24" enable-background="new 0 0 24 24" space="preserve">
+        width={ this.props.width } height={ this.props.height } viewBox="0 0 24 24" enableBackground="new 0 0 24 24" space="preserve">
         <g id="Bounding_Boxes">
           <g id="ui_x5F_spec_x5F_header_copy_2">
           </g>

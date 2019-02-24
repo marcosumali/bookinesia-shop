@@ -272,11 +272,19 @@ export const getAppointmentsAndCalendar = (branchId, date, staffs) => {
             }
             staffsWithAppointmentStatus.push(staffWithStatus)
           } else {
-            let staffWithStatus = {
-              ...staff,
-              appStatus: true
+            if (appointments[staffIndex].disableStatus) {
+              let staffWithStatus = {
+                ...staff,
+                appStatus: false
+              }
+              staffsWithAppointmentStatus.push(staffWithStatus)
+            } else {
+              let staffWithStatus = {
+                ...staff,
+                appStatus: true
+              }
+              staffsWithAppointmentStatus.push(staffWithStatus)
             }
-            staffsWithAppointmentStatus.push(staffWithStatus)
           }
           return ''
         })
