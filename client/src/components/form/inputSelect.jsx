@@ -25,6 +25,7 @@ export default class inputSelect extends Component {
         onChange={ (e, value) => handleChangesFunction(e, value, purpose, inputName, selectedData) } 
         label={ showLabel ? inputLabel : '' } 
         value={ inputValue }
+        browserDefault
       >
         {
           optionData && optionData.map((data, index) => {

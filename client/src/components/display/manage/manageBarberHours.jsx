@@ -33,16 +33,33 @@ class manageBarberHours extends Component {
     } = this.props
 
     return (
-      <form className="col m12 Container-wrap-center-cross Margin-b-10">
+      <form className="col m12 No-padding Container-wrap-center-cross Margin-b-10">
         <div className="col m12 No-margin No-padding Container-wrap-center-cross Margin-b-10">
+          {/* Schedule Headers */}
+          <div className="col m12 No-padding No-margin Container-wrap-center-cross">
+            <div className="col m2 No-padding No-margin Container-nowrap-center-cross">
+              <div className="Manage-barber-hours-text-blue Text-capitalize"></div>
+            </div>
+            <div className="col m2 No-padding No-margin Container-nowrap-end Margin-r-10">
+            </div>
+            <div className="col m3 No-margin Container-nowrap-center">
+              <div className="Select-headers">Start</div>
+            </div>
+            <div className="col m1 No-padding No-margin Container-nowrap-center">
+              <div className="Manage-barber-hours-text-gray"></div>
+            </div>
+            <div className="col m3 No-margin Container-nowrap-center">
+              <div className="Select-headers">End</div>
+            </div>
+          </div>
           {
             selectedStaffSchedulesInput && selectedStaffSchedulesInput.map((selectedStaffSchedule, index) => {
               return(
-                <div className="col m12 No-margin Container-nowrap-center-cross Schedule-box" key={ 'staffSchedule' + index }>
-                  <div className="col m3 No-margin Container-nowrap-center-cross">
+                <div className="col m12 No-padding No-margin Container-wrap-center-cross Schedule-box" key={ 'staffSchedule' + index }>
+                  <div className="col m2 No-padding No-margin Container-nowrap-center-cross">
                     <div className="Manage-barber-hours-text-blue Text-capitalize">{ selectedStaffSchedule.day }</div>
                   </div>
-                  <div className="col m2 No-margin Container-nowrap-start Margin-r-10">
+                  <div className="col m2 No-padding No-margin Container-nowrap-end Margin-r-10">
                     <SwitchInput 
                       inputId={ selectedStaffSchedule.id }
                       inputLabel=""
@@ -53,7 +70,7 @@ class manageBarberHours extends Component {
                       checkedStatus={ selectedStaffSchedule.disableStatus }
                     />
                   </div>
-                  <div className="col m2 No-margin Container-nowrap-center">
+                  <div className="col m3 No-margin Container-nowrap-center">
                     <SelectInput 
                       inputId={ selectedStaffSchedule.id }
                       className="Margin-r-5"
@@ -81,10 +98,10 @@ class manageBarberHours extends Component {
                       optionData={ minutes }
                     />
                   </div>
-                  <div className="col m2 No-margin Container-nowrap-center">
+                  <div className="col m1 No-padding No-margin Container-nowrap-center">
                     <div className="Manage-barber-hours-text-gray">to</div>
                   </div>
-                  <div className="col m2 No-margin Container-nowrap-center">
+                  <div className="col m3 No-margin Container-nowrap-center">
                     <SelectInput 
                       inputId={ selectedStaffSchedule.id }
                       className="Margin-r-5"

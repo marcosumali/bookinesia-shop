@@ -10,6 +10,7 @@ import Loading from '../loading/loading';
 
 class calendar extends Component {
   render() {
+    // console.log('---', this.props)
     return (
       <div>
         <div>

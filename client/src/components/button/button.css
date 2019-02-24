@@ -104,3 +104,17 @@
   font-size: 1.25em;
   margin-right: 0.75em;
 }
+
+.Receipt-box {
+  padding: 3px;
+  color: #5499c3;
+  border-radius: 6px;
+  border: 1px solid #5499c3;
+  min-width: 4em;
+  text-align: center;
+  font-size: 0.9em;
+}
+
+.Receipt-text {
+  margin-left: 0.25em;
+}

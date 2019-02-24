@@ -34,6 +34,22 @@ class manageBranchHours extends Component {
     return (
       <form className="col m12 No-padding Container-wrap-center-cross Margin-b-10">
         <div className="col m12 No-margin No-padding Container-wrap-center-cross Margin-b-10">
+          <div className="col m12 No-padding No-margin Container-nowrap-center-cross">
+            <div className="col m3 No-margin Container-nowrap-center-cross">
+              <div className="Manage-barber-hours-text-blue Text-capitalize"></div>
+            </div>
+            <div className="col m2 No-margin Container-nowrap-start Margin-r-10">
+            </div>
+            <div className="col m3 No-margin Container-nowrap-center" style={{ paddingLeft: '0px' }}>
+              <div className="Select-headers">Open</div>
+            </div>
+            <div className="col m1  No-padding No-margin Container-nowrap-center">
+              <div className="Manage-barber-hours-text-gray"></div>
+            </div>
+            <div className="col m3 No-margin Container-nowrap-center" style={{ paddingLeft: '0px' }}>
+              <div className="Select-headers">Closed</div>
+            </div>
+          </div>
           {
             branchSchedulesInput && branchSchedulesInput.map((schedule, index) => {
               return(
@@ -52,7 +68,7 @@ class manageBranchHours extends Component {
                       checkedStatus={ schedule.disableStatus }
                     />
                   </div>
-                  <div className="col m3 No-margin Container-nowrap-center">
+                  <div className="col m3 No-margin Container-nowrap-center" style={{ paddingLeft: '0px' }}>
                     <SelectInput 
                       inputId={ schedule.id }
                       className="Margin-r-5"
@@ -80,10 +96,10 @@ class manageBranchHours extends Component {
                       optionData={ minutes }
                     />
                   </div>
-                  <div className="col m1 No-margin Container-nowrap-center">
+                  <div className="col m1  No-padding No-margin Container-nowrap-center">
                     <div className="Manage-barber-hours-text-gray">to</div>
                   </div>
-                  <div className="col m3 No-margin Container-nowrap-center">
+                  <div className="col m3 No-margin Container-nowrap-center" style={{ paddingLeft: '0px' }}>
                     <SelectInput 
                       inputId={ schedule.id }
                       className="Margin-r-5"

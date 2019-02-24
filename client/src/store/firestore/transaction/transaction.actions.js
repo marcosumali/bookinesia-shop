@@ -7,8 +7,7 @@ import { validateEmail, validatePhone, formatPhone } from '../../../helpers/form
 import { setDashboardLoadingStatus, setUpdateLoadingStatus } from '../../dashboard/dashboard.actions';
 import { setSelectedDateSuccess, isAppointmentExist, updateAppointmentStatus, incorrectFilterError } from '../appointment/appointment.actions';
 
-const textQueueTwoNumberAfter = 'We would like to remind you about your appointment for related transaction and your queue number is two number after the current queuing number.'
-const textQueueOneNumberAfter = `Your queuing number is almost up. Please ensure that you are nearby the shop's location when your number is up.`
+const textQueue = `Your queuing number is almost up. Please ensure that you are nearby the shop's location when your number is up.`
 
 export const emptyError = 'This section must be filled.'
 export const phoneMinError = 'Phone number is too short, min. 8 characters.'
@@ -221,8 +220,11 @@ export const updateTransactionStatus = (shop, branch, status, appointment, trans
     transactionRef.update(dataToUpdate)
     .then(() => {
       // success condition: swal, or send email
-      if (status === 'skipped' || status === 'on progress' || status === 'finished') {
+      if (status === 'skipped' || status === 'on progress') {
         dispatch(sendEmailAfterSuccess(shop, branch, status, appointment, transaction, nextTransaction, afterNextTransaction))
+      } else if (status === 'finished') {
+        dispatch(setUpdateLoadingStatus(false))
+        swal("Transaction Finished", "", "success")
       }
     })
     .catch(err => {
@@ -236,6 +238,9 @@ export const sendEmailAfterSuccess = (shop, branch, status, appointment, transac
   return async (dispatch, getState, { getFirebase, getFirestore }) => {
     if(status === 'skipped') {
 
+      let score = 0
+
+      // Send email skip info
       let emailData = {
         name: transaction.name,
         email: transaction.email,
@@ -252,16 +257,10 @@ export const sendEmailAfterSuccess = (shop, branch, status, appointment, transac
       let sendEmailResult = await axios.post('https://us-central1-bookinesia-com.cloudfunctions.net/sendEmailShopSkipTransaction', emailData)
       // console.log('email', sendEmailResult)
       if (sendEmailResult.status === 200) {
-        dispatch(setUpdateLoadingStatus(false))
-        swal("Information Updated & Notification Sent", "", "success")
-      } else {
-        dispatch(setUpdateLoadingStatus(false))
-        swal("Information Updated & Notification Not Sent", "Please contact our support team", "success")
+        score = score + 1
       }
 
-    } else if (status === 'on progress') {
-
-      let score = 0
+      // Send email queue reminder
       let currentQueue =  String(Number(appointment.currentQueue) + 1)
 
       if (afterNextTransaction.status === 'booking confirmed') {
@@ -277,7 +276,7 @@ export const sendEmailAfterSuccess = (shop, branch, status, appointment, transac
           staffName: afterNextTransaction.staff.name,
           staffImage: afterNextTransaction.staff.picture,
           currentQueue,
-          text: textQueueTwoNumberAfter,
+          text: textQueue,
           category: shop.categoryId,
         }
         
@@ -301,7 +300,66 @@ export const sendEmailAfterSuccess = (shop, branch, status, appointment, transac
           staffName: nextTransaction.staff.name,
           staffImage: nextTransaction.staff.picture,
           currentQueue,
-          text: textQueueOneNumberAfter,
+          text: textQueue,
+          category: shop.categoryId,
+        }
+  
+        let sendEmailResultOneNumberAfter = await axios.post('https://us-central1-bookinesia-com.cloudfunctions.net/sendEmailQueueReminder', emailDataOne)
+        // console.log('email1', sendEmailResultOneNumberAfter)
+        if (sendEmailResultOneNumberAfter.status === 200) {
+          score = score + 1
+        }
+      }
+      // console.log('final', score)
+
+      if (score <= 3) {
+        dispatch(setUpdateLoadingStatus(false))
+        swal("Information Updated & Notification Sent", "", "success")
+      }
+
+    } else if (status === 'on progress') {
+
+      let score = 0
+      let currentQueue =  String(Number(appointment.currentQueue) + 1)
+
+      if (afterNextTransaction.status === 'booking confirmed') {
+        let emailDataTwo = {
+          name: afterNextTransaction.name,
+          email: afterNextTransaction.email,
+          transactionId: afterNextTransaction.id,
+          date: appointment.date,
+          shopName: shop.name,
+          shopLogo: shop.logo,
+          branchName: branch.name,
+          queueNo: afterNextTransaction.queueNo,
+          staffName: afterNextTransaction.staff.name,
+          staffImage: afterNextTransaction.staff.picture,
+          currentQueue,
+          text: textQueue,
+          category: shop.categoryId,
+        }
+        
+        let sendEmailResultTwoNumberAfter = await axios.post('https://us-central1-bookinesia-com.cloudfunctions.net/sendEmailQueueReminder', emailDataTwo)
+        // console.log('email2', sendEmailResultTwoNumberAfter)  
+        if (sendEmailResultTwoNumberAfter.status === 200) {
+          score = score + 1
+        }
+      }
+
+      if (nextTransaction.status === 'booking confirmed') {
+        let emailDataOne = {
+          name: nextTransaction.name,
+          email: nextTransaction.email,
+          transactionId: nextTransaction.id,
+          date: appointment.date,
+          shopName: shop.name,
+          shopLogo: shop.logo,
+          branchName: branch.name,
+          queueNo: nextTransaction.queueNo,
+          staffName: nextTransaction.staff.name,
+          staffImage: nextTransaction.staff.picture,
+          currentQueue,
+          text: textQueue,
           category: shop.categoryId,
         }
   
@@ -316,30 +374,6 @@ export const sendEmailAfterSuccess = (shop, branch, status, appointment, transac
       if (score <= 2) {
         dispatch(setUpdateLoadingStatus(false))
         swal("Information Updated & Notification Sent", "", "success")
-      }
-
-    } else if (status === 'finished') {
-
-      let emailData = {
-        name: transaction.name,
-        email: transaction.email,
-        transactionId: transaction.id,
-        date: appointment.date,
-        shopName: shop.name,
-        shopLogo: shop.logo,
-        branchName: branch.name,
-        queueNo: transaction.queueNo,
-        staffName: transaction.staff.name,
-        staffImage: transaction.staff.picture,
-        service: transaction.service,
-      } 
-      let sendEmailResult = await axios.post('https://us-central1-bookinesia-com.cloudfunctions.net/sendEmailTransactionReceipt', emailData)
-      if (sendEmailResult.status === 200) {
-        dispatch(setUpdateLoadingStatus(false))
-        swal("Information Updated & Notification Sent", "", "success")
-      } else {
-        dispatch(setUpdateLoadingStatus(false))
-        swal("Information Updated & Notification Not Sent", "Please contact our support team", "success")
       }
 
     } else if (status === 'booking confirmed') {
@@ -400,6 +434,96 @@ export const setShowPaymentMethodStatus = (data) => {
     payload: data
   }
 }
+
+
+// To handle changes in send email receipt 
+export const handleChangesSendEmailReceipt = (e) => {
+  return async (dispatch, getState, { getFirebase, getFirestore }) => {
+    let target = e.target
+    let inputId = target.id
+    let value = target.value
+    
+    if (inputId === 'email') {
+      dispatch(setSendEmailReceipt(value))
+    }
+  }
+}
+
+export const setInitialSendEmailReceipt = (email) => {
+  return async (dispatch, getState, { getFirebase, getFirestore }) => {
+    let input = ''
+    
+    if (email) {
+      input = email
+    }
+
+    dispatch(setSendEmailReceipt(input))
+  }
+}
+
+export const setSendEmailReceipt = (data) => {
+  return {
+    type: 'SET_SEND_EMAIL_RECEIPT_INPUT',
+    payload: data
+  }
+}
+
+// To send email receipt 
+export const sendEmailReceipt = (data) => {
+  return async (dispatch, getState, { getFirebase, getFirestore }) => {
+    let { transaction, email } = data
+
+    if (email.length <= 0) {
+      dispatch(setSendEmailError(emptyError))
+    } 
+
+    if (email.length > 0 && validateEmail(email) === false) {
+      dispatch(setSendEmailError(emailInvalidError))
+    }
+    
+    if (email.length > 0 && validateEmail(email) === true) {
+      dispatch(setSendEmailError(false))
+      dispatch(setSendEmailLoadingStatus(true))
+
+      let emailData = {
+        name: transaction.name,
+        email,
+        transactionId: transaction.id,
+        date: transaction.appointment.date,
+        shopName: transaction.shop.name,
+        shopLogo: transaction.shop.logo,
+        branchName: transaction.branch.name,
+        queueNo: transaction.queueNo,
+        staffName: transaction.staff.name,
+        staffImage: transaction.staff.picture,
+        service: transaction.service,
+      } 
+      let sendEmailResult = await axios.post('https://us-central1-bookinesia-com.cloudfunctions.net/sendEmailTransactionReceipt', emailData)
+      if (sendEmailResult.status === 200) {
+        dispatch(setSendEmailLoadingStatus(false))
+        swal("Receipt Sent", "", "success")
+      } else {
+        dispatch(setSendEmailLoadingStatus(false))
+        swal("Receipt Not Sent", "Please contact our support team", "error")
+      }
+    }
+  }
+}
+
+const setSendEmailError = (data) => {
+  return {
+    type: 'SET_SEND_EMAIL_INPUT_ERROR',
+    payload: data
+  }
+}
+
+const setSendEmailLoadingStatus = (data) => {
+  return {
+    type: 'SET_SEND_EMAIL_LOADING_STATUS',
+    payload: data
+  }
+}
+
 
 // To handle changes in adding new transaction 
 export const handleChangesNewTransaction = (e) => {

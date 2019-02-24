@@ -42,21 +42,23 @@ class dashboardHeader extends Component {
         </div>
         <div className="Container-nowrap-end Dashboard-header-inner-box">
           <OnlineStatusBox status={ onlineStatus } />
-          <Dropdown trigger={
-              <div className="Account-box Container-wrap-center-cross">
-                <div className="col m3 No-margin No-padding PersonSvg-box Container-nowrap-center">
-                  <PersonSvg height="1.25rem" width="1.25rem" color="#5499c3" />
+          <div className="Account-box">
+            <Dropdown trigger={
+                <div className="Container-wrap-center-cross">
+                  <div className="col m3 No-margin No-padding PersonSvg-box Container-nowrap-center">
+                    <PersonSvg height="1.25rem" width="1.25rem" color="#5499c3" />
+                  </div>
+                  <div className="col m5 No-margin No-padding Text-box Container-nowrap-center-cross">
+                    <div className="Account-text">{ user.name }</div>
+                  </div>
+                  <div className="col m4 No-margin No-padding ArrowDownSvg-box Container-nowrap-end">
+                    <ArrowDownSvg height="1.25rem" width="1.25rem" color="#5499c3" />
+                  </div>
                 </div>
-                <div className="col m5 No-margin No-padding Text-box Container-nowrap-center-cross">
-                  <div className="Account-text">{ user.name }</div>
-                </div>
-                <div className="col m4 No-margin No-padding ArrowDownSvg-box Container-nowrap-end">
-                  <ArrowDownSvg height="1.25rem" width="1.25rem" color="#5499c3" />
-                </div>
-              </div>
-            }>
-            <NavItem onClick={ () => authSignOut(cookies, window) }>Sign Out</NavItem>
-          </Dropdown>
+              }>
+              <NavItem onClick={ () => authSignOut(cookies, window) }>Sign Out</NavItem>
+            </Dropdown>
+          </div>
         </div>
       </div>
     )
