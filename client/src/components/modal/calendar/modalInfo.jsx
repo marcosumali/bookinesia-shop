@@ -444,10 +444,19 @@ class modalInfo extends Component {
                 :
                 <div className="col m12 No-margin No-padding Modal-body-box">
                   <div className="col m6 No-margin No-padding Container-nowrap-start">
-                    <DisabledButton 
-                      text="Edit"
-                      type="Btn-disabled No-margin"
-                    />
+                    {/* EDIT BUTTON */}
+                    {
+                      transaction.status === 'booking confirmed' || 
+                      transaction.status === 'on progress' || 
+                      (transaction.status === 'canceled' && Number(appointment.currentQueue) < Number(transaction.queueNo)) || 
+                      transaction.status === 'skipped' ?
+                      <ModalEditTransaction 
+                        barber={ transaction.staff }
+                        transaction={ transaction }
+                      />
+                      :
+                      <div></div>
+                    }
                     <DisabledButton 
                       text="Skip"
                       type="Btn-disabled"
