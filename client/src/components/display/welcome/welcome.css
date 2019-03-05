@@ -61,7 +61,7 @@
   height: 100%;
   margin-right: 0.625em;
   padding: 0.625em !important;
-  /* overflow-y: scroll; */
+  overflow-y: scroll;
 }
 
 .Detail-account-header-box {
@@ -76,6 +76,7 @@
   border-radius: 5px;
   height: inherit;
   padding: 1em !important;
+  overflow-y: scroll;
 }
 
 .Detail-account-header-text {
