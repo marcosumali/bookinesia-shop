@@ -90,6 +90,8 @@
   width: 13.25% !important;
   position: fixed;
   bottom: 0;
+  max-height: 25vh;
+  overflow-y: scroll;
 }
 
 .Legends-status-box {
