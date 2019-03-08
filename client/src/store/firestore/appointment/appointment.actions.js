@@ -2,6 +2,7 @@ import swal from 'sweetalert';
 import { getTransactions, getTransactionsCalendar, setDashboardSuccess, updateTransactionStatus, sendEmailAfterSuccess } from '../transaction/transaction.actions';
 import { getAllStaffsAndCalendar, setAllBarbersSuccess } from '../staff/staff.actions';
 import { setDashboardLoadingStatus } from '../../dashboard/dashboard.actions';
+import { returnAcceptedDate } from '../../../helpers/date';
 
 const filterEmptyError = 'To filter preferred appointments for selected provider, start and end dates must be filled.'
 const maxFilterError = `The preferred appointment's date that can be chosen is up to 7 days.`
@@ -64,7 +65,7 @@ const setAppointmentsFailed = (status) => {
 // To set appointment date index to show which date on dashboard
 export const setAppointmentDateIndex = (branchId, status, selectedDate) => {
   return async (dispatch, getState, { getFirebase, getFirestore }) => {
-    let inputDate = new Date(selectedDate)
+    let inputDate = new Date(returnAcceptedDate(selectedDate))
     
     if (status === 'next') {
       let tomorrowDate = new Date(inputDate.setDate(inputDate.getDate() + 1))
@@ -347,8 +348,8 @@ export const getAppointmentsAndCalendar = (branchId, date, staffs) => {
 // To validate and get filtered appointments based on start and end date 
 export const getFilteredAppointments = (startDate, endDate, selectedBarber) => {
   return async (dispatch, getState, { getFirebase, getFirestore }) => {
-    let newStartDate = new Date(startDate)
-    let newEndDate = new Date(endDate)
+    let newStartDate = new Date(returnAcceptedDate(startDate))
+    let newEndDate = new Date(returnAcceptedDate(endDate))
 
     let timeDifference = Math.abs(newEndDate.getTime() - newStartDate.getTime())
     let differenceInDays = Math.ceil(timeDifference / (1000 * 3600 * 24))

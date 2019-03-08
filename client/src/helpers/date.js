@@ -58,9 +58,31 @@ function getStoreOpenStatus(currentDate, openingDate, closingDate) {
   }
 }
 
+function returnAcceptedDate(openingDate) {
+  let dates = openingDate.split('-')
+  let setYear = dates[0]
+  let setMonth = dates[1] - 1
+  let setDate = dates[2]
+  let inputDate = new Date(setYear, setMonth, setDate)
+  let year = inputDate.getFullYear()
+  let month = inputDate.getMonth() + 1
+  let date = inputDate.getDate()
+
+  if (String(month).length <= 1) {
+    month = '0' + month      
+  }
+  
+  if (String(date).length <= 1) {
+    date = '0' + date      
+  }
+  let acceptedDate = `${year}-${month}-${date}`
+  return acceptedDate  
+}
+
 
 module.exports = {
   returnWhatDay,
   getStoreOpenStatus,
-  returnWhatMonth
+  returnWhatMonth,
+  returnAcceptedDate,
 }

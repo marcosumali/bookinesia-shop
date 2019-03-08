@@ -66,7 +66,7 @@ class modalUpdateApp extends Component {
           </div> 
         }
         trigger={
-          <div className="Container-wrap-center-cross Padding-t-5">
+          <div className="Container-wrap-center-cross">
             <AddBoxSvg width="2.5em" height="2.5em" color="#f68606" />
           </div>
         }>

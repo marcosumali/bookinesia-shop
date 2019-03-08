@@ -14,7 +14,7 @@ import RadioInput from '../../form/inputRadio';
 import Button from '../../button/button';
 import LoadingButton from '../../button/buttonLoading';
 import { formatMoney, getTotalTransaction } from '../../../helpers/currency';
-import { returnWhatDay, returnWhatMonth } from '../../../helpers/date';
+import { returnWhatDay, returnWhatMonth, returnAcceptedDate } from '../../../helpers/date';
 import { handleMultipleCheckboxStatus, handleMultipleCheckbox, handleRadio } from '../../../store/dashboard/dashboard.actions';
 import { handleChangesEditTransaction, validateAndEditTransaction, clearEditTransaction, setInitialTransaction } from '../../../store/firestore/transaction/transaction.actions';
 
@@ -47,7 +47,8 @@ class modalEditTrans extends Component {
       authUser,
       setInitialTransaction,
     } = this.props
-    let appointmentDate = `${returnWhatDay(new Date(selectedDate).getDay())}, ${new Date(selectedDate).getDate()} ${returnWhatMonth(new Date(selectedDate).getMonth())} ${new Date(selectedDate).getFullYear()}`
+    let acceptedDate = returnAcceptedDate(selectedDate)
+    let appointmentDate = `${returnWhatDay(new Date(acceptedDate).getDay())}, ${new Date(acceptedDate).getDate()} ${returnWhatMonth(new Date(acceptedDate).getMonth())} ${new Date(acceptedDate).getFullYear()}`
 
     let primaryServices = []
     let secondaryServices = []

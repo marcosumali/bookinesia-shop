@@ -4,6 +4,7 @@ import XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 
 import { validateEmail, validatePhone, formatPhone } from '../../../helpers/form';
+import { returnAcceptedDate } from '../../../helpers/date';
 import { setDashboardLoadingStatus, setUpdateLoadingStatus } from '../../dashboard/dashboard.actions';
 import { setSelectedDateSuccess, isAppointmentExist, updateAppointmentStatus, incorrectFilterError } from '../appointment/appointment.actions';
 
@@ -771,8 +772,8 @@ export const getFilteredTransactions = (startDate, endDate, branchId) => {
   return (dispatch, getState, { getFirebase, getFirestore }) => {
     let firestore = getFirestore()
     let transactionRef = firestore.collection('transaction')
-    let newStartDate = new Date(startDate)
-    let newEndDate = new Date(endDate)
+    let newStartDate = new Date(returnAcceptedDate(startDate))
+    let newEndDate = new Date(returnAcceptedDate(endDate))
 
     let timeDifference = Math.abs(newEndDate.getTime() - newStartDate.getTime())
     let differenceInDays = Math.ceil(timeDifference / (1000 * 3600 * 24))
