@@ -255,7 +255,7 @@ export const getAppointmentsAndCalendar = (branchId, date, staffs) => {
         // Process to fill up the transaction board with empty object to be filled up with transaction on next actions
         for (let j = 0; j < emptyDashboard[0].data.length; j++ ) {
           for (let i = 0; i < staffs.length; i++ ) {
-            emptyDashboard[0].data[j].transactions.push({})
+            emptyDashboard[0].data[j].transactions.push([])
           }
         }
         // console.log('step3--', emptyDashboard)
@@ -315,13 +315,14 @@ export const getAppointmentsAndCalendar = (branchId, date, staffs) => {
         // Process to fill up the transaction board with empty object to be filled up with transaction on next actions
         for (let j = 0; j < emptyDashboard[0].data.length; j++ ) {
           for (let i = 0; i < staffs.length; i++ ) {
-            let statusObj = {
+            let statusObj = [{
               status: 'no-appointment'
-            }
+            }]
             // to show no-appointment in html and css
             emptyDashboard[0].data[j].transactions.push(statusObj)
           }
         }
+        // console.log('empty--', emptyDashboard)
 
         dispatch(setDashboardLoadingStatus(false))
         dispatch(setDashboardSuccess(emptyDashboard))
@@ -873,7 +874,7 @@ export const isAppointmentExists = (branchId, staffId, date) => {
 }
 
 // To update appointment status from shop
-export const updateAppointmentStatus = (shop, branch, status, appointment, transaction, user, paymentMethod, nextTransaction, afterNextTransaction) => {
+export const updateAppointmentStatus = (shop, branch, status, appointment, transaction, user, paymentMethod, nextTransaction, afterNextTransaction, transactionIndex) => {
   return async (dispatch, getState, { getFirebase, getFirestore }) => {
     // console.log('cek app', status, appointment)
     let nowDate = new Date(Date.now())
@@ -891,7 +892,10 @@ export const updateAppointmentStatus = (shop, branch, status, appointment, trans
     if (status === 'booking confirmed') {
       dataToUpdate['currentTransaction'] = updatedCurrentTransaction
     } else if (status === 'skipped' || status === 'on progress') {
-      dataToUpdate['currentQueue'] = updatedCurrentQueue
+      // To mitigate update queuing number for multi-booked transactions so only to update first object in array
+      if (transactionIndex === 0) {
+        dataToUpdate['currentQueue'] = updatedCurrentQueue
+      }
     }
 
     if (transaction.status !== 'skipped') {
@@ -899,9 +903,9 @@ export const updateAppointmentStatus = (shop, branch, status, appointment, trans
       .then(() => {
         // success condition: swal or send email
         if (status === 'skipped') {
-          dispatch(updateTransactionStatus(shop, branch, status, appointment, transaction, user, paymentMethod, nextTransaction, afterNextTransaction))
+          dispatch(updateTransactionStatus(shop, branch, status, appointment, transaction, user, paymentMethod, nextTransaction, afterNextTransaction, null, transactionIndex))
         } else if (status === 'on progress') {
-          dispatch(updateTransactionStatus(shop, branch, status, appointment, transaction, user, paymentMethod, nextTransaction, afterNextTransaction))
+          dispatch(updateTransactionStatus(shop, branch, status, appointment, transaction, user, paymentMethod, nextTransaction, afterNextTransaction, null, transactionIndex))
         } else if (status === 'booking confirmed') {
           dispatch(sendEmailAfterSuccess(shop, branch, status, appointment, transaction, nextTransaction, afterNextTransaction))
         }

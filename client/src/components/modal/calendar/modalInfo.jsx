@@ -44,6 +44,7 @@ class modalInfo extends Component {
       authUser,
       handleChangesEditTransaction,
       paymentInformation,
+      transactionIndex
     } = this.props
     let appointment = transaction.appointment
     let user = {
@@ -60,7 +61,7 @@ class modalInfo extends Component {
     if (dataIndex > 0) {
       let selectedTransactions = dashboardData[dataIndex-1]
       let barberIndex = barbers.findIndex(barber => barber.id === transaction.staff.id)
-      let transactionBefore = selectedTransactions.transactions[barberIndex]
+      let transactionBefore = selectedTransactions.transactions[barberIndex][0]
       
       if (transactionBefore.status === 'finished' || transactionBefore.status === 'skipped') {
         buttonDisableStatus = false
@@ -349,7 +350,7 @@ class modalInfo extends Component {
                             text="Skip"
                             type="Btn-gray"
                             clickFunction={ handleUpdateStatus }
-                            data={{ shop, branch, status: 'skipped', appointment, transaction, user, paymentMethod: null, dashboardData: dashboards[0].data, barbers }}
+                            data={{ shop, branch, status: 'skipped', appointment, transaction, user, paymentMethod: null, dashboardData: dashboards[0].data, barbers, transactionIndex }}
                           />
                         }
                       </div>
@@ -432,7 +433,7 @@ class modalInfo extends Component {
                             text="Start"
                             type="Btn-white-orange"
                             clickFunction={ handleUpdateStatus }
-                            data={{ shop, branch, status: 'on progress', appointment, transaction, user, paymentMethod: null, dashboardData: dashboards[0].data, barbers }}
+                            data={{ shop, branch, status: 'on progress', appointment, transaction, user, paymentMethod: null, dashboardData: dashboards[0].data, barbers, transactionIndex }}
                           />
                         }
                       </div>

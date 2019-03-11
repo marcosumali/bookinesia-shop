@@ -838,7 +838,7 @@ export const setDashboardLoadingStatus = (data) => {
 // To handle update transaction and appointment
 export const handleUpdateStatus = (data) => {
   return async (dispatch, getState, { getFirebase, getFirestore }) => {
-    let { shop, branch, status, appointment, transaction, user, paymentMethod, dashboardData, barbers, paymentInformation } = data
+    let { shop, branch, status, appointment, transaction, user, paymentMethod, dashboardData, barbers, paymentInformation, transactionIndex } = data
     
     let swalText = ''
     if (status === 'skipped') {
@@ -873,12 +873,12 @@ export const handleUpdateStatus = (data) => {
           let staffIndex = barbers.findIndex(barber => barber.id === staff.id)
 
           let nextTransactionsData = dashboardData[nextIndex].transactions
-          let nextTransaction = nextTransactionsData[staffIndex]
+          let nextTransaction = nextTransactionsData[staffIndex][0]
 
           let afterNextTransactionData = dashboardData[afterNextIndex].transactions
-          let afterNextTransaction = afterNextTransactionData[staffIndex]
+          let afterNextTransaction = afterNextTransactionData[staffIndex][0]
 
-          dispatch(updateAppointmentStatus(shop, branch, status, appointment, transaction, user, paymentMethod, nextTransaction, afterNextTransaction))
+          dispatch(updateAppointmentStatus(shop, branch, status, appointment, transaction, user, paymentMethod, nextTransaction, afterNextTransaction, transactionIndex))
         
         } else if (status === 'finished') {
 
