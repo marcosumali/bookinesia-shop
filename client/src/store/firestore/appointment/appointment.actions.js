@@ -2,6 +2,7 @@ import swal from 'sweetalert';
 import { getTransactions, getTransactionsCalendar, setDashboardSuccess, updateTransactionStatus, sendEmailAfterSuccess } from '../transaction/transaction.actions';
 import { getAllStaffsAndCalendar, setAllBarbersSuccess } from '../staff/staff.actions';
 import { setDashboardLoadingStatus } from '../../dashboard/dashboard.actions';
+import { returnAcceptedDate } from '../../../helpers/date';
 
 const filterEmptyError = 'To filter preferred appointments for selected provider, start and end dates must be filled.'
 const maxFilterError = `The preferred appointment's date that can be chosen is up to 7 days.`
@@ -64,7 +65,7 @@ const setAppointmentsFailed = (status) => {
 // To set appointment date index to show which date on dashboard
 export const setAppointmentDateIndex = (branchId, status, selectedDate) => {
   return async (dispatch, getState, { getFirebase, getFirestore }) => {
-    let inputDate = new Date(selectedDate)
+    let inputDate = new Date(returnAcceptedDate(selectedDate))
     
     if (status === 'next') {
       let tomorrowDate = new Date(inputDate.setDate(inputDate.getDate() + 1))
@@ -254,7 +255,7 @@ export const getAppointmentsAndCalendar = (branchId, date, staffs) => {
         // Process to fill up the transaction board with empty object to be filled up with transaction on next actions
         for (let j = 0; j < emptyDashboard[0].data.length; j++ ) {
           for (let i = 0; i < staffs.length; i++ ) {
-            emptyDashboard[0].data[j].transactions.push({})
+            emptyDashboard[0].data[j].transactions.push([])
           }
         }
         // console.log('step3--', emptyDashboard)
@@ -314,13 +315,14 @@ export const getAppointmentsAndCalendar = (branchId, date, staffs) => {
         // Process to fill up the transaction board with empty object to be filled up with transaction on next actions
         for (let j = 0; j < emptyDashboard[0].data.length; j++ ) {
           for (let i = 0; i < staffs.length; i++ ) {
-            let statusObj = {
+            let statusObj = [{
               status: 'no-appointment'
-            }
+            }]
             // to show no-appointment in html and css
             emptyDashboard[0].data[j].transactions.push(statusObj)
           }
         }
+        // console.log('empty--', emptyDashboard)
 
         dispatch(setDashboardLoadingStatus(false))
         dispatch(setDashboardSuccess(emptyDashboard))
@@ -347,8 +349,8 @@ export const getAppointmentsAndCalendar = (branchId, date, staffs) => {
 // To validate and get filtered appointments based on start and end date 
 export const getFilteredAppointments = (startDate, endDate, selectedBarber) => {
   return async (dispatch, getState, { getFirebase, getFirestore }) => {
-    let newStartDate = new Date(startDate)
-    let newEndDate = new Date(endDate)
+    let newStartDate = new Date(returnAcceptedDate(startDate))
+    let newEndDate = new Date(returnAcceptedDate(endDate))
 
     let timeDifference = Math.abs(newEndDate.getTime() - newStartDate.getTime())
     let differenceInDays = Math.ceil(timeDifference / (1000 * 3600 * 24))
@@ -872,7 +874,7 @@ export const isAppointmentExists = (branchId, staffId, date) => {
 }
 
 // To update appointment status from shop
-export const updateAppointmentStatus = (shop, branch, status, appointment, transaction, user, paymentMethod, nextTransaction, afterNextTransaction) => {
+export const updateAppointmentStatus = (shop, branch, status, appointment, transaction, user, paymentMethod, nextTransaction, afterNextTransaction, transactionIndex) => {
   return async (dispatch, getState, { getFirebase, getFirestore }) => {
     // console.log('cek app', status, appointment)
     let nowDate = new Date(Date.now())
@@ -890,7 +892,10 @@ export const updateAppointmentStatus = (shop, branch, status, appointment, trans
     if (status === 'booking confirmed') {
       dataToUpdate['currentTransaction'] = updatedCurrentTransaction
     } else if (status === 'skipped' || status === 'on progress') {
-      dataToUpdate['currentQueue'] = updatedCurrentQueue
+      // To mitigate update queuing number for multi-booked transactions so only to update first object in array
+      if (transactionIndex === 0) {
+        dataToUpdate['currentQueue'] = updatedCurrentQueue
+      }
     }
 
     if (transaction.status !== 'skipped') {
@@ -898,9 +903,9 @@ export const updateAppointmentStatus = (shop, branch, status, appointment, trans
       .then(() => {
         // success condition: swal or send email
         if (status === 'skipped') {
-          dispatch(updateTransactionStatus(shop, branch, status, appointment, transaction, user, paymentMethod, nextTransaction, afterNextTransaction))
+          dispatch(updateTransactionStatus(shop, branch, status, appointment, transaction, user, paymentMethod, nextTransaction, afterNextTransaction, null, transactionIndex))
         } else if (status === 'on progress') {
-          dispatch(updateTransactionStatus(shop, branch, status, appointment, transaction, user, paymentMethod, nextTransaction, afterNextTransaction))
+          dispatch(updateTransactionStatus(shop, branch, status, appointment, transaction, user, paymentMethod, nextTransaction, afterNextTransaction, null, transactionIndex))
         } else if (status === 'booking confirmed') {
           dispatch(sendEmailAfterSuccess(shop, branch, status, appointment, transaction, nextTransaction, afterNextTransaction))
         }

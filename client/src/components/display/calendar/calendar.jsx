@@ -10,7 +10,6 @@ import Loading from '../loading/loading';
 
 class calendar extends Component {
   render() {
-    // console.log('---', this.props)
     return (
       <div>
         <div>
@@ -67,30 +66,57 @@ class calendar extends Component {
                           <tr key={ 'data' + index }>
                             <td className="Number-box Text-center">{ data.queueNo }</td>
                             {
-                              data.transactions.map((transaction, index) => {
-                                return Object.keys(transaction).length === 0 && transaction.constructor === Object ?
-                                <td className="Content-box-inner Background-blank" key={ 'transaction' + index }>
+                              data.transactions.map((transactions, index) => {
+                                return transactions.length === 0 ?
+                                <td className="Content-box-inner Background-blank" key={ 'transactions' + index }>
                                   <div className="Container-wrap-center-cross">
                                     <div className="Customer-text"></div>
                                     <div className="Customer-phone"></div>
                                   </div>
                                 </td>
                                 :
-                                transaction.status === 'no-appointment' ?
-                                <td className="Content-box-inner Background-no-appointment" key={ 'transaction' + index }>
+                                transactions[0].status === 'no-appointment' ?
+                                <td className="Content-box-inner Background-no-appointment" key={ 'transactions' + index }>
                                   <div className="Container-wrap-center-cross">
                                     <div className="Customer-text Text-no-appointment"></div>
                                     <div className="Customer-phone Text-no-appointment"></div>
                                   </div>
                                 </td>
                                 :
-                                <td className="Content-box-inner Background-blank" key={ 'transaction' + index }>
-                                  <div className="Container-wrap-center-cross">
-                                    <ModalInfo 
-                                      transaction={ transaction } 
-                                      dashboardData={ this.props.dashboards[0].data }
-                                    />
-                                  </div>
+                                <td className="Content-box-inner Background-blank" key={ 'transactions' + index }>
+                                  {
+                                    transactions.length > 1 ?
+                                    transactions && transactions.map((transaction, index) => {
+                                      return index === transactions.length-1 ?
+                                      <div className="Container-wrap-center-cross" key={ 'transaction' + index }>
+                                        <ModalInfo 
+                                          transaction={ transaction } 
+                                          dashboardData={ this.props.dashboards[0].data }
+                                          transactionIndex={ index }
+                                        />
+                                      </div>
+                                      :
+                                      <div className="Single-box Container-wrap-center-cross" key={ 'transaction' + index }>
+                                        <ModalInfo 
+                                          transaction={ transaction } 
+                                          dashboardData={ this.props.dashboards[0].data }
+                                          transactionIndex={ index }
+                                        />
+                                      </div>
+                                    })
+                                    :
+                                    transactions && transactions.map((transaction, index) => {
+                                      return (
+                                        <div className="Container-wrap-center-cross" key={ 'transaction' + index }>
+                                          <ModalInfo 
+                                            transaction={ transaction } 
+                                            dashboardData={ this.props.dashboards[0].data }
+                                            transactionIndex={ index }
+                                          />
+                                        </div>
+                                      )
+                                    })
+                                  }
                                 </td>
                               })
                             }

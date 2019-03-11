@@ -4,6 +4,7 @@ import XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 
 import { validateEmail, validatePhone, formatPhone } from '../../../helpers/form';
+import { returnAcceptedDate } from '../../../helpers/date';
 import { setDashboardLoadingStatus, setUpdateLoadingStatus } from '../../dashboard/dashboard.actions';
 import { setSelectedDateSuccess, isAppointmentExist, updateAppointmentStatus, incorrectFilterError } from '../appointment/appointment.actions';
 
@@ -121,7 +122,13 @@ export const getTransactionsCalendar = (branchId, dashboardReady, staffs, appoin
             for (let i = 0; i < dashboard.data.length; i++) {
               if (dashboard.data[i].queueNo === transaction.queueNo) {
                 let barberIndex = staffs.findIndex(staff => staff.id === transaction.staff.id)
-                dashboard.data[i].transactions[barberIndex] = transaction
+
+                let dataIndex = dashboard.data[i].transactions[barberIndex].findIndex(dataTransaction => dataTransaction.id === transaction.id)
+                if (dataIndex < 0) {
+                  dashboard.data[i].transactions[barberIndex].push(transaction)
+                } else {
+                  dashboard.data[i].transactions[barberIndex][dataIndex] = transaction
+                }
               }
             }
           }
@@ -147,9 +154,13 @@ export const reconstructCalender = (dashboardReady, staffs, appointments, transa
     appointments && appointments.map((appointment) => {
       for (let i = 0; i < dashboard.data.length; i++) {
         for (let j = 0; j < dashboard.data[i].transactions.length; j++) {
-          if (Object.keys(dashboard.data[i].transactions[j]).length > 0 && (dashboard.data[i].transactions[j]).constructor === Object && dashboard.data[i].transactions[j].status !== "no-appointment") {
-            if (dashboard.data[i].transactions[j].appointment.id === appointment.id) {
-              dashboard.data[i].transactions[j].appointment = appointment
+          if (dashboard.data[i].transactions[j].length > 0) {
+            for (let k = 0; k < dashboard.data[i].transactions[j].length; k++) {
+              if (dashboard.data[i].transactions[j][k].status !== "no-appointment") {
+                if (dashboard.data[i].transactions[j][k].appointment.id === appointment.id) {
+                  dashboard.data[i].transactions[j][k].appointment = appointment
+                }
+              }
             }
           }
         }
@@ -171,12 +182,12 @@ export const reconstructCalender = (dashboardReady, staffs, appointments, transa
     staffWithNoAppointmentOnSelectedDate && staffWithNoAppointmentOnSelectedDate.map(staff => {
       for (let i = 0; i < dashboard.data.length; i++) {
         for (let j = 0; j < dashboard.data[i].transactions.length; j++) {
-          let barberIndex = staffs.findIndex(barber => barber.id === staff.id)
-          if (Object.keys(dashboard.data[i].transactions[j]).length <= 0 && dashboard.data[i].transactions[j].constructor === Object) {
+          if (dashboard.data[i].transactions[j].length <= 0) {
             let statusObj = {
               status: 'no-appointment'
             }
-            dashboard.data[i].transactions[barberIndex] = statusObj 
+            let barberIndex = staffs.findIndex(barber => barber.id === staff.id)
+            dashboard.data[i].transactions[barberIndex].push(statusObj)
           }
         }
       }
@@ -192,7 +203,7 @@ export const reconstructCalender = (dashboardReady, staffs, appointments, transa
 }
 
 // To update transaction status from shop
-export const updateTransactionStatus = (shop, branch, status, appointment, transaction, user, paymentMethod, nextTransaction, afterNextTransaction, paymentInformation) => {
+export const updateTransactionStatus = (shop, branch, status, appointment, transaction, user, paymentMethod, nextTransaction, afterNextTransaction, paymentInformation, transactionIndex) => {
   return async (dispatch, getState, { getFirebase, getFirestore }) => {
     let firestore = getFirestore()
     let nowDate = new Date(Date.now())
@@ -221,7 +232,13 @@ export const updateTransactionStatus = (shop, branch, status, appointment, trans
     .then(() => {
       // success condition: swal, or send email
       if (status === 'skipped' || status === 'on progress') {
-        dispatch(sendEmailAfterSuccess(shop, branch, status, appointment, transaction, nextTransaction, afterNextTransaction))
+        // To mitigate update queuing number for multi-booked transactions so only to update first object in array
+        if (transactionIndex === 0) {
+          dispatch(sendEmailAfterSuccess(shop, branch, status, appointment, transaction, nextTransaction, afterNextTransaction))
+        } else {
+          dispatch(setUpdateLoadingStatus(false))
+          swal("Information Updated", "", "success")
+        }
       } else if (status === 'finished') {
         dispatch(setUpdateLoadingStatus(false))
         swal("Transaction Finished", "", "success")
@@ -771,8 +788,8 @@ export const getFilteredTransactions = (startDate, endDate, branchId) => {
   return (dispatch, getState, { getFirebase, getFirestore }) => {
     let firestore = getFirestore()
     let transactionRef = firestore.collection('transaction')
-    let newStartDate = new Date(startDate)
-    let newEndDate = new Date(endDate)
+    let newStartDate = new Date(returnAcceptedDate(startDate))
+    let newEndDate = new Date(returnAcceptedDate(endDate))
 
     let timeDifference = Math.abs(newEndDate.getTime() - newStartDate.getTime())
     let differenceInDays = Math.ceil(timeDifference / (1000 * 3600 * 24))

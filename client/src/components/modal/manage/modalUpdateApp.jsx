@@ -14,6 +14,9 @@ import SwitchInput from '../../form/inputSwitch';
 import Button from '../../button/button';
 import DisabledButton from '../../button/buttonDisabled';
 import LoadingButton from '../../button/buttonLoading';
+import {
+  returnAcceptedDate
+} from '../../../helpers/date';
 import { 
   handleBasicDateInput, 
   handleMultipleSelectOption, 
@@ -80,9 +83,9 @@ class modalUpdateApp extends Component {
             <div className="col m12 No-margin No-padding Container-nowrap-center-cross Margin-b-5">
               {
                 filteredAppointment.disableStatus ?
-                <div className="Manage-text Disabled">{ new Date(filteredAppointment.date).toDateString() }</div>
+                <div className="Manage-text Disabled">{ new Date(returnAcceptedDate(filteredAppointment.date)).toDateString() }</div>
                 :
-                <div className="Manage-text">{ new Date(filteredAppointment.date).toDateString() }</div>
+                <div className="Manage-text">{ new Date(returnAcceptedDate(filteredAppointment.date)).toDateString() }</div>
               }
             </div>
             <div className="col m12 No-margin No-padding Container-nowrap-center-cross">
