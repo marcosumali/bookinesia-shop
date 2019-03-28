@@ -200,6 +200,7 @@ input[type="radio"].with-gap:checked+label:after {
   line-height: 1.2;
   letter-spacing: normal;
   color: #5499c3;
+  text-transform: capitalize;
   /* text-align: center; */
 } /* To edit the span section of li inside select input */
 

@@ -29,7 +29,7 @@ class manageBarberDetails extends Component {
       file,
       hasEditStatusFile,
       loadingStatus,
-      user,
+      selectedBranch,
     } = this.props
 
     return (
@@ -103,7 +103,7 @@ class manageBarberDetails extends Component {
               text="Save"
               type="Btn-white-blue"
               clickFunction={ updateBarberDataValidation }
-              data={{ selectedBarber, name: barberName, disableStatus: barberDisableStatus, file, branchId: user.branchId }}
+              data={{ selectedBarber, name: barberName, disableStatus: barberDisableStatus, file, branchId: selectedBranch.id }}
             />
             :
             loadingStatus ?
@@ -136,6 +136,7 @@ const mapStateToProps = state => {
     hasEditStatusFile: state.nav.hasEditStatusFile,
     loadingStatus: state.staff.loadingStatus,
     user: state.auth.user,
+    selectedBranch: state.branch.branch,
   }
 }
 

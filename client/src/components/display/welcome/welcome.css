@@ -138,3 +138,22 @@
   letter-spacing: normal;
   color: #5499c3;
 }
+
+.Sign-out-button {
+  background-color: #EAEAEA;
+  width: 100%;
+  border-radius: 0.3125em;
+  padding: 0.625em;
+}
+
+.Sign-out-text {
+  color: #666666;
+  text-align: center;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.9em;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.2;
+  letter-spacing: normal;
+}
