@@ -127,7 +127,7 @@ class modalUpdateApp extends Component {
                   handleChangesFunction={ handleNumberInput }
                 />
               </div>
-              <div className="col m3 No-padding Margin-b-10 Container-wrap-center" style={{ marginTop: '0.5rem' }}>
+              <div className="col m3 No-padding Container-wrap-center" style={{ marginTop: '0.5rem' }}>
                 <SelectInput 
                   inputId="startHours"
                   className="Margin-r-5"
@@ -158,7 +158,7 @@ class modalUpdateApp extends Component {
               <div className="col m1 No-padding Container-nowrap-center" style={{ marginTop: '0rem' }}>
                 <div className="Manage-barber-hours-text-gray">to</div>
               </div>
-              <div className="col m3 No-padding Margin-b-10 Container-wrap-center" style={{ marginTop: '0.5rem' }}>
+              <div className="col m3 No-padding Container-wrap-center" style={{ marginTop: '0.5rem' }}>
                 <SelectInput 
                   inputId="endHours"
                   className="Margin-r-5"
