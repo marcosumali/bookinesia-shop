@@ -2,7 +2,7 @@ import swal from 'sweetalert';
 
 import { 
   saveDashboardMenuStatus, 
-  getLatestDashboardMenuStatus 
+  getLatestDashboardMenuStatus,
 } from '../../helpers/dashboard';
 import { 
   setBarberDisableStatusInput, 
@@ -79,7 +79,7 @@ export const maxFileSizeError = 'Maximum file size is 1 MB. '
 export const imageFileTypeError = 'Accepted image file are JPG/JPEG, PNG, or GIF. '
 
 // ---------------------------------------------- DASHBOARD ACTION ----------------------------------------------
-// To get DMS cookies and dispatch to store
+// To get DMS (Dashboard) cookies and dispatch to store
 export const getDMSCookies = (cookies) => {
   return (dispatch, getState, { getFirebase, getFirestore }) => {
     let DMS = getLatestDashboardMenuStatus(cookies)

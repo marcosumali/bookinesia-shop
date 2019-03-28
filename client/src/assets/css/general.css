@@ -7,12 +7,20 @@
   padding: 0px !important;
 }
 
+.Padding-r-0 {
+  padding-right: 0px !important;
+}
+
 .Padding-5 {
   padding: 0.3125em !important;
 }
 
 .No-margin {
   margin: 0px !important;
+}
+
+.Margin-t-05em {
+  margin-top: 0.5em !important;
 }
 
 .Margin-t-5 {

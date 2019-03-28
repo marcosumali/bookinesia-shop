@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 
 import PersonSvg from '../../svg/personSvg';
 import ModalChangePassword from '../../modal/welcome/modalChangePass';
+import { authSignOut } from '../../../store/firestore/auth/auth.actions';
 
 class welcomeAccount extends Component {
   render() {
@@ -11,6 +12,9 @@ class welcomeAccount extends Component {
       shop,
       branch,
       user,
+      authSignOut,
+      cookies,
+      window,
     } = this.props
     return (
       <div className="col m12 No-margin No-padding">
@@ -69,6 +73,13 @@ class welcomeAccount extends Component {
         <div className="col m12 No-margin No-padding Detail-account-info-box">
           <ModalChangePassword />
         </div>
+        <div className="col m12 No-margin No-padding Detail-account-info-box">
+          <div className="Container-wrap-center-cross animated fadeIn faster">
+            <div className="Sign-out-button" onClick={ () => authSignOut(cookies, window) }>
+              <div className="Sign-out-text">Sign Out</div>
+            </div>
+          </div>
+        </div>
         
       </div>
     )
@@ -81,10 +92,13 @@ const mapStateToProps = state => {
     shop: state.shop.shop,
     branch: state.branch.branch,
     user: state.auth.user,
+    cookies: state.user.cookies,
+    window: state.user.window,
   }
 }
 
 const mapDispatchToProps = dispatch => bindActionCreators({
+  authSignOut,
 }, dispatch)
 
 

@@ -17,6 +17,7 @@ class dashboardDisplay extends Component {
         {
           this.props.shopLoading || 
           this.props.branchLoading || 
+          this.props.grantedBranchesLoading || 
           this.props.dashboardsLoading || 
           !this.props.selectedDate ||
           this.props.allBarbersLoading ||
@@ -68,6 +69,7 @@ const mapStateToProps = state => {
     staffSchedulesLoading: state.staffSchedule.staffSchedulesLoading,
     shopLoading: state.shop.shopLoading,
     branchLoading: state.branch.branchLoading,
+    grantedBranchesLoading: state.access.grantedBranchesLoading,
     selectedDate: state.appointment.selectedDate,
     user: state.auth.user,
   }

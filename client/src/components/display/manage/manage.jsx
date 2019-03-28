@@ -42,7 +42,7 @@ class serviceProviders extends Component {
     } = this.props
 
     return (
-      <div className="col m12 No-margin No-padding Height-100cent">
+      <div className="col m12 No-margin No-padding Height-100cent" style={{ borderTop: '1px solid #EAEAEA' }}>
         <div className="col m4 No-margin No-padding Height-100cent Manage-menu-box">
           <ManageMenu />
         </div>

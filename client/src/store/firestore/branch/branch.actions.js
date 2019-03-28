@@ -2,7 +2,9 @@ import swal from 'sweetalert';
 
 import { maxFileSizeError, imageFileTypeError } from '../../dashboard/dashboard.actions';
 import { emptyError, phoneInvalidError } from '../transaction/transaction.actions';
+import { getOperationalDataNow } from '../auth/auth.actions';
 import { validatePhone, formatPhone } from '../../../helpers/form';
+import { saveBranchStatus } from '../../../helpers/dashboard';
 
 // Get branch data
 export const getBranch = (branchId) => {
@@ -27,6 +29,45 @@ const getBranchAction = (data) => {
   return {
     type: 'SET_BRANCH_SUCCESS',
     payload: data
+  }
+}
+
+// Get all granted access branches data
+export const getGrantedBranches = (grantedBranchIds) => {
+  return async (dispatch, getState, { getFirebase, getFirestore }) => {
+    let firestore = getFirestore()
+
+    let grantedBranches = []
+    await Promise.all(grantedBranchIds && grantedBranchIds.map(async branchAccessData => {
+      let branchId = branchAccessData.branchId
+      let branchRef = firestore.collection('branch').doc(branchId)
+
+      await branchRef
+      .get()
+      .then(function (doc) {
+        if (doc.exists) {
+          let data = doc.data()
+          let id = doc.id
+          data['id'] = id
+          grantedBranches.push(data)
+        }
+      })
+      .catch(err => {
+        console.log('ERROR: get granted branches data', err)
+      })
+      
+      return ''
+    }))
+
+    return grantedBranches
+  }
+}
+
+// Set selected granted branches data
+export const setGrantedBranch = (cookies, branchId) => {
+  return async (dispatch, getState, { getFirebase, getFirestore }) => {
+    saveBranchStatus(cookies, branchId)
+    dispatch(getOperationalDataNow(branchId))
   }
 }
 

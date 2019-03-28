@@ -56,7 +56,7 @@ class modalUpdateApp extends Component {
       updateAppointmentErrors,
       updateSelectedAppointment,
       clearUpdateAppointment,
-      user,
+      selectedBranch,
     } = this.props
 
     const options = {
@@ -312,7 +312,7 @@ class modalUpdateApp extends Component {
                   updateEndMinutes,
                   updateDisableStatus,
                   selectedAppointment,
-                  branchId: user.branchId,
+                  branchId: selectedBranch.id,
                   selectedBarber
                 }}
               />
@@ -342,6 +342,7 @@ const mapStateToProps = state => {
     hours: state.nav.hours,
     minutes: state.nav.minutes,
     user: state.auth.user,
+    selectedBranch: state.branch.branch,
   }
 }
 

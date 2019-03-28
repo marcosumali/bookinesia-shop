@@ -102,7 +102,7 @@ class modalInfo extends Component {
                   </div>
                 </div>
                 <div className="col m12 No-margin No-padding">
-                  <div className="Customer-phone Disabled">{ transaction.phone }</div>
+                  <div className="Customer-phone Disabled" style={{ padding: '0.15625em' }}>{ transaction.phone }</div>
                 </div>
               </div>
               :
@@ -121,7 +121,7 @@ class modalInfo extends Component {
                   </div>
                 </div>
                 <div className="col m12 No-margin No-padding">
-                  <div className="Customer-phone">{ transaction.phone }</div>
+                  <div className="Customer-phone" style={{ padding: '0.15625em' }}>{ transaction.phone }</div>
                 </div>
               </div>
             }
