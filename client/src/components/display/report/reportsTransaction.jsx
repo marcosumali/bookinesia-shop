@@ -30,7 +30,7 @@ class reportsTransaction extends Component {
     } = this.props
 
     return (
-      <div className="row No-margin Report-box">
+      <div className="row No-margin Report-box" style={{ borderTop: '1px solid #EAEAEA' }}>
         <div className="Report-inner-box">
           <div className="col m12 No-margin Report-header-box">
             <div className="Report-header-text">Transaction Reports</div>

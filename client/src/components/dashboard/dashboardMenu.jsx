@@ -7,6 +7,25 @@ import SubMenuItem from './subMenuItem';
 import MiniStatusBox from '../statusBox/miniStatusBox';
 
 class dashboardMenu extends Component {
+  constructor() {
+    super()
+    this.state = {
+      showLegends: false
+    }
+  }
+
+  changeShowLegends = (status) => {
+    if (status) {
+      this.setState({
+        showLegends: false
+      })
+    } else {
+      this.setState({
+        showLegends: true
+      })
+    }
+  }
+
   render() {
     let {
       isOwner,
@@ -14,7 +33,7 @@ class dashboardMenu extends Component {
 
     return (
       <div className="row No-margin Dashboard-menu-box Container-wrap">
-        <div className="col m12 No-padding No-margin Menu-box Margin-t-40">
+        <div className="col m12 No-padding No-margin Menu-box">
           {
             this.props.menuToShow === 'Welcome' ?
             <div className="Active">
@@ -90,41 +109,48 @@ class dashboardMenu extends Component {
           }
         </div>
         <div className="col m12 No-margin No-padding Legends-box">
-          <div className="col m12 No-margin No-padding">
+          <div className="col m12 No-margin No-padding" onClick={ () => this.changeShowLegends(this.state.showLegends) }>
             <div className="Legends-header-text">Calendar Legends</div>
           </div>
-          <div className="col m12 Legends-status-box No-margin No-padding Container-nowrap-center-cross">
-            <div className="col m1 No-margin No-padding Margin-r-5 Container-wrap-center">
-              <div className="No-margin Appointment-status-circle-off" />
+          {
+            this.state.showLegends ?
+            <div className="col m12 No-margin No-padding">
+              <div className="col m12 Legends-status-box No-margin No-padding Container-nowrap-center-cross Margin-t-05em">
+                <div className="col m1 No-margin No-padding Margin-r-5 Container-wrap-center">
+                  <div className="No-margin Appointment-status-circle-off" />
+                </div>
+                <div className="col m11 No-margin No-padding Legends-text-box Container-wrap-center-cross">
+                  <div className="Legends-text">Provider App. Off / No Appointment</div>
+                </div>
+              </div>
+              <div className="col m12 Legends-status-box No-margin No-padding Container-nowrap-center-cross">
+                <div className="col m1 No-margin No-padding Margin-r-5">
+                  <MiniStatusBox status="booking confirmed" />
+                </div>
+                <div className="col m11 No-margin No-padding Legends-text-box Container-wrap-center-cross">
+                  <div className="Legends-text">Booking Confirmed / On Progress</div>
+                </div>
+              </div>
+              <div className="col m12 Legends-status-box No-margin No-padding Container-nowrap-center-cross">
+                <div className="col m1 No-margin No-padding Margin-r-5">
+                  <MiniStatusBox status="finished" />
+                </div>
+                <div className="col m11 No-margin No-padding Legends-text-box Container-wrap-center-cross">
+                  <div className="Legends-text">Finished</div>
+                </div>
+              </div>
+              <div className="col m12 Legends-status-box No-margin No-padding Container-nowrap-center-cross">
+                <div className="col m1 No-margin No-padding Margin-r-5">
+                  <MiniStatusBox status="canceled" />
+                </div>
+                <div className="col m11 No-margin No-padding Legends-text-box Container-wrap-center-cross">
+                  <div className="Legends-text">Canceled / Skipped</div>
+                </div>
+              </div>
             </div>
-            <div className="col m11 No-margin No-padding Legends-text-box Container-wrap-center-cross">
-              <div className="Legends-text">Provider App. Off / No Appointment</div>
-            </div>
-          </div>
-          <div className="col m12 Legends-status-box No-margin No-padding Container-nowrap-center-cross">
-            <div className="col m1 No-margin No-padding Margin-r-5">
-              <MiniStatusBox status="booking confirmed" />
-            </div>
-            <div className="col m11 No-margin No-padding Legends-text-box Container-wrap-center-cross">
-              <div className="Legends-text">Booking Confirmed / On Progress</div>
-            </div>
-          </div>
-          <div className="col m12 Legends-status-box No-margin No-padding Container-nowrap-center-cross">
-            <div className="col m1 No-margin No-padding Margin-r-5">
-              <MiniStatusBox status="finished" />
-            </div>
-            <div className="col m11 No-margin No-padding Legends-text-box Container-wrap-center-cross">
-              <div className="Legends-text">Finished</div>
-            </div>
-          </div>
-          <div className="col m12 Legends-status-box No-margin No-padding Container-nowrap-center-cross">
-            <div className="col m1 No-margin No-padding Margin-r-5">
-              <MiniStatusBox status="canceled" />
-            </div>
-            <div className="col m11 No-margin No-padding Legends-text-box Container-wrap-center-cross">
-              <div className="Legends-text">Canceled / Skipped</div>
-            </div>
-          </div>
+            :
+            <div></div>
+          }
         </div>
 
       </div>

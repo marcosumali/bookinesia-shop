@@ -5,7 +5,6 @@ import { bindActionCreators } from 'redux';
 import './calendar.css';
 import ArrowLeftSvg from '../../svg/arrowLeftSvg';
 import ArrowRightSvg from '../../svg/arrowRightSvg';
-import CalendarSvg from '../../svg/calendarSvg';
 import BasicDateInput from '../../form/inputDateBasic';
 import { setAppointmentDateIndex, setTodayDateIndex } from '../../../store/firestore/appointment/appointment.actions';
 import { handleBasicDateInput } from '../../../store/dashboard/dashboard.actions';
@@ -24,8 +23,6 @@ class calendarHeader extends Component {
           <div className="col m3 No-margin No-padding">
             <div className="Calendar-header-text">CALENDAR</div>
           </div>
-          {/* <div className="col m4 No-margin No-padding Container-nowrap-center">
-          </div> */}
           <div className="col m2 No-margin No-padding Height-100cent Container-nowrap-end">
             <div
               className="col m4 No-margin No-padding Height-100cent Container-nowrap-end" 
@@ -35,9 +32,6 @@ class calendarHeader extends Component {
             </div>
           </div>
           <div className="col m2 No-padding Height-100cent Container-wrap-center" style={{ marginLeft: '0.5em', marginRight: '0.5em' }}>
-            <div className="Width-100cent Container-nowrap-center">
-              <CalendarSvg height="1rem" width="1rem" color="#5499c3" />
-            </div>
             <div className="Width-100cent Container-nowrap-center">
               <BasicDateInput 
                 inputId="calendarDate"

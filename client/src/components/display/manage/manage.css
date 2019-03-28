@@ -5,6 +5,14 @@
   overflow-y: scroll;
 }
 
+.Manage-menu-box-no-right {
+  padding: 0.625em !important;
+  padding-right: 0em !important;
+  background-color: #FAFAFA;
+  height: 100%;
+  overflow-y: scroll;
+}
+
 .Manage-content-box {
   padding: 0.625em !important;
   padding-left: 0px !important;
