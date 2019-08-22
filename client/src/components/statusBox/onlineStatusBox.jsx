@@ -9,7 +9,7 @@ export default class onlineStatus extends Component {
       <div className="row No-margin">
         {
           status === 'online' ?
-          <div className="Online-box Container-wrap-center-cross">
+          <div className="Online-box Container-nowrap-center-cross">
             <div className="col m2 No-margin">
               <div className="Online-ball"></div>
             </div>
@@ -18,7 +18,7 @@ export default class onlineStatus extends Component {
             </div>
           </div>
           :
-          <div className="Offline-box Container-wrap-center-cross">
+          <div className="Offline-box Container-nowrap-center-cross">
             <div className="col m2 No-margin">
               <div className="Offline-ball"></div>
             </div>

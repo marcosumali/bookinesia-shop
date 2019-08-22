@@ -44,6 +44,7 @@ class modalInfo extends Component {
       authUser,
       handleChangesEditTransaction,
       paymentInformation,
+      transactionIndex
     } = this.props
     let appointment = transaction.appointment
     let user = {
@@ -60,7 +61,7 @@ class modalInfo extends Component {
     if (dataIndex > 0) {
       let selectedTransactions = dashboardData[dataIndex-1]
       let barberIndex = barbers.findIndex(barber => barber.id === transaction.staff.id)
-      let transactionBefore = selectedTransactions.transactions[barberIndex]
+      let transactionBefore = selectedTransactions.transactions[barberIndex][0]
       
       if (transactionBefore.status === 'finished' || transactionBefore.status === 'skipped') {
         buttonDisableStatus = false
@@ -101,7 +102,7 @@ class modalInfo extends Component {
                   </div>
                 </div>
                 <div className="col m12 No-margin No-padding">
-                  <div className="Customer-phone Disabled">{ transaction.phone }</div>
+                  <div className="Customer-phone Disabled" style={{ padding: '0.15625em' }}>{ transaction.phone }</div>
                 </div>
               </div>
               :
@@ -120,7 +121,7 @@ class modalInfo extends Component {
                   </div>
                 </div>
                 <div className="col m12 No-margin No-padding">
-                  <div className="Customer-phone">{ transaction.phone }</div>
+                  <div className="Customer-phone" style={{ padding: '0.15625em' }}>{ transaction.phone }</div>
                 </div>
               </div>
             }
@@ -349,7 +350,7 @@ class modalInfo extends Component {
                             text="Skip"
                             type="Btn-gray"
                             clickFunction={ handleUpdateStatus }
-                            data={{ shop, branch, status: 'skipped', appointment, transaction, user, paymentMethod: null, dashboardData: dashboards[0].data, barbers }}
+                            data={{ shop, branch, status: 'skipped', appointment, transaction, user, paymentMethod: null, dashboardData: dashboards[0].data, barbers, transactionIndex }}
                           />
                         }
                       </div>
@@ -432,7 +433,7 @@ class modalInfo extends Component {
                             text="Start"
                             type="Btn-white-orange"
                             clickFunction={ handleUpdateStatus }
-                            data={{ shop, branch, status: 'on progress', appointment, transaction, user, paymentMethod: null, dashboardData: dashboards[0].data, barbers }}
+                            data={{ shop, branch, status: 'on progress', appointment, transaction, user, paymentMethod: null, dashboardData: dashboards[0].data, barbers, transactionIndex }}
                           />
                         }
                       </div>
@@ -444,10 +445,19 @@ class modalInfo extends Component {
                 :
                 <div className="col m12 No-margin No-padding Modal-body-box">
                   <div className="col m6 No-margin No-padding Container-nowrap-start">
-                    <DisabledButton 
-                      text="Edit"
-                      type="Btn-disabled No-margin"
-                    />
+                    {/* EDIT BUTTON */}
+                    {
+                      transaction.status === 'booking confirmed' || 
+                      transaction.status === 'on progress' || 
+                      (transaction.status === 'canceled' && Number(appointment.currentQueue) < Number(transaction.queueNo)) || 
+                      transaction.status === 'skipped' ?
+                      <ModalEditTransaction 
+                        barber={ transaction.staff }
+                        transaction={ transaction }
+                      />
+                      :
+                      <div></div>
+                    }
                     <DisabledButton 
                       text="Skip"
                       type="Btn-disabled"

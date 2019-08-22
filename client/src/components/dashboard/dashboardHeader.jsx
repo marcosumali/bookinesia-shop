@@ -7,18 +7,20 @@ import '../../pages/dashboard/dashboardPage.css';
 import './dashboard.css';
 import MenuSvg from '../svg/menuSvg';
 import ArrowDownSvg from '../svg/arrowDownSvg';
-import PersonSvg from '../svg/personSvg';
+import StoreSvg from '../svg/storeSvg';
 import OnlineStatusBox from '../statusBox/onlineStatusBox';
 import { authSignOut, setOnlineStatus } from '../../store/firestore/auth/auth.actions';
+import { setGrantedBranch } from '../../store/firestore/branch/branch.actions';
 
 class dashboardHeader extends Component {
   render() {
     let {
-      user,
       cookies,
-      authSignOut,
       onlineStatus,
-      setOnlineStatus
+      setOnlineStatus,
+      grantedBranches,
+      setGrantedBranch,
+      selectedBranch,
     } = this.props
 
     if (window.navigator.onLine) {
@@ -46,17 +48,25 @@ class dashboardHeader extends Component {
             <Dropdown trigger={
                 <div className="Container-wrap-center-cross">
                   <div className="col m3 No-margin No-padding PersonSvg-box Container-nowrap-center">
-                    <PersonSvg height="1.25rem" width="1.25rem" color="#5499c3" />
+                    <StoreSvg height="1.25rem" width="1.25rem" color="#5499c3" />
                   </div>
                   <div className="col m5 No-margin No-padding Text-box Container-nowrap-center-cross">
-                    <div className="Account-text">{ user.name }</div>
+                    <div className="Account-text">{ selectedBranch.name }</div>
                   </div>
                   <div className="col m4 No-margin No-padding ArrowDownSvg-box Container-nowrap-end">
                     <ArrowDownSvg height="1.25rem" width="1.25rem" color="#5499c3" />
                   </div>
                 </div>
               }>
-              <NavItem onClick={ () => authSignOut(cookies, window) }>Sign Out</NavItem>
+              {
+                grantedBranches && grantedBranches.map((branch, index) => {
+                  return (
+                    <div key={ 'branch' + index } onClick={ () => setGrantedBranch(cookies, branch.id) }>
+                      <NavItem>{ branch.name }</NavItem>
+                    </div>
+                  )
+                })
+              }
             </Dropdown>
           </div>
         </div>
@@ -72,12 +82,15 @@ const mapStateToProps = state => {
     cookies: state.user.cookies,
     window: state.user.window,
     onlineStatus: state.auth.onlineStatus,
+    grantedBranches: state.access.grantedBranches,
+    selectedBranch: state.branch.branch,
   }
 }
 
 const mapDispatchToProps = dispatch => bindActionCreators({
   authSignOut,
   setOnlineStatus,
+  setGrantedBranch,
 }, dispatch)
 
 

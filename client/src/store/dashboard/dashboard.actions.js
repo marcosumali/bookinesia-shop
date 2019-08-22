@@ -2,7 +2,7 @@ import swal from 'sweetalert';
 
 import { 
   saveDashboardMenuStatus, 
-  getLatestDashboardMenuStatus 
+  getLatestDashboardMenuStatus,
 } from '../../helpers/dashboard';
 import { 
   setBarberDisableStatusInput, 
@@ -79,7 +79,7 @@ export const maxFileSizeError = 'Maximum file size is 1 MB. '
 export const imageFileTypeError = 'Accepted image file are JPG/JPEG, PNG, or GIF. '
 
 // ---------------------------------------------- DASHBOARD ACTION ----------------------------------------------
-// To get DMS cookies and dispatch to store
+// To get DMS (Dashboard) cookies and dispatch to store
 export const getDMSCookies = (cookies) => {
   return (dispatch, getState, { getFirebase, getFirestore }) => {
     let DMS = getLatestDashboardMenuStatus(cookies)
@@ -838,7 +838,7 @@ export const setDashboardLoadingStatus = (data) => {
 // To handle update transaction and appointment
 export const handleUpdateStatus = (data) => {
   return async (dispatch, getState, { getFirebase, getFirestore }) => {
-    let { shop, branch, status, appointment, transaction, user, paymentMethod, dashboardData, barbers, paymentInformation } = data
+    let { shop, branch, status, appointment, transaction, user, paymentMethod, dashboardData, barbers, paymentInformation, transactionIndex } = data
     
     let swalText = ''
     if (status === 'skipped') {
@@ -873,12 +873,12 @@ export const handleUpdateStatus = (data) => {
           let staffIndex = barbers.findIndex(barber => barber.id === staff.id)
 
           let nextTransactionsData = dashboardData[nextIndex].transactions
-          let nextTransaction = nextTransactionsData[staffIndex]
+          let nextTransaction = nextTransactionsData[staffIndex][0]
 
           let afterNextTransactionData = dashboardData[afterNextIndex].transactions
-          let afterNextTransaction = afterNextTransactionData[staffIndex]
+          let afterNextTransaction = afterNextTransactionData[staffIndex][0]
 
-          dispatch(updateAppointmentStatus(shop, branch, status, appointment, transaction, user, paymentMethod, nextTransaction, afterNextTransaction))
+          dispatch(updateAppointmentStatus(shop, branch, status, appointment, transaction, user, paymentMethod, nextTransaction, afterNextTransaction, transactionIndex))
         
         } else if (status === 'finished') {
 

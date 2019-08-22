@@ -44,7 +44,7 @@ class modalUpdateApp extends Component {
       addAppointmentErrors,
       addAppointment,
       clearAddAppointment,
-      user
+      selectedBranch,
     } = this.props
 
     const options = {
@@ -66,7 +66,7 @@ class modalUpdateApp extends Component {
           </div> 
         }
         trigger={
-          <div className="Container-wrap-center-cross Padding-t-5">
+          <div className="Container-wrap-center-cross">
             <AddBoxSvg width="2.5em" height="2.5em" color="#f68606" />
           </div>
         }>
@@ -90,84 +90,102 @@ class modalUpdateApp extends Component {
                 </div>
               </div>
             </div>
-            <div className="col m5 No-padding Margin-b-10" style={{ marginTop: '0.9rem' }}>
-              <BasicDateInput 
-                inputId="addDate"
-                className="input-field Input-date-box"
-                inputLabelStatus={ true }
-                inputLabel="Appointment Date"
-                openingStatus={ true }
-                openingDate={ addDateInput }
-                handleChangesDateFunction={ handleBasicDateInput }              
-              />
+            <div className="col m12 No-padding No-margin Container-wrap-center-cross">
+              <div className="col m3 No-padding No-margin Container-nowrap-center-cross">
+                <div className="Manage-barber-hours-text-blue Text-capitalize"></div>
+              </div>
+              <div className="col m2 No-padding No-margin Container-nowrap-end">
+              </div>
+              <div className="col m3 No-margin Container-nowrap-center">
+                <div className="Select-headers">Start</div>
+              </div>
+              <div className="col m1 No-padding No-margin Container-nowrap-center">
+                <div className="Manage-barber-hours-text-gray"></div>
+              </div>
+              <div className="col m3 No-margin Container-nowrap-center">
+                <div className="Select-headers">End</div>
+              </div>
             </div>
-            <div className="col m2 No-padding Margin-b-10" style={{ marginTop: '1.3rem' }}>
-              <NumberInput 
-                inputId="addMaxQueue"
-                inputLabel="Max Queue"
-                inputError={ addMaxQueueInputError }
-                inputValue={ addMaxQueueInput }
-                handleChangesFunction={ handleNumberInput }
-              />
-            </div>
-            <div className="col m2 No-padding Margin-b-10 Container-wrap-center" style={{ marginTop: '1.5rem' }}>
-              <SelectInput 
-                inputId="startHours"
-                className="Margin-r-5"
-                inputSize={ 4 }
-                handleChangesFunction={ handleMultipleSelectOption }
-                purpose="addAppointment"
-                inputName="startHours"
-                selectedData={ null }
-                showLabel={ true }
-                inputLabel="Hours"
-                inputValue={ addStartHours }
-                optionData={ hours }
-              />
-              <SelectInput 
-                inputId="startMinutes"
-                className=""
-                inputSize={ 4 }
-                handleChangesFunction={ handleMultipleSelectOption }
-                purpose="addAppointment"
-                inputName="startMinutes"
-                selectedData={ null }
-                showLabel={ true }
-                inputLabel="Minutes"
-                inputValue={ addStartMinutes }
-                optionData={ minutes }
-              />
-            </div>
-            <div className="col m1 No-padding Container-nowrap-center" style={{ marginTop: '1.5rem' }}>
-              <div className="Manage-barber-hours-text-gray">to</div>
-            </div>
-            <div className="col m2 No-padding Margin-b-10 Container-wrap-center" style={{ marginTop: '1.5rem' }}>
-              <SelectInput 
-                inputId="endHours"
-                className="Margin-r-5"
-                inputSize={ 4 }
-                handleChangesFunction={ handleMultipleSelectOption }
-                purpose="addAppointment"
-                inputName="endHours"
-                selectedData={ null }
-                showLabel={ true }
-                inputLabel="Hours"
-                inputValue={ addEndHours }
-                optionData={ hours }
-              />
-              <SelectInput 
-                inputId="endMinutes"
-                className=""
-                inputSize={ 4 }
-                handleChangesFunction={ handleMultipleSelectOption }
-                purpose="addAppointment"
-                inputName="endMinutes"
-                selectedData={ null }
-                showLabel={ true }
-                inputLabel="Minutes"
-                inputValue={ addEndMinutes }
-                optionData={ minutes }
-              />
+            <div className="col m12 No-padding No-margin Container-wrap-center-cross">
+              <div className="col m3 No-padding Margin-b-10" style={{ marginTop: '1.1rem' }}>
+                <BasicDateInput 
+                  inputId="addDate"
+                  className="input-field Input-date-box"
+                  inputLabelStatus={ true }
+                  inputLabel="Appointment Date"
+                  openingStatus={ true }
+                  openingDate={ addDateInput }
+                  handleChangesDateFunction={ handleBasicDateInput }              
+                />
+              </div>
+              <div className="col m2 No-padding Margin-b-10" style={{ marginTop: '1.3rem' }}>
+                <NumberInput 
+                  inputId="addMaxQueue"
+                  inputLabel="Max Queue"
+                  inputError={ addMaxQueueInputError }
+                  inputValue={ addMaxQueueInput }
+                  handleChangesFunction={ handleNumberInput }
+                />
+              </div>
+              <div className="col m3 No-padding Container-wrap-center" style={{ marginTop: '0.5rem' }}>
+                <SelectInput 
+                  inputId="startHours"
+                  className="Margin-r-5"
+                  inputSize={ 6 }
+                  handleChangesFunction={ handleMultipleSelectOption }
+                  purpose="addAppointment"
+                  inputName="startHours"
+                  selectedData={ null }
+                  showLabel={ true }
+                  inputLabel="Hours"
+                  inputValue={ addStartHours }
+                  optionData={ hours }
+                />
+                <SelectInput 
+                  inputId="startMinutes"
+                  className=""
+                  inputSize={ 6 }
+                  handleChangesFunction={ handleMultipleSelectOption }
+                  purpose="addAppointment"
+                  inputName="startMinutes"
+                  selectedData={ null }
+                  showLabel={ true }
+                  inputLabel="Minutes"
+                  inputValue={ addStartMinutes }
+                  optionData={ minutes }
+                />
+              </div>
+              <div className="col m1 No-padding Container-nowrap-center" style={{ marginTop: '0rem' }}>
+                <div className="Manage-barber-hours-text-gray">to</div>
+              </div>
+              <div className="col m3 No-padding Container-wrap-center" style={{ marginTop: '0.5rem' }}>
+                <SelectInput 
+                  inputId="endHours"
+                  className="Margin-r-5"
+                  inputSize={ 6 }
+                  handleChangesFunction={ handleMultipleSelectOption }
+                  purpose="addAppointment"
+                  inputName="endHours"
+                  selectedData={ null }
+                  showLabel={ true }
+                  inputLabel="Hours"
+                  inputValue={ addEndHours }
+                  optionData={ hours }
+                />
+                <SelectInput 
+                  inputId="endMinutes"
+                  className=""
+                  inputSize={ 6 }
+                  handleChangesFunction={ handleMultipleSelectOption }
+                  purpose="addAppointment"
+                  inputName="endMinutes"
+                  selectedData={ null }
+                  showLabel={ true }
+                  inputLabel="Minutes"
+                  inputValue={ addEndMinutes }
+                  optionData={ minutes }
+                />
+              </div>
             </div>
             <div className="col m12 Container-wrap-center-cross Margin-b-10">
               {
@@ -222,7 +240,7 @@ class modalUpdateApp extends Component {
                   addEndHours,
                   addEndMinutes,
                   addDisableStatus,
-                  branchId: user.branchId,
+                  branchId: selectedBranch.id,
                   selectedBarber,
                 }}
               />
@@ -250,6 +268,7 @@ const mapStateToProps = state => {
     hours: state.nav.hours,
     minutes: state.nav.minutes,
     user: state.auth.user,
+    selectedBranch: state.branch.branch,
   }
 }
 

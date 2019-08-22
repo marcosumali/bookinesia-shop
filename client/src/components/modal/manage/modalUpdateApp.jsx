@@ -14,6 +14,9 @@ import SwitchInput from '../../form/inputSwitch';
 import Button from '../../button/button';
 import DisabledButton from '../../button/buttonDisabled';
 import LoadingButton from '../../button/buttonLoading';
+import {
+  returnAcceptedDate
+} from '../../../helpers/date';
 import { 
   handleBasicDateInput, 
   handleMultipleSelectOption, 
@@ -53,7 +56,7 @@ class modalUpdateApp extends Component {
       updateAppointmentErrors,
       updateSelectedAppointment,
       clearUpdateAppointment,
-      user,
+      selectedBranch,
     } = this.props
 
     const options = {
@@ -80,9 +83,9 @@ class modalUpdateApp extends Component {
             <div className="col m12 No-margin No-padding Container-nowrap-center-cross Margin-b-5">
               {
                 filteredAppointment.disableStatus ?
-                <div className="Manage-text Disabled">{ new Date(filteredAppointment.date).toDateString() }</div>
+                <div className="Manage-text Disabled">{ new Date(returnAcceptedDate(filteredAppointment.date)).toDateString() }</div>
                 :
-                <div className="Manage-text">{ new Date(filteredAppointment.date).toDateString() }</div>
+                <div className="Manage-text">{ new Date(returnAcceptedDate(filteredAppointment.date)).toDateString() }</div>
               }
             </div>
             <div className="col m12 No-margin No-padding Container-nowrap-center-cross">
@@ -147,96 +150,113 @@ class modalUpdateApp extends Component {
                 <LoadingDotSvg height="4em" width="4em" color="#5499c3" />
               </div>
               :
-              <div className="animated fadeIn faster">
-                <div className="col m3 No-padding Margin-b-10" style={{ marginTop: '0.6rem' }}>
-                  <BasicDateInput 
-                    inputId="updateDate"
-                    className="input-field Input-date-box"
-                    inputLabelStatus={ true }
-                    inputLabel="Appointment Date"
-                    openingStatus={ true }
-                    openingDate={ updateDateInput }
-                    handleChangesDateFunction={ handleBasicDateInput }              
-                  />
+              <div className="animated fadeIn faster col m12 No-padding No-margin Container-wrap-center-cross">
+                <div className="col m12 No-padding No-margin Container-nowrap-center-cross">
+                  <div className="col m3 No-padding No-margin Container-nowrap-center-cross">
+                    <div className="Manage-barber-hours-text-blue Text-capitalize"></div>
+                  </div>
+                  <div className="col m3 No-padding No-margin Container-nowrap-end">
+                  </div>
+                  <div className="col m1 No-padding No-margin Container-nowrap-end">
+                  </div>
+                  <div className="col m3 No-margin Container-nowrap-center">
+                    <div className="Select-headers No-margin">Start</div>
+                  </div>
+                  <div className="col m3 No-margin Container-nowrap-center">
+                    <div className="Select-headers No-margin">End</div>
+                  </div>
                 </div>
-                <div className="col m3 No-margin No-padding Margin-b-10 Container-wrap-center">
-                  <SwitchInput 
-                    inputId="updateAppointmentStatus"
-                    showLabel={ true }
-                    inputLabel="Status"
-                    inputValue=""
-                    handleChangesFunction={ handleSingleCheckbox }
-                    handleCheckFunction={ handleCheckedStatus }
-                    checkedStatus={ updateDisableStatus }
-                  />
-                </div>
-                <div className="col m1 No-padding Margin-b-10" style={{ marginTop: '0.95rem' }}>
-                  <NumberInput 
-                    inputId="updateMaxQueue"
-                    inputLabel="Max Queue"
-                    inputError={ updateMaxQueueInputError }
-                    inputValue={ updateMaxQueueInput }
-                    handleChangesFunction={ handleNumberInput }
-                  />
-                </div>
-                <div className="col m2 No-padding Margin-b-10 Container-wrap-center" style={{ marginTop: '1.2rem' }}>
-                  <SelectInput 
-                    inputId="startHours"
-                    className="Margin-r-5"
-                    inputSize={ 4 }
-                    handleChangesFunction={ handleMultipleSelectOption }
-                    purpose="updateAppointment"
-                    inputName="startHours"
-                    selectedData={ null }
-                    showLabel={ true }
-                    inputLabel="Hours"
-                    inputValue={ updateStartHours }
-                    optionData={ hours }
-                  />
-                  <SelectInput 
-                    inputId="startMinutes"
-                    className=""
-                    inputSize={ 4 }
-                    handleChangesFunction={ handleMultipleSelectOption }
-                    purpose="updateAppointment"
-                    inputName="startMinutes"
-                    selectedData={ null }
-                    showLabel={ true }
-                    inputLabel="Minutes"
-                    inputValue={ updateStartMinutes }
-                    optionData={ minutes }
-                  />
-                </div>
-                <div className="col m1 No-padding Container-nowrap-center" style={{ marginTop: '1.2rem' }}>
-                  <div className="Manage-barber-hours-text-gray">to</div>
-                </div>
-                <div className="col m2 No-padding Margin-b-10 Container-wrap-center" style={{ marginTop: '1.2rem' }}>
-                  <SelectInput 
-                    inputId="endHours"
-                    className="Margin-r-5"
-                    inputSize={ 4 }
-                    handleChangesFunction={ handleMultipleSelectOption }
-                    purpose="updateAppointment"
-                    inputName="endHours"
-                    selectedData={ null }
-                    showLabel={ true }
-                    inputLabel="Hours"
-                    inputValue={ updateEndHours }
-                    optionData={ hours }
-                  />
-                  <SelectInput 
-                    inputId="endMinutes"
-                    className=""
-                    inputSize={ 4 }
-                    handleChangesFunction={ handleMultipleSelectOption }
-                    purpose="updateAppointment"
-                    inputName="endMinutes"
-                    selectedData={ null }
-                    showLabel={ true }
-                    inputLabel="Minutes"
-                    inputValue={ updateEndMinutes }
-                    optionData={ minutes }
-                  />
+                <div className="col m12 No-padding No-margin Container-nowrap-center-cross">
+                  <div className="col m3 No-padding Margin-b-10" style={{ marginTop: '0.6rem' }}>
+                    <BasicDateInput 
+                      inputId="updateDate"
+                      className="input-field Input-date-box"
+                      inputLabelStatus={ true }
+                      inputLabel="Appointment Date"
+                      openingStatus={ true }
+                      openingDate={ updateDateInput }
+                      handleChangesDateFunction={ handleBasicDateInput }              
+                    />
+                  </div>
+                  <div className="col m3 No-margin No-padding Margin-b-10 Container-wrap-center">
+                    <SwitchInput 
+                      inputId="updateAppointmentStatus"
+                      showLabel={ true }
+                      inputLabel="Status"
+                      inputValue=""
+                      handleChangesFunction={ handleSingleCheckbox }
+                      handleCheckFunction={ handleCheckedStatus }
+                      checkedStatus={ updateDisableStatus }
+                    />
+                  </div>
+                  <div className="col m1 No-padding Margin-b-10" style={{ marginTop: '0.95rem' }}>
+                    <NumberInput 
+                      inputId="updateMaxQueue"
+                      inputLabel="Max Queue"
+                      inputError={ updateMaxQueueInputError }
+                      inputValue={ updateMaxQueueInput }
+                      handleChangesFunction={ handleNumberInput }
+                    />
+                  </div>
+                  <div className="col m3 No-padding Margin-b-10 Container-wrap-center" style={{ marginTop: '1.2rem' }}>
+                    <SelectInput 
+                      inputId="startHours"
+                      className="Margin-r-5"
+                      inputSize={ 5 }
+                      handleChangesFunction={ handleMultipleSelectOption }
+                      purpose="updateAppointment"
+                      inputName="startHours"
+                      selectedData={ null }
+                      showLabel={ true }
+                      inputLabel="Hours"
+                      inputValue={ updateStartHours }
+                      optionData={ hours }
+                    />
+                    <SelectInput 
+                      inputId="startMinutes"
+                      className=""
+                      inputSize={ 5 }
+                      handleChangesFunction={ handleMultipleSelectOption }
+                      purpose="updateAppointment"
+                      inputName="startMinutes"
+                      selectedData={ null }
+                      showLabel={ true }
+                      inputLabel="Minutes"
+                      inputValue={ updateStartMinutes }
+                      optionData={ minutes }
+                    />
+                  </div>
+                  {/* <div className="col m1 No-padding Container-nowrap-center" style={{ marginTop: '1.2rem' }}>
+                    <div className="Manage-barber-hours-text-gray">to</div>
+                  </div> */}
+                  <div className="col m3 No-padding Margin-b-10 Container-wrap-center" style={{ marginTop: '1.2rem' }}>
+                    <SelectInput 
+                      inputId="endHours"
+                      className="Margin-r-5"
+                      inputSize={ 5 }
+                      handleChangesFunction={ handleMultipleSelectOption }
+                      purpose="updateAppointment"
+                      inputName="endHours"
+                      selectedData={ null }
+                      showLabel={ true }
+                      inputLabel="Hours"
+                      inputValue={ updateEndHours }
+                      optionData={ hours }
+                    />
+                    <SelectInput 
+                      inputId="endMinutes"
+                      className=""
+                      inputSize={ 5 }
+                      handleChangesFunction={ handleMultipleSelectOption }
+                      purpose="updateAppointment"
+                      inputName="endMinutes"
+                      selectedData={ null }
+                      showLabel={ true }
+                      inputLabel="Minutes"
+                      inputValue={ updateEndMinutes }
+                      optionData={ minutes }
+                    />
+                  </div>
                 </div>
               </div>
             }
@@ -292,7 +312,7 @@ class modalUpdateApp extends Component {
                   updateEndMinutes,
                   updateDisableStatus,
                   selectedAppointment,
-                  branchId: user.branchId,
+                  branchId: selectedBranch.id,
                   selectedBarber
                 }}
               />
@@ -322,6 +342,7 @@ const mapStateToProps = state => {
     hours: state.nav.hours,
     minutes: state.nav.minutes,
     user: state.auth.user,
+    selectedBranch: state.branch.branch,
   }
 }
 

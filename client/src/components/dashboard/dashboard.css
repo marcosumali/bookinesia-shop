@@ -90,6 +90,8 @@
   width: 13.25% !important;
   position: fixed;
   bottom: 0;
+  max-height: 25vh;
+  overflow-y: scroll;
 }
 
 .Legends-status-box {
@@ -110,8 +112,8 @@
   letter-spacing: normal;
   color: #5499c3;
   text-align: center;
-  margin-top: 0.5em;
-  margin-bottom: 0.75em;
+  /* margin-top: 0.5em; */
+  /* margin-bottom: 0.75em; */
 }
 
 .Legends-text {
@@ -133,5 +135,25 @@
   }  
   .Menu-text, .Sub-menu-text, .Legends-text {
     font-size: 0.9em;
+  }
+}
+
+/* For Mobile CSS */
+@media only screen and (max-width: 1023px) {
+  .Legends-box {
+    margin: 0.3125em !important;
+    width: 13.77% !important;
+  }
+
+  .Legends-header-text {
+    font-size: 0.6225em;
+  }
+
+  .Legends-text {
+    font-size: 0.5em;
+  }
+
+  .Account-text {
+    font-size: 0.85em;
   }
 }

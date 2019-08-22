@@ -1,7 +1,7 @@
 .Calendar-header-box {
   width: 100%;
   height: 8vh;
-  padding: 0.5em;
+  padding: 0em 0.5em 0em 0.5em;
   border-top: 1px solid #EAEAEA;
 }
 
@@ -39,7 +39,7 @@
 .Show-today-box {
   border: 1px solid #5499c3;
   border-radius: 5px;
-  padding: 5px;
+  padding: 3px;
 }
 
 .Show-today-text {
@@ -97,7 +97,7 @@
   color: gainsboro !important;
 }
 
-.Staff-text{
+.Staff-text {
   text-align: center;
   font-family: 'Montserrat', sans-serif;
   font-size: 1.1em;
@@ -144,10 +144,11 @@
 
 .Appointment-status-circle-off {
   background-color: #EAEAEA;
+  border: 1px solid #666666;
   border-radius: 50%;
   height: 1em;
   width: 1em;
-  margin-right: 0.5em;
+  margin-right: 0.25em;
 }
 
 td, th {
@@ -156,4 +157,26 @@ td, th {
 
 tr {
   height: 8vh;
+}
+
+.Single-box {
+  padding-bottom: 0.3125em;
+  margin-bottom: 0.3125em;
+  border-bottom: 1px solid #EAEAEA;
+}
+
+/* For Mobile CSS */
+@media only screen and (max-width: 1023px) {
+  .Appointment-status-circle-off {
+    width: 0.75em;
+    height: 0.75em;
+  }
+
+  .Staff-text {
+    font-size: 0.9em;
+  }
+
+  .Customer-text, .Customer-phone {
+    font-size: 0.7em;
+  }
 }

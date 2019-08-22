@@ -33,7 +33,7 @@ class modalAddService extends Component {
       clearAddServiceData,
       services,
       barbers,
-      user,
+      selectedBranch,
     } = this.props
 
     return (
@@ -135,7 +135,7 @@ class modalAddService extends Component {
                   duration: addServiceDuration,
                   price: addServicePrice,
                   type: addServiceType,
-                  branchId: user.branchId, 
+                  branchId: selectedBranch.id, 
                   staffs: barbers 
                 }}
               />
@@ -162,6 +162,7 @@ const mapStateToProps = state => {
     services: state.service.allServices,
     barbers: state.staff.allBarbers,
     user: state.auth.user,
+    selectedBranch: state.branch.branch,
   }
 }
 

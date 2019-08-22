@@ -136,10 +136,10 @@ class manageMenu extends Component {
                       <div className="Manage-text Disabled">{ singleData.name }</div>
                     </div>
                     <div className="col m12 No-margin No-padding Container-nowrap-center-cross">
-                      <div className="col m6 Container-nowrap-start">
+                      <div className="col m6 No-padding Container-nowrap-start">
                         <div className="Manage-text-gray Disabled">{ singleData.duration } minutes</div>
                       </div>
-                      <div className="col m6 Container-nowrap-end">
+                      <div className="col m6 No-padding Container-nowrap-end">
                         <div className="Manage-text-gray Disabled">{ singleData.currency } { formatMoney(singleData.price) }</div>
                       </div>
                     </div>
@@ -153,10 +153,10 @@ class manageMenu extends Component {
                       <div className="Manage-text">{ singleData.name }</div>
                     </div>
                     <div className="col m12 No-margin No-padding Container-nowrap-center-cross">
-                      <div className="col m6 Container-nowrap-start">
+                      <div className="col m6 No-padding Container-nowrap-start">
                         <div className="Manage-text-gray">{ singleData.duration } minutes</div>
                       </div>
-                      <div className="col m6 Container-nowrap-end">
+                      <div className="col m6 No-padding Container-nowrap-end">
                         <div className="Manage-text-gray">{ singleData.currency } { formatMoney(singleData.price) }</div>
                       </div>
                     </div>

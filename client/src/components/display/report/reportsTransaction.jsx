@@ -9,7 +9,7 @@ import Button from '../../button/button';
 import DisabledButton from '../../button/buttonDisabled';
 import { handleBasicDateInput } from '../../../store/dashboard/dashboard.actions';
 import { getFilteredTransactions, exportToExcel } from '../../../store/firestore/transaction/transaction.actions';
-import { getTotalTransaction } from '../../../helpers/currency';
+import { getTotalTransaction, formatMoney } from '../../../helpers/currency';
 
 class reportsTransaction extends Component {
   render() {
@@ -25,12 +25,12 @@ class reportsTransaction extends Component {
       filteredTransactions,
       reportHeaders,
       exportToExcel,
-      user,
       salesTransactions,
+      selectedBranch,
     } = this.props
 
     return (
-      <div className="row No-margin Report-box">
+      <div className="row No-margin Report-box" style={{ borderTop: '1px solid #EAEAEA' }}>
         <div className="Report-inner-box">
           <div className="col m12 No-margin Report-header-box">
             <div className="Report-header-text">Transaction Reports</div>
@@ -62,7 +62,7 @@ class reportsTransaction extends Component {
                 />
               </div>
               <div className="col m1 No-margin No-padding Container-nowrap-center">
-                <div className="Search-box" onClick={ () => getFilteredTransactions(startDate, endDate, user.branchId) }>
+                <div className="Search-box" onClick={ () => getFilteredTransactions(startDate, endDate, selectedBranch.id) }>
                   <SearchSvg height="1em" width="1em" color="#5499c3" />
                 </div>
               </div>
@@ -130,6 +130,12 @@ class reportsTransaction extends Component {
                       </tr>
                       <tr style={{ height:'5vh' }}>
                         <th>
+                          <div className="Table-text-header">Number of Sales  :</div>
+                        </th>
+                        <th>
+                          <div className="Table-text">{ salesTransactions.length }</div>
+                        </th>
+                        <th>
                           <div className="Table-text-header">Shop :</div>
                         </th>
                         <th>
@@ -141,14 +147,14 @@ class reportsTransaction extends Component {
                         <th>
                           <div className="Table-text">{ startDate }</div>
                         </th>
-                        <th>
-                          <div className="Table-text-header">Number of Sales  :</div>
-                        </th>
-                        <th>
-                          <div className="Table-text">{ salesTransactions.length }</div>
-                        </th>
                       </tr>
                       <tr style={{ height:'5vh' }}>
+                        <th>
+                          <div className="Table-text-header">Total Sales  :</div>
+                        </th>
+                        <th>
+                          <div className="Table-text">{ formatMoney(getTotalTransaction(salesTransactions)) }</div>
+                        </th>
                         <th>
                           <div className="Table-text-header">Branch :</div>
                         </th>
@@ -160,12 +166,6 @@ class reportsTransaction extends Component {
                         </th>
                         <th>
                           <div className="Table-text">{ endDate }</div>
-                        </th>
-                        <th>
-                          <div className="Table-text-header">Total Sales  :</div>
-                        </th>
-                        <th>
-                          <div className="Table-text">{ getTotalTransaction(salesTransactions) }</div>
                         </th>
                       </tr>
                       <tr style={{ borderTop: '1px solid #EAEAEA' }}>
@@ -245,6 +245,7 @@ const mapStateToProps = state => {
     reportHeaders: state.transaction.reportHeaders,
     user: state.auth.user,
     salesTransactions: state.transaction.salesTransactions,
+    selectedBranch: state.branch.branch,
   }
 }
 

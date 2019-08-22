@@ -6,6 +6,7 @@ import { getStaffServices } from '../staffService/staffService.actions';
 import { getStaffSchedules } from '../staffSchedule/staffSchedule.actions';
 import { getShop } from '../shop/shop.actions';
 import { getBranch } from '../branch/branch.actions';
+import { getBranchAccess } from '../branchAccess/branchAccess.actions';
 import { getBranchSchedules } from '../branchSchedule/branchSchedule.actions';
 import {
   getCookies,
@@ -106,20 +107,9 @@ export const handleCookies = (purpose, cookies) => {
           dispatch(setAdminStatus(true))
         }
       } else if (purpose === 'getData') {
-        let inputDate = new Date(Date.now())
-        let year = inputDate.getFullYear()
-        let month = inputDate.getMonth() + 1
-        let date = inputDate.getDate()
-        let acceptedDate = `${year}-${month}-${date}`
         let shopId = userData.shopId
-        let branchId = userData.branchId
         dispatch(getShop(shopId))
-        dispatch(getBranch(branchId))
-        dispatch(getAllStaffsAndCalendar(branchId, acceptedDate))
-        dispatch(getAllServices(branchId))
-        dispatch(getStaffServices(branchId))
-        dispatch(getStaffSchedules(branchId))
-        dispatch(getBranchSchedules(branchId))
+        dispatch(getBranchAccess(userData.id, cookies))
       }
     } else {
       dispatch(setAuthenticationStatus(false))
@@ -127,6 +117,24 @@ export const handleCookies = (purpose, cookies) => {
       dispatch(setAdminStatus(false))
       dispatch(setOwnerStatus(false))
     }
+  }
+}
+
+// To get all operation branches data
+export const getOperationalDataNow = (branchId) => {
+  return (dispatch, getState, { getFirebase, getFirestore }) => {
+    let inputDate = new Date(Date.now())
+    let year = inputDate.getFullYear()
+    let month = inputDate.getMonth() + 1
+    let date = inputDate.getDate()
+    let acceptedDate = `${year}-${month}-${date}`
+
+    dispatch(getBranch(branchId))
+    dispatch(getAllStaffsAndCalendar(branchId, acceptedDate))
+    dispatch(getAllServices(branchId))
+    dispatch(getStaffServices(branchId))
+    dispatch(getStaffSchedules(branchId))
+    dispatch(getBranchSchedules(branchId))
   }
 }
 

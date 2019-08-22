@@ -5,7 +5,6 @@ import { bindActionCreators } from 'redux';
 import './calendar.css';
 import ArrowLeftSvg from '../../svg/arrowLeftSvg';
 import ArrowRightSvg from '../../svg/arrowRightSvg';
-import CalendarSvg from '../../svg/calendarSvg';
 import BasicDateInput from '../../form/inputDateBasic';
 import { setAppointmentDateIndex, setTodayDateIndex } from '../../../store/firestore/appointment/appointment.actions';
 import { handleBasicDateInput } from '../../../store/dashboard/dashboard.actions';
@@ -15,29 +14,23 @@ class calendarHeader extends Component {
     let {
       handleBasicDateInput,
       allBarbers,
-      user
+      selectedBranch,
     } = this.props
-
     return (
       <div className="row No-margin animated fadeIn faster">
         <div className="Calendar-header-box Container-nowrap-center-cross">
           <div className="col m3 No-margin No-padding">
             <div className="Calendar-header-text">CALENDAR</div>
           </div>
-          {/* <div className="col m4 No-margin No-padding Container-nowrap-center">
-          </div> */}
           <div className="col m2 No-margin No-padding Height-100cent Container-nowrap-end">
             <div
               className="col m4 No-margin No-padding Height-100cent Container-nowrap-end" 
-              onClick={ () => this.props.setAppointmentDateIndex(user.branchId,'previous', this.props.selectedDate) }
+              onClick={ () => this.props.setAppointmentDateIndex(selectedBranch.id,'previous', this.props.selectedDate) }
             >
               <ArrowLeftSvg height="2.75rem" width="2.75rem" color="#5499c3" />
             </div>
           </div>
           <div className="col m2 No-padding Height-100cent Container-wrap-center" style={{ marginLeft: '0.5em', marginRight: '0.5em' }}>
-            <div className="Width-100cent Container-nowrap-center">
-              <CalendarSvg height="1rem" width="1rem" color="#5499c3" />
-            </div>
             <div className="Width-100cent Container-nowrap-center">
               <BasicDateInput 
                 inputId="calendarDate"
@@ -46,20 +39,20 @@ class calendarHeader extends Component {
                 inputLabel=""
                 openingStatus={ true }
                 openingDate={ this.props.selectedDate }
-                handleChangesDateFunction={ (e) => handleBasicDateInput(e, user.branchId, allBarbers) }              
+                handleChangesDateFunction={ (e) => handleBasicDateInput(e, selectedBranch.id, allBarbers) }              
               />
             </div>
           </div>
           <div className="col m2 No-margin No-padding Height-100cent Container-nowrap-start">
             <div 
               className="col m4 No-margin No-padding Height-100cent Container-nowrap-start"
-              onClick={ () => this.props.setAppointmentDateIndex(user.branchId,'next', this.props.selectedDate) }
+              onClick={ () => this.props.setAppointmentDateIndex(selectedBranch.id, 'next', this.props.selectedDate) }
             >
               <ArrowRightSvg height="2.75rem" width="2.75rem" color="#5499c3" />
             </div>
           </div>
           <div className="col m3 No-margin No-padding Container-nowrap-end">
-            <div className="Show-today-box" onClick={ () => this.props.setTodayDateIndex(user.branchId) }>
+            <div className="Show-today-box" onClick={ () => this.props.setTodayDateIndex(selectedBranch.id) }>
               <div className="Show-today-text">Show Today</div>
             </div>
           </div>
@@ -77,6 +70,7 @@ const mapStateToProps = state => {
     selectedDate: state.appointment.selectedDate,
     allBarbers: state.staff.allBarbers,
     user: state.auth.user,
+    selectedBranch: state.branch.branch,
   }
 }
 

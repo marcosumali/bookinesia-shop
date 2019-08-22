@@ -24,9 +24,25 @@ function saveDashboardMenuStatus(cookies, dashboardMenuStatus) {
   cookies.set('DMS', DMS, { path: '/', secure: false, expires: expirationDate })
 }
 
+function getLatestBranchStatus(cookies) {
+  let BMS = cookies.get('BMS')
+
+  if (BMS) {
+    let decodedBMS = jwt.verify(BMS, PRIVATEKEY)
+    return decodedBMS
+  }
+}
+
+function saveBranchStatus(cookies, branchId) {
+  let BMS = jwt.sign(branchId, PRIVATEKEY)
+  cookies.set('BMS', BMS, { path: '/', secure: false, expires: expirationDate })
+}
+
 
 module.exports = {
   getLatestDashboardMenuStatus,
   saveDashboardMenuStatus,
+  getLatestBranchStatus,
+  saveBranchStatus,
 }
 

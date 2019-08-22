@@ -13,9 +13,6 @@ import DisabledButton from '../../button/buttonDisabled';
 import LoadingButton from '../../button/buttonLoading';
 
 class manageService extends Component {
-  hanlde() {
-    console.log('123')
-  }
   render() {
     let {
       serviceName,
